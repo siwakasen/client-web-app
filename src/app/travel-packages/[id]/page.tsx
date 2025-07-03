@@ -26,6 +26,9 @@ export default async function TravelPackageDetailPage({params}: {params: Promise
             src={convertTravelImageUrl(data.images?.[0] || "")}
             alt={data.package_name}
             fill
+            sizes="100vw"
+            quality={100}
+            priority
             className="object-cover"
           />
           <div className="absolute inset-0 bg-black/40" />

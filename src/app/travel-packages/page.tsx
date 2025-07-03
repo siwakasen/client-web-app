@@ -16,7 +16,7 @@ export default async function TourPackagesPage() {
       <Navbar />
       {/* Hero Section */}
       <section className="relative h-64 md:h-80">
-        <Image src="/images/bali_1.jpg" priority alt="Bali landscape" fill className="object-cover " />
+        <Image src="/images/bali_1.jpg" priority alt="Bali landscape" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover " />
         <div className="absolute inset-0 " />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
           <div className="text-white">

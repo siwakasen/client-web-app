@@ -3,6 +3,7 @@ import type { TravelPackages } from "@/_interfaces/travel-packages.interface"
 import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import Image from "next/image"
 
 interface TourPackageCardProps {
   travelPackage: TravelPackages
@@ -13,7 +14,7 @@ export const TourPackageCard: React.FC<TourPackageCardProps> = ({ travelPackage 
     <Link href={`/travel-packages/${travelPackage.id}`} className="hover:scale-103 transition-all duration-300 ">
       {/* 1. Add `h-full`, `flex`, and `flex-col` */}
       <div className="bg-white rounded-lg shadow-lg overflow-hidden  h-full flex flex-col">
-        <img src={convertTravelImageUrl(travelPackage.images?.[0] || "")} alt={travelPackage.package_name} className="w-full h-48 object-cover" />
+        <img  src={convertTravelImageUrl(travelPackage.images?.[0] || "")} alt={travelPackage.package_name} className="w-full h-48 object-cover" />
         {/* 2. Add `flex`, `flex-col`, and `flex-grow` to the content wrapper */}
         <div className="p-4 flex flex-col flex-grow">
           <div className="mb-4">

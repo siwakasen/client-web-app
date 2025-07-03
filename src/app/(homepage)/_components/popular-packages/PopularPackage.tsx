@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { fetchTravelPackages } from "@/_services/travel-packages";
 import ContentDivider from "../content-divider/ContentDivider";
 import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
+import Link from "next/link";
 export default async function PopularPackage() {
   const {data} = await fetchTravelPackages({
     limit: 2,
@@ -35,6 +36,7 @@ export default async function PopularPackage() {
         <div className="flex flex-col md:flex-row w-full justify-between gap-8">
           {packages.length > 0 ? (
             packages.map((pkg, index) => (
+              <Link href={`/travel-packages/${pkg.id}`} key={pkg.id}> 
               <Card
                 key={pkg.id}
                 className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer p-0"
@@ -58,8 +60,9 @@ export default async function PopularPackage() {
                       </h3>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </Link>
             ))
           ) : (
             <div className="w-full text-center py-8">

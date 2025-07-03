@@ -38,6 +38,8 @@ export function ImageCarousel({ images, alt, className = "" }: ImageCarouselProp
           src={convertTravelImageUrl(images[currentImageIndex] || "")}
           alt={`${alt} - Image ${currentImageIndex + 1}`}
           fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          priority
           className="object-cover"
         />
         {images.length > 1 && (

@@ -25,6 +25,15 @@ const createApiInstance = (baseURL?: string) => {
       return Promise.reject(error);
     }
   );
+
+  api.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
   return api;
 };
 

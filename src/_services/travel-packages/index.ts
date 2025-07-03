@@ -13,13 +13,18 @@ const api = createApiInstance(process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API);
 export const fetchTravelPackages = async (
     pagination: TravelPackagesRequest
     ): Promise<TravelPackagesResponse> => {
-    const response = await api.get(
-        `/travel-packages?limit=${pagination.limit}&page=${pagination.page}&search=${pagination.search || ''}`
-    );
-    if(response.status !== 200){
-        throw new Error('Failed to fetch travel packages');
+    try {
+        const response = await api.get(
+            `/travel-packages?limit=${pagination.limit}&page=${pagination.page}&search=${pagination.search || ''}`
+        );
+        if(response.status !== 200){
+            throw new Error('Failed to fetch travel packages');
+        }
+        return response.data;
+    } catch (error) {
+        console.error('fetchTravelPackages error:', error);
+        throw error instanceof Error ? error : new Error(String(error));
     }
-    return response.data;
 };
 
 export const fetchTravelPackagesDetail = async (payload: TravelPackagesDetailRequest

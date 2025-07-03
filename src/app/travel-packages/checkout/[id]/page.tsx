@@ -28,7 +28,7 @@ interface CheckoutPageProps {
 }
 
 export default async function CheckoutPage({ params }: CheckoutPageProps) {
-  const { id } =  params;
+  const { id } =  await params;
   const {data : packageData} = await fetchTravelPackagesDetail({id: Number(id)})
 
 

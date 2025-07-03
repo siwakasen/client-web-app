@@ -7,7 +7,7 @@ import { LoginFormSchema, type LoginFormState } from "@/lib/validation"
 import { login } from "@/_services/customers"
 import { ForgotPasswordFormSchema, type ForgotPasswordFormState } from "@/lib/validation"
 
-export async function registerUser(state: FormState, formData: FormData): Promise<FormState> {
+export async function useRegisterUser(state: FormState, formData: FormData): Promise<FormState> {
   // Validate form fields
   const validatedFields = RegisterFormSchema.safeParse({
     name: formData.get("name"),
@@ -29,7 +29,7 @@ export async function registerUser(state: FormState, formData: FormData): Promis
   
 }
 
-export async function loginUser(state: LoginFormState, formData: FormData): Promise<LoginFormState> {
+export async function useLoginUser(state: LoginFormState, formData: FormData): Promise<LoginFormState> {
   // Validate form fields
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get("email"),
@@ -55,7 +55,7 @@ export async function loginUser(state: LoginFormState, formData: FormData): Prom
   }
 }
 
-export async function forgotPasswordUser(state: ForgotPasswordFormState, formData: FormData): Promise<ForgotPasswordFormState> {
+export async function useForgotPasswordUser(state: ForgotPasswordFormState, formData: FormData): Promise<ForgotPasswordFormState> {
   const validatedFields = ForgotPasswordFormSchema.safeParse({
     email: formData.get("email"),
   })
