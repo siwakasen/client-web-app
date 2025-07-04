@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { TravelPackagesMeta } from "@/_interfaces/travel-packages.interface";
+import { Meta as TravelPackagesMeta } from "@/_interfaces/travel-packages.interface";
+import { Meta as CarsMeta } from "@/_interfaces/rent-car.interface";
 
 interface PaginationProps {
-  meta: TravelPackagesMeta;
+  meta: TravelPackagesMeta | CarsMeta;
   currentPage: number;
   onPageChange: (page: number) => void;
 }

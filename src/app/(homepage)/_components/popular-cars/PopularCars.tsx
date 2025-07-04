@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import ContentDivider from "../content-divider/ContentDivider";
 import { fetchCars } from "@/_services/rent-cars";
 import { convertCarImageUrl } from "@/_helpers/images-url/car-images";
+import Link from "next/link";
 export default async function PopularCars() {
   const { data } = await fetchCars({
     limit: 2,
@@ -37,31 +38,35 @@ export default async function PopularCars() {
         <div className="flex flex-col md:flex-row w-full justify-between gap-8">
           {packages.length > 0 ? (
             packages.map((pkg, index) => (
-              <Card
-                key={pkg.id}
-                className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer p-0"
-              >
-                <CardContent className={`p-0 w-full h-80 md:h-96 md:min-w-2xl`}>
-                  <div className="relative h-full w-full">
-                    <div className="relative w-full h-full overflow-hidden">
-                      <Image
-                        src={pkg.image}
-                        alt={pkg.alt}
-                        fill
-                        priority={true}
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300"></div>
+              <Link href={`/rent-cars/${pkg.id}`} key={pkg.id}>
+                <Card
+                  key={pkg.id}
+                  className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer p-0"
+                >
+                  <CardContent
+                    className={`p-0 w-full h-80 md:h-96 md:min-w-2xl`}
+                  >
+                    <div className="relative h-full w-full">
+                      <div className="relative w-full h-full overflow-hidden">
+                        <Image
+                          src={pkg.image}
+                          alt={pkg.alt}
+                          fill
+                          priority={true}
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300"></div>
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 p-6">
+                        <h3 className="font-georgia text-2xl md:text-3xl font-bold text-white leading-tight">
+                          {pkg.title}
+                        </h3>
+                      </div>
                     </div>
-                    <div className="absolute bottom-0 left-0 right-0 p-6">
-                      <h3 className="font-georgia text-2xl md:text-3xl font-bold text-white leading-tight">
-                        {pkg.title}
-                      </h3>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </Link>
             ))
           ) : (
             <div className="w-full text-center py-8">

@@ -1,5 +1,5 @@
-import Navbar from "@/components/navbar/Navbar";
-import Footer from "../_components/footer";
+import Navbar from "@/components/shared/navbar/Navbar";
+import Footer from "../../../components/shared/content/footer";
 export default function TravelPackageDetailLayout({
   children,
 }: {

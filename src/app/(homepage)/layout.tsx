@@ -1,4 +1,4 @@
-import Navbar from "@/components/navbar/Navbar";
+import Navbar from "@/components/shared/navbar/Navbar";
 import Footer from "./_components/footer-section/Footer";
 
 export default function HomeLayout({

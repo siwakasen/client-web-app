@@ -1,3 +1,4 @@
+"use cache";
 import {
   fetchTravelPackages,
   fetchTravelPackagesDetail,
@@ -183,7 +184,7 @@ export default async function TravelPackageDetailPage({
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredRelatedPackages.map((pkg) => (
-              <a
+              <Link
                 key={pkg.id}
                 href={`/travel-packages/${pkg.id}`}
                 className="block h-full"
@@ -198,19 +199,27 @@ export default async function TravelPackageDetailPage({
                       sizes="(max-width: 768px) 100vw, 25vw"
                     />
                   </div>
-                  <CardContent className="flex flex-col flex-1 p-5 bg-gradient-to-br from-white to-green-50">
-                    <h3 className="font-semibold text-lg mb-2 line-clamp-2 text-gray-800 hover:text-green-700 transition-colors">
+                  <CardContent className="flex-1 p-4 flex flex-col">
+                    <h3 className="text-lg font-semibold mb-2">
                       {pkg.package_name}
                     </h3>
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg text-gray-500">Only</span>
-                      <p className="text-green-600 font-bold text-lg">
-                        ${pkg.package_price}
-                      </p>
+                    <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
+                      {pkg.description}
+                    </p>
+                    <div className="mt-auto flex items-center justify-between">
+                      <span className="text-primary font-bold">
+                        ${pkg.package_price.toLocaleString()}
+                      </span>
+                      <Button
+                        size="sm"
+                        className="bg-slate-700 hover:bg-slate-900 text-white cursor-pointer"
+                      >
+                        View
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
-              </a>
+              </Link>
             ))}
           </div>
         </div>

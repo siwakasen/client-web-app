@@ -1,8 +1,8 @@
 import MainContent from "./_components/main-content";
 import Image from "next/image";
 import { fetchTravelPackages } from "@/_services/travel-packages";
-import Navbar from "@/components/navbar/Navbar";
-import Footer from "./_components/footer";
+import Navbar from "@/components/shared/navbar/Navbar";
+import Footer from "../../components/shared/content/footer";
 import { unstable_cacheLife as cacheLife } from "next/cache";
 
 export default async function TourPackagesPage() {
@@ -31,7 +31,7 @@ export default async function TourPackagesPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
           <div className="text-white">
             <h1 className="text-3xl md:text-5xl font-bold mb-4">
-              Bali our Package
+              Travel Packages
             </h1>
             <p className="text-lg md:text-xl opacity-90">
               Explore the best tour packages in Bali

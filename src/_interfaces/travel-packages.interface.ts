@@ -1,6 +1,6 @@
 export interface TravelPackagesResponse {
     data: TravelPackages[]
-    meta: TravelPackagesMeta
+    meta: Meta
   }
   
   export interface TravelPackages {
@@ -18,7 +18,7 @@ export interface TravelPackagesResponse {
     deleted_at: string
   }
   
-  export interface TravelPackagesMeta {
+  export interface Meta {
     totalItems: number
     currentPage: number
     totalPages: number

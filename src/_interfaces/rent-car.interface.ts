@@ -6,7 +6,7 @@ export interface CarsResponse {
 export interface Car {
     id: number
     car_name: string
-    car_image?: string
+    car_image: string
     car_color: string
     police_number: string
     transmission: string
