@@ -7,13 +7,14 @@ import { Input } from "@/components/ui/input";
 import { CarsCard } from "./cars-card";
 import { Pagination } from "../../../components/shared/content/pagination";
 import { fetchCars } from "@/_services/rent-cars";
+import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
 
 interface CarsProps {
-  tourPackages: Car[];
+  cars: Car[];
   meta: Meta;
 }
 export default function MainContent({
-  tourPackages: initialCars,
+  cars: initialCars,
   meta: initialMeta,
 }: CarsProps) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,6 +37,7 @@ export default function MainContent({
 
   // Fetch data when page or debounced search changes
   useEffect(() => {
+    // must change to ssr
     const fetchData = async () => {
       try {
         const { data, meta: newMeta } = await fetchCars({
@@ -46,7 +48,7 @@ export default function MainContent({
         setCars(data);
         setMeta(newMeta);
       } catch (error) {
-        console.error("Error fetching cars:", error);
+        // TOAST ERROR
       }
     };
 
@@ -101,11 +103,19 @@ export default function MainContent({
                 ))}
               </div>
               {filteredCars.length === 0 && (
-                <div className="text-center py-12">
-                  <p className="text-gray-500 text-lg">
-                    No cars found matching your criteria.
-                  </p>
-                </div>
+                <>
+                  <div className="text-center py-3">
+                    <p className="text-gray-500 text-md">
+                      No cars available or not matching your criteria.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <SkeletonCard />
+                    <SkeletonCard />
+                    <SkeletonCard />
+                    <SkeletonCard />
+                  </div>
+                </>
               )}
               {filteredCars.length > 0 && (
                 <Pagination

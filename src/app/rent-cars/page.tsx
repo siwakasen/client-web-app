@@ -4,15 +4,32 @@ import { fetchCars } from "@/_services/rent-cars";
 import Navbar from "@/components/shared/navbar/Navbar";
 import Footer from "../../components/shared/content/footer";
 import { unstable_cacheLife as cacheLife } from "next/cache";
+import { Car } from "@/_interfaces/rent-car.interface";
+import { Meta } from "@/_interfaces/rent-car.interface";
 
 export default async function RentCarsPage() {
   "use cache";
   cacheLife("hours");
-  const { data, meta } = await fetchCars({
-    limit: 20,
-    page: 1,
-    search: "",
-  });
+  let cars: Car[] = [];
+  let meta: Meta = {
+    currentPage: 1,
+    totalItems: 0,
+    totalPages: 0,
+    limit: 10,
+    hasNextPage: false,
+    hasPrevPage: false,
+  };
+  try {
+    const { data, meta: metaData } = await fetchCars({
+      limit: 10,
+      page: 1,
+      search: "",
+    });
+    cars = data;
+    meta = metaData;
+  } catch (error) {
+    console.log("Error fetching cars:", error);
+  }
 
   return (
     <div className="min-h-screen bg-gray-200">
@@ -38,7 +55,7 @@ export default async function RentCarsPage() {
         </div>
       </section>
 
-      <MainContent tourPackages={data} meta={meta} />
+      <MainContent cars={cars} meta={meta} />
       <Footer />
     </div>
   );

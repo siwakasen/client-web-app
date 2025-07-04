@@ -22,7 +22,6 @@ export async function fetchTravelPackages (
         }
         return response.data;
     } catch (error) {
-        console.error('fetchTravelPackages error:', error);
         throw error instanceof Error ? error : new Error(String(error));
     }
 };

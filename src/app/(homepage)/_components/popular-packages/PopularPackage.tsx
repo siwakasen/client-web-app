@@ -3,16 +3,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import { fetchTravelPackages } from "@/_services/travel-packages";
 import ContentDivider from "../content-divider/ContentDivider";
 import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import { TravelPackages } from "@/_interfaces/travel-packages.interface";
+import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
 export default async function PopularPackage() {
-  const { data } = await fetchTravelPackages({
-    limit: 2,
-    page: 1,
-    search: "",
-  });
+  let packages: TravelPackages[] = [];
+  try {
+    const { data } = await fetchTravelPackages({
+      limit: 2,
+      page: 1,
+      search: "",
+    });
+    packages = data;
+  } catch (error) {}
 
-  // Use the actual data from the API response
-  const packages = data.map((pkg) => ({
+  const packagesData = packages.map((pkg) => ({
     id: pkg.id,
     title: pkg.package_name,
     image:
@@ -23,7 +29,11 @@ export default async function PopularPackage() {
   }));
 
   return (
-    <section className="bg-gray-50 pt-16 px-4 md:px-8 min-h-screen">
+    <section
+      className={`bg-gray-50 pt-16 px-4 md:px-8 ${
+        packagesData.length > 0 ? "min-h-screen" : "min-h-fit"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <ContentDivider
@@ -36,8 +46,8 @@ export default async function PopularPackage() {
 
         {/* Cards Section */}
         <div className="flex flex-col md:flex-row w-full justify-between gap-8">
-          {packages.length > 0 ? (
-            packages.map((pkg, index) => (
+          {packagesData.length > 0 ? (
+            packagesData.map((pkg, index) => (
               <Link href={`/travel-packages/${pkg.id}`} key={pkg.id}>
                 <Card
                   key={pkg.id}
@@ -71,10 +81,13 @@ export default async function PopularPackage() {
               </Link>
             ))
           ) : (
-            <div className="w-full text-center py-8">
-              <p className="text-gray-500">
-                No travel packages available at the moment.
-              </p>
+            <div className="w-full text-center py-8 flex flex-row gap-4 justify-center">
+              <div className="w-full">
+                <SkeletonCard />
+              </div>
+              <div className="w-full">
+                <SkeletonCard />
+              </div>
             </div>
           )}
         </div>

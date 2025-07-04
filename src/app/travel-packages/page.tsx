@@ -4,16 +4,31 @@ import { fetchTravelPackages } from "@/_services/travel-packages";
 import Navbar from "@/components/shared/navbar/Navbar";
 import Footer from "../../components/shared/content/footer";
 import { unstable_cacheLife as cacheLife } from "next/cache";
+import { Meta, TravelPackages } from "@/_interfaces/travel-packages.interface";
 
 export default async function TourPackagesPage() {
   "use cache";
   cacheLife("hours");
-  const { data, meta } = await fetchTravelPackages({
-    limit: 20,
-    page: 1,
-    search: "",
-  });
-
+  let travelPackages: TravelPackages[] = [];
+  let metaPackages: Meta = {
+    currentPage: 1,
+    totalItems: 0,
+    totalPages: 0,
+    limit: 10,
+    hasNextPage: false,
+    hasPrevPage: false,
+  };
+  try {
+    const { data, meta: metaData } = await fetchTravelPackages({
+      limit: 10,
+      page: 1,
+      search: "",
+    });
+    travelPackages = data;
+    metaPackages = metaData;
+  } catch (error) {
+    console.log("Error fetching travel packages:", error);
+  }
   return (
     <div className="min-h-screen bg-gray-200">
       <Navbar />
@@ -40,7 +55,7 @@ export default async function TourPackagesPage() {
         </div>
       </section>
 
-      <MainContent tourPackages={data} meta={meta} />
+      <MainContent tourPackages={travelPackages} meta={metaPackages} />
       <Footer />
     </div>
   );

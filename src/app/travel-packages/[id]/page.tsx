@@ -1,4 +1,5 @@
 "use cache";
+
 import {
   fetchTravelPackages,
   fetchTravelPackagesDetail,
@@ -12,6 +13,8 @@ import { ImageCarousel } from "./_components/carousel-images";
 import { Separator } from "@/components/ui/separator";
 import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
 import Link from "next/link";
+import { TravelPackages } from "@/_interfaces/travel-packages.interface";
+import { notFound } from "next/navigation";
 
 export default async function TravelPackageDetailPage({
   params,
@@ -20,18 +23,30 @@ export default async function TravelPackageDetailPage({
 }) {
   // Fetch data on the server
   const { id } = await params;
-  const { data } = await fetchTravelPackagesDetail({ id: Number(id) });
-  const relatedPackages = await fetchTravelPackages({
-    limit: 10,
-    page: 1,
-    search: "",
-  });
-  const filteredRelatedPackages = relatedPackages.data
-    .filter((pkg) => pkg.id !== Number(id))
-    .slice(0, 4);
+  let data: TravelPackages | null = null;
+  let filteredRelatedPackages: TravelPackages[] = [];
+  try {
+    const { data: travel } = await fetchTravelPackagesDetail({
+      id: Number(id),
+    });
+    const relatedPackages = await fetchTravelPackages({
+      limit: 10,
+      page: 1,
+      search: "",
+    });
+    data = travel;
+    filteredRelatedPackages = relatedPackages.data
+      .filter((pkg) => pkg.id !== Number(id))
+      .slice(0, 4);
+  } catch (error) {
+    // TOAST ERROR
+  }
+
+  if (!data) {
+    notFound();
+  }
 
   const formatPrice = (price: number) => `$${price.toLocaleString()}`;
-
   return (
     <div className="min-h-screen ">
       {/* Hero Section with Title */}

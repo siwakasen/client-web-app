@@ -9,10 +9,8 @@ import { Separator } from "@/components/ui/separator";
 import { convertCarImageUrl } from "@/_helpers/images-url/car-images";
 import Link from "next/link";
 import React from "react";
-
-function formatPrice(price: number) {
-  return `$${price.toLocaleString()}`;
-}
+import { Car } from "@/_interfaces/rent-car.interface";
+import { notFound } from "next/navigation";
 
 export default async function CarDetailPage({
   params,
@@ -20,11 +18,24 @@ export default async function CarDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const { data } = await fetchCarsDetail({ id: Number(id) });
-  const relatedCars = await fetchCars({ limit: 10, page: 1, search: "" });
-  const filteredRelatedCars = relatedCars.data
-    .filter((car) => car.id !== Number(id))
-    .slice(0, 4);
+  let data: Car | null = null;
+  let filteredRelatedCars: Car[] = [];
+  try {
+    const { data: car } = await fetchCarsDetail({ id: Number(id) });
+    const relatedCars = await fetchCars({ limit: 10, page: 1, search: "" });
+    data = car;
+    filteredRelatedCars = relatedCars.data
+      .filter((car) => car.id !== Number(id))
+      .slice(0, 4);
+  } catch (error) {
+    // TOAST ERROR
+  }
+
+  if (!data) {
+    notFound();
+  }
+
+  const formatPrice = (price: number) => `$${price.toLocaleString()}`;
 
   return (
     <div className="min-h-screen ">

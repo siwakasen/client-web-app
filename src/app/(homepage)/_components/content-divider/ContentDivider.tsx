@@ -12,7 +12,7 @@ export default function ContentDivider({
   titleClass: number;
 }) {
   return (
-    <div className="mb-12">
+    <div className="mb-12 py-4">
       <div className="flex items-center gap-4 mb-2">
         <p className="text-sm text-gray-600 font-medium tracking-wide uppercase py-6">
           {dividerText}

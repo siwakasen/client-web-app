@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { TourPackageCard } from "./packages-card";
 import { Pagination } from "../../../components/shared/content/pagination";
 import { fetchTravelPackages } from "@/_services/travel-packages";
+import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
 
 interface TourPackagesProps {
   tourPackages: TravelPackages[];
@@ -36,17 +38,18 @@ export default function MainContent({
 
   // Fetch data when page or debounced search changes
   useEffect(() => {
+    // must change to ssr
     const fetchData = async () => {
       try {
         const { data, meta: newMeta } = await fetchTravelPackages({
-          limit: 4,
+          limit: 10,
           page: currentPage,
           search: debouncedSearchTerm,
         });
         setTourPackages(data);
         setMeta(newMeta);
       } catch (error) {
-        console.error("Error fetching travel packages:", error);
+        // TOAST ERROR
       }
     };
 
@@ -108,15 +111,22 @@ export default function MainContent({
                   <TourPackageCard key={pkg.id} travelPackage={pkg} />
                 ))}
               </div>
-
               {filteredPackages.length === 0 && (
-                <div className="text-center py-12">
-                  <p className="text-gray-500 text-lg">
-                    No packages found matching your criteria.
-                  </p>
-                </div>
+                <>
+                  <div className="text-center py-3">
+                    <p className="text-gray-500 text-md">
+                      No travel packages available or not matching your
+                      criteria.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <SkeletonCard />
+                    <SkeletonCard />
+                    <SkeletonCard />
+                    <SkeletonCard />
+                  </div>
+                </>
               )}
-
               {/* Pagination */}
               {filteredPackages.length > 0 && (
                 <Pagination
