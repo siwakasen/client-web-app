@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { useState, useEffect } from "react"; // Import useEffect
 
@@ -13,12 +13,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   // --- 1. State to track scroll position ---
   const [isScrolled, setIsScrolled] = useState(false);
-
 
   // --- 2. Effect to handle scroll event ---
   useEffect(() => {
@@ -51,8 +49,8 @@ export default function Navbar() {
     <nav
       className={`w-full fixed top-0 left-0 z-50 px-4 md:px-8 py-4 transition-all duration-300 ${
         isScrolled
-          ? 'bg-gray-50 shadow-md'
-          : 'bg-gradient-to-b from-black/70 to-transparent'
+          ? "bg-gray-50 shadow-md"
+          : "bg-gradient-to-b from-black/70 to-transparent"
       }`}
     >
       <div className="flex items-center justify-between max-w-7xl mx-auto">
@@ -61,7 +59,7 @@ export default function Navbar() {
           <span className="text-xl md:text-2xl font-bold">
             <span className="text-green-400">Ride Bali</span>{" "}
             {/* Conditionally change logo text color */}
-            <span className={isScrolled ? 'text-gray-900' : 'text-white'}>
+            <span className={isScrolled ? "text-gray-900" : "text-white"}>
               Explore
             </span>
           </span>
@@ -77,8 +75,8 @@ export default function Navbar() {
                 // Conditionally change link text color and hover color
                 className={`font-bold transition-colors duration-200 lg:mx-6 xl:mx-8 ${
                   isScrolled
-                    ? 'text-gray-900 hover:text-green-600'
-                    : 'text-white hover:text-green-400'
+                    ? "text-gray-900 hover:text-green-600"
+                    : "text-white hover:text-green-400"
                 }`}
               >
                 {item.label}
@@ -96,7 +94,9 @@ export default function Navbar() {
                 size="icon"
                 // Conditionally change menu icon color
                 className={`hover:bg-white/10 ${
-                    isScrolled ? 'text-gray-900 hover:text-green-600' : 'text-white hover:text-green-400'
+                  isScrolled
+                    ? "text-gray-900 hover:text-green-600"
+                    : "text-white hover:text-green-400"
                 }`}
               >
                 <Menu className="h-6 w-6" />
@@ -134,13 +134,18 @@ export default function Navbar() {
 
         {/* Desktop "Book Now" Button */}
         <div className="hidden md:block">
-          
-            {/* Conditionally change button styles */}
-            <Button asChild size="lg" className={`transition-all duration-300 rounded-full ${isScrolled ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-white/20 text-white backdrop-blur-md border border-white/30 hover:bg-black/30'}`}>
-                <Link href="/travel-packages">
-                  Book Now
-                </Link>
-              </Button>
+          {/* Conditionally change button styles */}
+          <Button
+            asChild
+            size="lg"
+            className={`transition-all duration-300 rounded-full ${
+              isScrolled
+                ? "bg-green-500 text-white hover:bg-green-600"
+                : "bg-white/20 text-white backdrop-blur-md border border-white/30 hover:bg-black/30"
+            }`}
+          >
+            <Link href="/travel-packages">Book Now</Link>
+          </Button>
         </div>
       </div>
     </nav>

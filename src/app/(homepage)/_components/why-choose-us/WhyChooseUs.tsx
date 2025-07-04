@@ -7,23 +7,23 @@ export default function WhyChooseUs() {
     {
       number: "1",
       title: "Enjoy a great journey tailored just for you",
-      description: "We provide the best experiences for our customers."
+      description: "We provide the best experiences for our customers.",
     },
     {
-      number: "2", 
+      number: "2",
       title: "Affordable and reliable services",
-      description: "Experience the best quality at a reasonable price."
+      description: "Experience the best quality at a reasonable price.",
     },
     {
       number: "3",
-      title: "Trusted by thousands", 
-      description: "Join the community of happy travelers."
+      title: "Trusted by thousands",
+      description: "Join the community of happy travelers.",
     },
     {
       number: "4",
       title: "Wide range of options",
-      description: "From budget-friendly to luxurious travels."
-    }
+      description: "From budget-friendly to luxurious travels.",
+    },
   ];
 
   return (
@@ -77,7 +77,6 @@ export default function WhyChooseUs() {
             ))}
           </div>
         </div>
-
       </div>
     </section>
   );

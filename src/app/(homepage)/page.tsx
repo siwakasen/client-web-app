@@ -7,7 +7,7 @@ import Manager from "./_components/manager-section/Manager";
 import Footer from "./_components/footer-section/Footer";
 export default function Home() {
   return (
-    <div >
+    <div>
       <Hero />
       <PopularPackage />
       <WhyChooseUs />

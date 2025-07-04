@@ -7,7 +7,7 @@ export default function RentCarsLayout({
 }) {
   return (
     <div>
-        <Navbar/>   
+      <Navbar />
       {children}
     </div>
   );

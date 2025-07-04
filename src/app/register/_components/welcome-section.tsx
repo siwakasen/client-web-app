@@ -1,4 +1,4 @@
-import Image from "next/image"
+import Image from "next/image";
 
 export default function WelcomeSection() {
   return (
@@ -11,11 +11,14 @@ export default function WelcomeSection() {
 
       {/* Welcome Text */}
       <div className="space-y-4 max-w-md">
-        <h1 className="text-3xl font-bold text-gray-900">Welcome to Ride Bali Explore</h1>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Welcome to Ride Bali Explore
+        </h1>
         <p className="text-gray-600 leading-relaxed">
-            Explore Bali with us and enjoy the best experience with our best travel packages and car rental services.
+          Explore Bali with us and enjoy the best experience with our best
+          travel packages and car rental services.
         </p>
       </div>
     </div>
-  )
+  );
 }

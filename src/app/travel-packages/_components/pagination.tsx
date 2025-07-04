@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { TravelPackagesMeta } from "@/_interfaces/travel-packages.interface"
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { TravelPackagesMeta } from "@/_interfaces/travel-packages.interface";
 
 interface PaginationProps {
-  meta: TravelPackagesMeta
-  currentPage: number
-  onPageChange: (page: number) => void
+  meta: TravelPackagesMeta;
+  currentPage: number;
+  onPageChange: (page: number) => void;
 }
 
 export const Pagination: React.FC<PaginationProps> = ({
@@ -13,26 +13,26 @@ export const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   onPageChange,
 }) => {
-  const { totalPages, hasNextPage, hasPrevPage } = meta
+  const { totalPages, hasNextPage, hasPrevPage } = meta;
 
   const getPageNumbers = () => {
-    const pages = []
-    const maxVisiblePages = 5
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2))
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
+    const pages = [];
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
     if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1)
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
 
     for (let i = startPage; i <= endPage; i++) {
-      pages.push(i)
+      pages.push(i);
     }
 
-    return pages
-  }
+    return pages;
+  };
 
-  const pageNumbers = getPageNumbers()
+  const pageNumbers = getPageNumbers();
 
   return (
     <div className="flex items-center justify-center space-x-2 mt-8">
@@ -73,5 +73,5 @@ export const Pagination: React.FC<PaginationProps> = ({
         <ChevronRight className="h-4 w-4" />
       </Button>
     </div>
-  )
-} 
+  );
+};

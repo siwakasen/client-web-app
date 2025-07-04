@@ -1,15 +1,21 @@
-"use client"
+"use client";
 
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Card } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 
 interface FilterSearchProps {
-  maxPrice: string
-  setMaxPrice: (value: string) => void
-  maxGroupSize: string
-  setMaxGroupSize: (value: string) => void
+  maxPrice: string;
+  setMaxPrice: (value: string) => void;
+  maxGroupSize: string;
+  setMaxGroupSize: (value: string) => void;
 }
 
 export function FilterSearch({
@@ -20,14 +26,15 @@ export function FilterSearch({
 }: FilterSearchProps) {
   return (
     <>
-
       {/* Sidebar Filters */}
       <Card className="p-6 mb-6 lg:mb-0">
         <h3 className="text-lg font-semibold mb-4">Filter</h3>
 
         <div className="space-y-4">
           <div>
-            <Label htmlFor="max-price" className="mb-2">Max Price</Label>
+            <Label htmlFor="max-price" className="mb-2">
+              Max Price
+            </Label>
             <Input
               id="max-price"
               type="number"
@@ -38,7 +45,9 @@ export function FilterSearch({
           </div>
 
           <div>
-            <Label htmlFor="max-group" className="mb-2">Max Group Size</Label>
+            <Label htmlFor="max-group" className="mb-2">
+              Max Group Size
+            </Label>
             <Input
               id="max-group"
               type="number"
@@ -50,5 +59,5 @@ export function FilterSearch({
         </div>
       </Card>
     </>
-  )
+  );
 }

@@ -9,9 +9,9 @@ import { createApiInstance } from '../api';
   
   const api = createApiInstance(process.env.NEXT_PUBLIC_CARS_API_URL);
 
-  export const fetchCars = async (
+  export async function fetchCars (
     pagination: CarsRequest
-  ): Promise<CarsResponse> => {
+  ): Promise<CarsResponse> {
     const response = await api.get(
       `/cars?limit=${pagination.limit}&page=${pagination.page}&search=${pagination.search || ''}`
     );
@@ -21,8 +21,8 @@ import { createApiInstance } from '../api';
     return response.data;
   };
 
-  export const fetchCarsDetail = async (payload: CarsDetailRequest
-    ): Promise<CarsDetailResponse> => {
+  export async function fetchCarsDetail (payload: CarsDetailRequest
+    ): Promise<CarsDetailResponse> {
     const response = await api.get(
         `/cars/${payload.id}`
     );

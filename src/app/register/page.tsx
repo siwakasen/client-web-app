@@ -1,5 +1,5 @@
-import RegisterForm from "./_components/register-form"
-import WelcomeSection from "./_components/welcome-section"
+import RegisterForm from "./_components/register-form";
+import WelcomeSection from "./_components/welcome-section";
 
 export default function RegisterPage() {
   return (
@@ -21,5 +21,5 @@ export default function RegisterPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

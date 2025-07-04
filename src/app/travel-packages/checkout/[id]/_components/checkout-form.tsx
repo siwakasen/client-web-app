@@ -1,31 +1,31 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Textarea } from "@/components/ui/textarea"
-import { Checkbox } from "@/components/ui/checkbox"
-import { ChevronDown } from "lucide-react"
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ChevronDown } from "lucide-react";
 
 interface BookingData {
-  package_id: number
-  number_of_persons: number
-  start_date: string
-  end_date: string
-  payment_method: "MIDTRANS" | "PAYPAL"
-  pickup_location: string
-  pickup_time: string
-  email: string
-  password: string
-  name: string
-  phone_number: string
-  country_origin: string
+  package_id: number;
+  number_of_persons: number;
+  start_date: string;
+  end_date: string;
+  payment_method: "MIDTRANS" | "PAYPAL";
+  pickup_location: string;
+  pickup_time: string;
+  email: string;
+  password: string;
+  name: string;
+  phone_number: string;
+  country_origin: string;
 }
 
 interface CheckoutFormProps {
-  packageId: number
+  packageId: number;
 }
 
 export function CheckoutForm({ packageId }: CheckoutFormProps) {
@@ -42,71 +42,71 @@ export function CheckoutForm({ packageId }: CheckoutFormProps) {
     name: "Logobreaker",
     phone_number: "08123456789",
     country_origin: "Indonesia",
-  })
+  });
 
-  const [notes, setNotes] = useState("")
-  const [emailUpdates, setEmailUpdates] = useState(false)
-  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [notes, setNotes] = useState("");
+  const [emailUpdates, setEmailUpdates] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validateForm = () => {
-    const newErrors: Record<string, string> = {}
+    const newErrors: Record<string, string> = {};
 
     if (!bookingData.start_date) {
-      newErrors.start_date = "Start date is required"
+      newErrors.start_date = "Start date is required";
     }
     if (!bookingData.end_date) {
-      newErrors.end_date = "End date is required"
+      newErrors.end_date = "End date is required";
     }
     if (!bookingData.number_of_persons || bookingData.number_of_persons < 1) {
-      newErrors.number_of_persons = "Number of persons is required (minimum 1)"
+      newErrors.number_of_persons = "Number of persons is required (minimum 1)";
     }
     if (!bookingData.pickup_location.trim()) {
-      newErrors.pickup_location = "Pickup location is required"
+      newErrors.pickup_location = "Pickup location is required";
     }
     if (!bookingData.pickup_time) {
-      newErrors.pickup_time = "Pickup time is required"
+      newErrors.pickup_time = "Pickup time is required";
     }
 
-    setErrors(newErrors)
-    return { isValid: Object.keys(newErrors).length === 0, errors: newErrors }
-  }
+    setErrors(newErrors);
+    return { isValid: Object.keys(newErrors).length === 0, errors: newErrors };
+  };
 
   const scrollToFirstError = (validationErrors: Record<string, string>) => {
-    const errorFields = Object.keys(validationErrors)
+    const errorFields = Object.keys(validationErrors);
     if (errorFields.length > 0) {
       // Scroll to top of the form when there are validation errors
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }
+  };
 
   const handleSubmit = async () => {
-    const validation = validateForm()
+    const validation = validateForm();
     if (!validation.isValid) {
-      scrollToFirstError(validation.errors)
-      return
+      scrollToFirstError(validation.errors);
+      return;
     }
 
-    console.log("Booking Data:", bookingData)
-    console.log("Notes:", notes)
+    console.log("Booking Data:", bookingData);
+    console.log("Notes:", notes);
 
     if (bookingData.payment_method === "MIDTRANS") {
-      console.log("Redirecting to Midtrans...")
+      console.log("Redirecting to Midtrans...");
       // Add actual Midtrans integration here
     } else {
-      console.log("Redirecting to PayPal...")
+      console.log("Redirecting to PayPal...");
       // Add actual PayPal integration here
     }
-  }
+  };
 
   const formatDateForDisplay = (dateString: string) => {
-    if (!dateString) return "Not selected"
-    const date = new Date(dateString)
+    if (!dateString) return "Not selected";
+    const date = new Date(dateString);
     return date.toLocaleDateString("id-ID", {
       day: "numeric",
       month: "long",
       year: "numeric",
-    })
-  }
+    });
+  };
 
   return (
     <div className="bg-white p-6 lg:p-8 space-y-6">
@@ -134,12 +134,14 @@ export function CheckoutForm({ packageId }: CheckoutFormProps) {
                   setBookingData({
                     ...bookingData,
                     start_date: e.target.value,
-                  })
+                  });
                   if (errors.start_date) {
-                    setErrors(prev => ({ ...prev, start_date: "" }))
+                    setErrors((prev) => ({ ...prev, start_date: "" }));
                   }
                 }}
-                className={`mt-1 ${errors.start_date ? "border-red-500 focus:border-red-500" : ""}`}
+                className={`mt-1 ${
+                  errors.start_date ? "border-red-500 focus:border-red-500" : ""
+                }`}
               />
               {errors.start_date && (
                 <p className="text-red-500 text-sm mt-1">{errors.start_date}</p>
@@ -155,12 +157,14 @@ export function CheckoutForm({ packageId }: CheckoutFormProps) {
                   setBookingData({
                     ...bookingData,
                     end_date: e.target.value,
-                  })
+                  });
                   if (errors.end_date) {
-                    setErrors(prev => ({ ...prev, end_date: "" }))
+                    setErrors((prev) => ({ ...prev, end_date: "" }));
                   }
                 }}
-                className={`mt-1 ${errors.end_date ? "border-red-500 focus:border-red-500" : ""}`}
+                className={`mt-1 ${
+                  errors.end_date ? "border-red-500 focus:border-red-500" : ""
+                }`}
               />
               {errors.end_date && (
                 <p className="text-red-500 text-sm mt-1">{errors.end_date}</p>
@@ -179,15 +183,21 @@ export function CheckoutForm({ packageId }: CheckoutFormProps) {
                 setBookingData({
                   ...bookingData,
                   number_of_persons: Number.parseInt(e.target.value) || 1,
-                })
+                });
                 if (errors.number_of_persons) {
-                  setErrors(prev => ({ ...prev, number_of_persons: "" }))
+                  setErrors((prev) => ({ ...prev, number_of_persons: "" }));
                 }
               }}
-              className={`mt-1 w-32 ${errors.number_of_persons ? "border-red-500 focus:border-red-500" : ""}`}
+              className={`mt-1 w-32 ${
+                errors.number_of_persons
+                  ? "border-red-500 focus:border-red-500"
+                  : ""
+              }`}
             />
             {errors.number_of_persons && (
-              <p className="text-red-500 text-sm mt-1">{errors.number_of_persons}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.number_of_persons}
+              </p>
             )}
           </div>
 
@@ -201,16 +211,22 @@ export function CheckoutForm({ packageId }: CheckoutFormProps) {
                 setBookingData({
                   ...bookingData,
                   pickup_location: e.target.value,
-                })
+                });
                 if (errors.pickup_location) {
-                  setErrors(prev => ({ ...prev, pickup_location: "" }))
+                  setErrors((prev) => ({ ...prev, pickup_location: "" }));
                 }
               }}
-              className={`mt-1 ${errors.pickup_location ? "border-red-500 focus:border-red-500" : ""}`}
+              className={`mt-1 ${
+                errors.pickup_location
+                  ? "border-red-500 focus:border-red-500"
+                  : ""
+              }`}
               placeholder="Enter pickup location"
             />
             {errors.pickup_location && (
-              <p className="text-red-500 text-sm mt-1">{errors.pickup_location}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.pickup_location}
+              </p>
             )}
           </div>
 
@@ -224,12 +240,14 @@ export function CheckoutForm({ packageId }: CheckoutFormProps) {
                 setBookingData({
                   ...bookingData,
                   pickup_time: e.target.value,
-                })
+                });
                 if (errors.pickup_time) {
-                  setErrors(prev => ({ ...prev, pickup_time: "" }))
+                  setErrors((prev) => ({ ...prev, pickup_time: "" }));
                 }
               }}
-              className={`mt-1 w-32 ${errors.pickup_time ? "border-red-500 focus:border-red-500" : ""}`}
+              className={`mt-1 w-32 ${
+                errors.pickup_time ? "border-red-500 focus:border-red-500" : ""
+              }`}
             />
             {errors.pickup_time && (
               <p className="text-red-500 text-sm mt-1">{errors.pickup_time}</p>
@@ -241,16 +259,17 @@ export function CheckoutForm({ packageId }: CheckoutFormProps) {
       {/* Date Summary Display */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
         <p className="text-sm text-blue-800">
-          <span className="font-medium">Trip Duration:</span> {formatDateForDisplay(bookingData.start_date)} –{" "}
+          <span className="font-medium">Trip Duration:</span>{" "}
+          {formatDateForDisplay(bookingData.start_date)} –{" "}
           {formatDateForDisplay(bookingData.end_date)}
         </p>
       </div>
 
       {/* Email Updates */}
       <div className="flex items-center space-x-2">
-        <Checkbox 
-          id="email-updates" 
-          checked={emailUpdates} 
+        <Checkbox
+          id="email-updates"
+          checked={emailUpdates}
           onCheckedChange={(checked) => setEmailUpdates(checked === true)}
         />
         <Label htmlFor="email-updates" className="text-sm">
@@ -274,12 +293,15 @@ export function CheckoutForm({ packageId }: CheckoutFormProps) {
       {/* Payment Section */}
       <div>
         <h2 className="text-lg font-bold mb-2">Payment</h2>
-        <p className="text-sm text-gray-600 mb-4">All transactions are secured and encrypted.</p>
+        <p className="text-sm text-gray-600 mb-4">
+          All transactions are secured and encrypted.
+        </p>
 
         <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
           <p className="text-sm text-red-700">
-            <span className="font-medium">Attention:</span> The final price will be displayed on the payment page with
-            applicable promotions if available.
+            <span className="font-medium">Attention:</span> The final price will
+            be displayed on the payment page with applicable promotions if
+            available.
           </p>
         </div>
 
@@ -295,14 +317,20 @@ export function CheckoutForm({ packageId }: CheckoutFormProps) {
         >
           {/* PayPal Option */}
           <div
-            className={`border rounded-lg ${bookingData.payment_method === "PAYPAL" ? "border-blue-500" : "border-gray-200"}`}
+            className={`border rounded-lg ${
+              bookingData.payment_method === "PAYPAL"
+                ? "border-blue-500"
+                : "border-gray-200"
+            }`}
           >
             <div className="flex items-center space-x-3 p-4 border-b">
               <RadioGroupItem value="PAYPAL" id="paypal-payment" />
               <Label htmlFor="paypal-payment" className="flex-1 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-lg">PayPal</span>
-                  <div className="bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold">PayPal</div>
+                  <div className="bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold">
+                    PayPal
+                  </div>
                 </div>
               </Label>
             </div>
@@ -311,11 +339,14 @@ export function CheckoutForm({ packageId }: CheckoutFormProps) {
               <div className="p-4 bg-gray-50">
                 <div className="flex justify-center mb-4">
                   <div className="w-24 h-16 bg-white border rounded flex items-center justify-center">
-                    <div className="text-blue-600 font-bold text-lg">PayPal</div>
+                    <div className="text-blue-600 font-bold text-lg">
+                      PayPal
+                    </div>
                   </div>
                 </div>
                 <p className="text-sm text-gray-700 text-center">
-                  After clicking "Pay now", you will be directed to PayPal to complete the payment process securely.
+                  After clicking "Pay now", you will be directed to PayPal to
+                  complete the payment process securely.
                 </p>
               </div>
             )}
@@ -323,18 +354,35 @@ export function CheckoutForm({ packageId }: CheckoutFormProps) {
 
           {/* Midtrans Option */}
           <div
-            className={`border rounded-lg ${bookingData.payment_method === "MIDTRANS" ? "border-blue-500" : "border-gray-200"}`}
+            className={`border rounded-lg ${
+              bookingData.payment_method === "MIDTRANS"
+                ? "border-blue-500"
+                : "border-gray-200"
+            }`}
           >
             <div className="flex items-center space-x-3 p-4 border-b">
               <RadioGroupItem value="MIDTRANS" id="midtrans-payment" />
-              <Label htmlFor="midtrans-payment" className="flex-1 cursor-pointer">
+              <Label
+                htmlFor="midtrans-payment"
+                className="flex-1 cursor-pointer"
+              >
                 <div className="flex items-center justify-between">
-                  <span className="font-medium text-lg">Payments via Midtrans</span>
+                  <span className="font-medium text-lg">
+                    Payments via Midtrans
+                  </span>
                   <div className="flex items-center gap-2">
-                    <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">BCA</div>
-                    <div className="bg-blue-500 text-white px-2 py-1 rounded text-xs font-bold">gopay</div>
-                    <div className="bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">●●</div>
-                    <div className="bg-orange-500 text-white px-2 py-1 rounded text-xs font-bold">BNI</div>
+                    <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                      BCA
+                    </div>
+                    <div className="bg-blue-500 text-white px-2 py-1 rounded text-xs font-bold">
+                      gopay
+                    </div>
+                    <div className="bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
+                      ●●
+                    </div>
+                    <div className="bg-orange-500 text-white px-2 py-1 rounded text-xs font-bold">
+                      BNI
+                    </div>
                     <span className="text-blue-600 font-bold text-sm">+21</span>
                   </div>
                 </div>
@@ -363,8 +411,8 @@ export function CheckoutForm({ packageId }: CheckoutFormProps) {
                   </div>
                 </div>
                 <p className="text-sm text-gray-700 text-center">
-                  After clicking "Pay now", you will be directed to Payments via Midtrans to complete the payment
-                  process securely.
+                  After clicking "Pay now", you will be directed to Payments via
+                  Midtrans to complete the payment process securely.
                 </p>
               </div>
             )}
@@ -381,5 +429,5 @@ export function CheckoutForm({ packageId }: CheckoutFormProps) {
         Pay now
       </Button>
     </div>
-  )
+  );
 }
