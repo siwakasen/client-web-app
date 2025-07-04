@@ -3,8 +3,11 @@ import Image from "next/image"
 import { fetchTravelPackages } from "@/_services/travel-packages";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "./_components/footer";
+import {unstable_cacheLife as cacheLife} from "next/cache"
 
 export default async function TourPackagesPage() {
+  "use cache"
+  cacheLife("hours")
   const {data, meta} = await fetchTravelPackages({
     limit: 20,
     page: 1,

@@ -5,6 +5,7 @@ import { createApiInstance } from "../api";
 const api = createApiInstance(process.env.NEXT_PUBLIC_CUSTOMERS_API_URL);
 
 export const login = async (payload: LoginRequest): Promise<LoginResponse> => {
+    
     const response = await api.post('/customers/login', payload);
     if(response.status !== 200){
         throw new Error('Failed to login');

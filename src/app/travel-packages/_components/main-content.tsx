@@ -20,7 +20,6 @@ export default function MainContent({tourPackages: initialTourPackages, meta: in
     const [currentPage, setCurrentPage] = useState(1)
     const [tourPackages, setTourPackages] = useState(initialTourPackages)
     const [meta, setMeta] = useState(initialMeta)
-    const [isLoading, setIsLoading] = useState(false)
 
     // Debounce search term
     useEffect(() => {
@@ -35,7 +34,6 @@ export default function MainContent({tourPackages: initialTourPackages, meta: in
     // Fetch data when page or debounced search changes
     useEffect(() => {
         const fetchData = async () => {
-            setIsLoading(true)
             try {
                 const { data, meta: newMeta } = await fetchTravelPackages({
                     limit: 4,
@@ -46,9 +44,8 @@ export default function MainContent({tourPackages: initialTourPackages, meta: in
                 setMeta(newMeta)
             } catch (error) {
                 console.error("Error fetching travel packages:", error)
-            } finally {
-                setIsLoading(false)
             }
+            
         }
 
         fetchData()
@@ -101,15 +98,8 @@ export default function MainContent({tourPackages: initialTourPackages, meta: in
                   </div>
                 </div>
 
-                {/* Loading State */}
-                {isLoading && (
-                  <div className="text-center py-12">
-                    <p className="text-gray-500 text-lg">Loading packages...</p>
-                  </div>
-                )}
 
                 {/* Tour Package Cards */}
-                {!isLoading && (
                   <>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
                       {filteredPackages.map((pkg) => (
@@ -132,7 +122,6 @@ export default function MainContent({tourPackages: initialTourPackages, meta: in
                       />
                     )}
                   </>
-                )}
               </div>
             </div>
           </div>
