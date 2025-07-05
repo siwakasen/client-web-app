@@ -42,7 +42,7 @@ export default function MainContent({
     const fetchData = async () => {
       try {
         const { data, meta: newMeta } = await fetchTravelPackages({
-          limit: 10,
+          limit: 6,
           page: currentPage,
           search: debouncedSearchTerm,
         });

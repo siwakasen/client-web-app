@@ -41,7 +41,7 @@ export default function MainContent({
     const fetchData = async () => {
       try {
         const { data, meta: newMeta } = await fetchCars({
-          limit: 4,
+          limit: 6,
           page: currentPage,
           search: debouncedSearchTerm,
         });

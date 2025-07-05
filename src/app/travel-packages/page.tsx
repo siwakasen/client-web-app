@@ -14,13 +14,13 @@ export default async function TourPackagesPage() {
     currentPage: 1,
     totalItems: 0,
     totalPages: 0,
-    limit: 10,
+    limit: 6,
     hasNextPage: false,
     hasPrevPage: false,
   };
   try {
     const { data, meta: metaData } = await fetchTravelPackages({
-      limit: 10,
+      limit: 6,
       page: 1,
       search: "",
     });
