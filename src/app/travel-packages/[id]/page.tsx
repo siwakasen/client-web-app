@@ -1,9 +1,3 @@
-"use cache";
-
-import {
-  fetchTravelPackages,
-  fetchTravelPackagesDetail,
-} from "@/_services/travel-packages";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -15,25 +9,37 @@ import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
 import Link from "next/link";
 import { TravelPackages } from "@/_interfaces/travel-packages.interface";
 import { notFound } from "next/navigation";
+import {
+  useGetTravelPackages,
+  useGetTravelPackagesDetail,
+} from "@/_hooks/travel-packages/ssr-travel.hook";
+import { getHeaders } from "@/lib";
 
 export default async function TravelPackageDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const headers = await getHeaders();
   // Fetch data on the server
   const { id } = await params;
   let data: TravelPackages | null = null;
   let filteredRelatedPackages: TravelPackages[] = [];
   try {
-    const { data: travel } = await fetchTravelPackagesDetail({
-      id: Number(id),
-    });
-    const relatedPackages = await fetchTravelPackages({
-      limit: 10,
-      page: 1,
-      search: "",
-    });
+    const { data: travel } = await useGetTravelPackagesDetail(
+      {
+        id: Number(id),
+      },
+      headers
+    );
+    const relatedPackages = await useGetTravelPackages(
+      {
+        limit: 10,
+        page: 1,
+        search: "",
+      },
+      headers
+    );
     data = travel;
     filteredRelatedPackages = relatedPackages.data
       .filter((pkg) => pkg.id !== Number(id))

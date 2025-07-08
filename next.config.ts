@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
       
     ],
   },
+  allowedDevOrigins: ["https://siwakasen.mole-mintaka.ts.net","https://vulpies.tail66dfd8.ts.net/"],
   experimental:{
     useCache:true,
   }

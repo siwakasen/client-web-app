@@ -1,5 +1,3 @@
-"use cache";
-import { fetchCars, fetchCarsDetail } from "@/_services/rent-cars";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -11,18 +9,27 @@ import Link from "next/link";
 import React from "react";
 import { Car } from "@/_interfaces/rent-car.interface";
 import { notFound } from "next/navigation";
+import {
+  useGetCars,
+  useGetCarsDetail,
+} from "@/_hooks/rent-cars/server-side.hook";
+import { getHeaders } from "@/lib";
 
 export default async function CarDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const headers = await getHeaders();
   const { id } = await params;
   let data: Car | null = null;
   let filteredRelatedCars: Car[] = [];
   try {
-    const { data: car } = await fetchCarsDetail({ id: Number(id) });
-    const relatedCars = await fetchCars({ limit: 10, page: 1, search: "" });
+    const { data: car } = await useGetCarsDetail(Number(id), headers);
+    const relatedCars = await useGetCars(
+      { limit: 10, page: 1, search: "" },
+      headers
+    );
     data = car;
     filteredRelatedCars = relatedCars.data
       .filter((car) => car.id !== Number(id))

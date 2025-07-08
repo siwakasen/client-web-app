@@ -1,11 +1,10 @@
+"use cache";
 import Image from "next/image";
-
-export default function Hero() {
+export default async function Hero() {
   return (
     <div className="w-screen h-screen relative">
       {/* Background overlay */}
       <div className="absolute top-0 left-0 w-full h-full bg-black/20 z-10"></div>
-      xxxx
       {/* Background image */}
       <Image
         src="/images/hero4_img.jpg"

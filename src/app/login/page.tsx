@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,10 +8,19 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useLoginUser } from "@/_hooks/auth/auth.hook";
 import Link from "next/link";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [state, action, pending] = useActionState(useLoginUser, undefined);
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+    if (state?.message) {
+      toast.success(state.message);
+      router.push("/");
+    }
+  }, [state?.message]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white">
@@ -88,12 +97,7 @@ export default function LoginPage() {
           >
             {pending ? "Memproses..." : "Masuk"}
           </Button>
-          {/* Success/Error Messages */}
-          {state?.message && (
-            <p className="text-sm text-green-600 text-center">
-              {state.message}
-            </p>
-          )}
+
           {/* Forgot Password Link */}
           <div className="text-center">
             <Link

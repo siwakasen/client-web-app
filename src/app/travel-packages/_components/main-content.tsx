@@ -6,17 +6,18 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { TourPackageCard } from "./packages-card";
 import { Pagination } from "../../../components/shared/content/pagination";
-import { fetchTravelPackages } from "@/_services/travel-packages";
-import { Skeleton } from "@/components/ui/skeleton";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
+import { useGetTravelPackages } from "@/_hooks/travel-packages/csr-travel.hook";
 
 interface TourPackagesProps {
   tourPackages: TravelPackages[];
   meta: Meta;
+  token?: string;
 }
 export default function MainContent({
   tourPackages: initialTourPackages,
   meta: initialMeta,
+  token,
 }: TourPackagesProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
@@ -41,11 +42,14 @@ export default function MainContent({
     // must change to ssr
     const fetchData = async () => {
       try {
-        const { data, meta: newMeta } = await fetchTravelPackages({
-          limit: 6,
-          page: currentPage,
-          search: debouncedSearchTerm,
-        });
+        const { data, meta: newMeta } = await useGetTravelPackages(
+          {
+            limit: 6,
+            page: currentPage,
+            search: debouncedSearchTerm,
+          },
+          token
+        );
         setTourPackages(data);
         setMeta(newMeta);
       } catch (error) {

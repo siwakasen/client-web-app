@@ -3,14 +3,15 @@ import PopularPackage from "./_components/popular-packages/PopularPackage";
 import WhyChooseUs from "./_components/why-choose-us/WhyChooseUs";
 import PopularCars from "./_components/popular-cars/PopularCars";
 import Manager from "./_components/manager-section/Manager";
+import { getHeaders } from "@/lib";
 export default async function Home() {
-  "use cache";
+  const headers = await getHeaders();
   return (
     <div>
       <Hero />
-      <PopularPackage />
+      <PopularPackage headers={headers} />
       <WhyChooseUs />
-      <PopularCars />
+      <PopularCars headers={headers} />
       <Manager />
     </div>
   );

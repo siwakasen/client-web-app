@@ -8,6 +8,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChevronDown } from "lucide-react";
+import { Customer } from "@/_interfaces/customer.interface";
 
 interface BookingData {
   package_id: number;
@@ -26,24 +27,10 @@ interface BookingData {
 
 interface CheckoutFormProps {
   packageId: number;
+  customer?: Customer;
 }
 
-export function CheckoutForm({ packageId }: CheckoutFormProps) {
-  const [bookingData, setBookingData] = useState<BookingData>({
-    package_id: packageId,
-    number_of_persons: 1,
-    start_date: "",
-    end_date: "",
-    payment_method: "PAYPAL",
-    pickup_location: "",
-    pickup_time: "",
-    email: "logobreaker@gmail.com",
-    password: "Password12!@",
-    name: "Logobreaker",
-    phone_number: "08123456789",
-    country_origin: "Indonesia",
-  });
-
+export function CheckoutForm({ packageId, customer }: CheckoutFormProps) {
   const [notes, setNotes] = useState("");
   const [emailUpdates, setEmailUpdates] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});

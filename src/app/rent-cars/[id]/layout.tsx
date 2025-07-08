@@ -5,7 +5,7 @@ import { getCustomer } from "@/_services/customers";
 import { Customer } from "@/_interfaces/customer.interface";
 import { headers } from "next/headers";
 import { getHeaders } from "@/lib";
-export default async function TravelPackageDetailLayout({
+export default async function RentCarDetailLayout({
   children,
 }: {
   children: React.ReactNode;

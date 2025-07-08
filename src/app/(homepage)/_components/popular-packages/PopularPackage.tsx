@@ -1,20 +1,27 @@
+"use cache";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import { fetchTravelPackages } from "@/_services/travel-packages";
 import ContentDivider from "../content-divider/ContentDivider";
 import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
-import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { TravelPackages } from "@/_interfaces/travel-packages.interface";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-export default async function PopularPackage() {
+import { useGetTravelPackages } from "@/_hooks/travel-packages/ssr-travel.hook";
+export default async function PopularPackage({
+  headers,
+}: {
+  headers: Record<string, string>;
+}) {
   let packages: TravelPackages[] = [];
   try {
-    const { data } = await fetchTravelPackages({
-      limit: 2,
-      page: 1,
-      search: "",
-    });
+    const { data } = await useGetTravelPackages(
+      {
+        limit: 2,
+        page: 1,
+        search: "",
+      },
+      headers
+    );
     packages = data;
   } catch (error) {}
 

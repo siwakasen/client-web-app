@@ -38,6 +38,7 @@ export type LoginFormState =
         password?: string[]
       }
       message?: string
+      token?: string
     }
   | undefined
 

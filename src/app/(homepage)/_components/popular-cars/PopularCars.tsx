@@ -1,19 +1,28 @@
+"use cache";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import ContentDivider from "../content-divider/ContentDivider";
-import { fetchCars } from "@/_services/rent-cars";
 import { convertCarImageUrl } from "@/_helpers/images-url/car-images";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
 import { Car } from "@/_interfaces/rent-car.interface";
+import Link from "next/link";
+import { useGetCars } from "@/_hooks/rent-cars/server-side.hook";
 
-export default async function PopularCars() {
+export default async function PopularCars({
+  headers,
+}: {
+  headers: Record<string, string>;
+}) {
   let cars: Car[] = [];
   try {
-    const { data } = await fetchCars({
-      limit: 2,
-      page: 1,
-      search: "",
-    });
+    const { data } = await useGetCars(
+      {
+        limit: 2,
+        page: 1,
+        search: "",
+      },
+      headers
+    );
     cars = data;
   } catch (error) {
     // TOAST ERROR
@@ -46,31 +55,35 @@ export default async function PopularCars() {
         <div className="flex flex-col md:flex-row w-full justify-between gap-8">
           {carsData.length > 0 ? (
             carsData.map((car) => (
-              <Card
-                key={car.id}
-                className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer p-0"
-              >
-                <CardContent className={`p-0 w-full h-80 md:h-96 md:min-w-2xl`}>
-                  <div className="relative h-full w-full">
-                    <div className="relative w-full h-full overflow-hidden">
-                      <Image
-                        src={car.image}
-                        alt={car.alt}
-                        fill
-                        priority={true}
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300"></div>
+              <Link href={`/rent-cars/${car.id}`} key={car.id}>
+                <Card
+                  key={car.id}
+                  className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer p-0"
+                >
+                  <CardContent
+                    className={`p-0 w-full h-80 md:h-96 md:min-w-2xl`}
+                  >
+                    <div className="relative h-full w-full">
+                      <div className="relative w-full h-full overflow-hidden">
+                        <Image
+                          src={car.image}
+                          alt={car.alt}
+                          fill
+                          priority={true}
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300"></div>
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 p-6">
+                        <h3 className="font-georgia text-2xl md:text-3xl font-bold text-white leading-tight">
+                          {car.title}
+                        </h3>
+                      </div>
                     </div>
-                    <div className="absolute bottom-0 left-0 right-0 p-6">
-                      <h3 className="font-georgia text-2xl md:text-3xl font-bold text-white leading-tight">
-                        {car.title}
-                      </h3>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </Link>
             ))
           ) : (
             <div className="w-full text-center py-8 flex flex-row gap-4 justify-center">

@@ -1,15 +1,28 @@
 import MainContent from "./_components/main-content";
 import Image from "next/image";
-import { fetchCars } from "@/_services/rent-cars";
 import Navbar from "@/components/shared/navbar/Navbar";
 import Footer from "../../components/shared/content/footer";
-import { unstable_cacheLife as cacheLife } from "next/cache";
 import { Car } from "@/_interfaces/rent-car.interface";
 import { Meta } from "@/_interfaces/rent-car.interface";
-
+import { getToken, hasSession } from "@/lib/session";
+import { getCustomer } from "@/_services/customers";
+import { Customer } from "@/_interfaces/customer.interface";
+import { getHeaders } from "@/lib";
+import { useGetCars } from "@/_hooks/rent-cars/server-side.hook";
 export default async function RentCarsPage() {
-  "use cache";
-  cacheLife("hours");
+  const headers = await getHeaders();
+  let isAuthenticated = await hasSession();
+  let customer: Customer;
+  try {
+    if (isAuthenticated) {
+      const token = await getToken();
+      const header = await getHeaders();
+      const { data } = await getCustomer(token!, header);
+      customer = data;
+    }
+  } catch (error) {
+    isAuthenticated = false;
+  }
   let cars: Car[] = [];
   let meta: Meta = {
     currentPage: 1,
@@ -20,11 +33,14 @@ export default async function RentCarsPage() {
     hasPrevPage: false,
   };
   try {
-    const { data, meta: metaData } = await fetchCars({
-      limit: 6,
-      page: 1,
-      search: "",
-    });
+    const { data, meta: metaData } = await useGetCars(
+      {
+        limit: 6,
+        page: 1,
+        search: "",
+      },
+      headers
+    );
     cars = data;
     meta = metaData;
   } catch (error) {
@@ -33,7 +49,7 @@ export default async function RentCarsPage() {
 
   return (
     <div className="min-h-screen bg-gray-200">
-      <Navbar />
+      <Navbar isAuthenticated={isAuthenticated} customer={customer!} />
       {/* Hero Section */}
       <section className="relative h-64 md:h-80">
         <Image

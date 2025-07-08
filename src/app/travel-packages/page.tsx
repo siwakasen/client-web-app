@@ -1,14 +1,27 @@
 import MainContent from "./_components/main-content";
 import Image from "next/image";
-import { fetchTravelPackages } from "@/_services/travel-packages";
 import Navbar from "@/components/shared/navbar/Navbar";
 import Footer from "../../components/shared/content/footer";
-import { unstable_cacheLife as cacheLife } from "next/cache";
 import { Meta, TravelPackages } from "@/_interfaces/travel-packages.interface";
+import { getToken, hasSession } from "@/lib/session";
+import { getCustomer } from "@/_services/customers";
+import { Customer } from "@/_interfaces/customer.interface";
+import { getHeaders } from "@/lib";
+import { useGetTravelPackages } from "@/_hooks/travel-packages/ssr-travel.hook";
 
 export default async function TourPackagesPage() {
-  "use cache";
-  cacheLife("hours");
+  const headers = await getHeaders();
+  let isAuthenticated = await hasSession();
+  let token: string = "";
+  let customer: Customer;
+  try {
+    if (isAuthenticated) {
+      token = (await getToken()) || "";
+      const header = await getHeaders();
+      const { data } = await getCustomer(token, header);
+      customer = data;
+    }
+  } catch (error) {}
   let travelPackages: TravelPackages[] = [];
   let metaPackages: Meta = {
     currentPage: 1,
@@ -19,11 +32,14 @@ export default async function TourPackagesPage() {
     hasPrevPage: false,
   };
   try {
-    const { data, meta: metaData } = await fetchTravelPackages({
-      limit: 6,
-      page: 1,
-      search: "",
-    });
+    const { data, meta: metaData } = await useGetTravelPackages(
+      {
+        limit: 6,
+        page: 1,
+        search: "",
+      },
+      headers
+    );
     travelPackages = data;
     metaPackages = metaData;
   } catch (error) {
@@ -31,7 +47,7 @@ export default async function TourPackagesPage() {
   }
   return (
     <div className="min-h-screen bg-gray-200">
-      <Navbar />
+      <Navbar isAuthenticated={isAuthenticated} customer={customer!} />
       {/* Hero Section */}
       <section className="relative h-64 md:h-80">
         <Image
@@ -55,7 +71,11 @@ export default async function TourPackagesPage() {
         </div>
       </section>
 
-      <MainContent tourPackages={travelPackages} meta={metaPackages} />
+      <MainContent
+        tourPackages={travelPackages}
+        meta={metaPackages}
+        token={token}
+      />
       <Footer />
     </div>
   );

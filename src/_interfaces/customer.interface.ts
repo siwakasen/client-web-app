@@ -32,3 +32,19 @@ export interface RegisterRequest {
   export interface ForgotPasswordResponse {
     message: string
   }
+
+  export interface CustomerResponse {
+    data: Customer
+  }
+  
+  export interface Customer {
+    id: number
+    name: string
+    phone_number: any
+    country_origin: any
+    email: string
+    identity_file: any
+    created_at: string
+    updated_at: string
+    deleted_at: string
+  }

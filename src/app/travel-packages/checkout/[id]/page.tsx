@@ -1,6 +1,11 @@
 import { fetchTravelPackagesDetail } from "@/_services/travel-packages";
 import { CheckoutForm } from "./_components/checkout-form";
 import { OrderSummary } from "./_components/order-summary";
+import { getToken, hasSession } from "@/lib/session";
+import { getCustomer } from "@/_services/customers";
+import { Customer } from "@/_interfaces/customer.interface";
+import { getHeaders } from "@/lib";
+import { useGetTravelPackagesDetail } from "@/_hooks/travel-packages/ssr-travel.hook";
 
 interface BookingData {
   package_id: number;
@@ -29,19 +34,26 @@ interface CheckoutPageProps {
 
 export default async function CheckoutPage({ params }: CheckoutPageProps) {
   const { id } = await params;
-  const { data: packageData } = await fetchTravelPackagesDetail({
-    id: Number(id),
-  });
+  const { data: packageData } = await useGetTravelPackagesDetail(
+    {
+      id: Number(id),
+    },
+    await getHeaders()
+  );
 
-  const initialBookingData = {
-    package_id: Number.parseInt(id),
-    number_of_persons: 1,
-    start_date: "2025-06-30T15:49:25.825Z",
-    end_date: "2025-07-01T15:49:25.826Z",
-    payment_method: "PAYPAL" as const,
-    pickup_location: "Hotel Kuta",
-    pickup_time: "10:00",
-  };
+  let isAuthenticated = await hasSession();
+
+  let customer: Customer;
+  try {
+    if (isAuthenticated) {
+      const token = await getToken();
+      const header = await getHeaders();
+      const { data } = await getCustomer(token!, header);
+      customer = data;
+    }
+  } catch (error) {
+    isAuthenticated = false;
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -56,7 +68,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 pb-8">
         {/* Left Column - Client Component (Form) */}
         <div className="lg:col-span-1">
-          <CheckoutForm packageId={Number(id)} />
+          <CheckoutForm packageId={Number(id)} customer={customer!} />
         </div>
 
         {/* Right Column - Server Component (Order Summary) */}

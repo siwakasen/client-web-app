@@ -6,8 +6,8 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { CarsCard } from "./cars-card";
 import { Pagination } from "../../../components/shared/content/pagination";
-import { fetchCars } from "@/_services/rent-cars";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
+import { useSearchCars } from "@/_hooks/rent-cars/client-side.hook";
 
 interface CarsProps {
   cars: Car[];
@@ -40,7 +40,7 @@ export default function MainContent({
     // must change to ssr
     const fetchData = async () => {
       try {
-        const { data, meta: newMeta } = await fetchCars({
+        const { data, meta: newMeta } = await useSearchCars({
           limit: 6,
           page: currentPage,
           search: debouncedSearchTerm,

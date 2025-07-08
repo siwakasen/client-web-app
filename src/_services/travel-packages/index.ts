@@ -1,38 +1,52 @@
-"use server"
 import {
-    TravelPackagesResponse,
-    TravelPackagesRequest   ,
-    TravelPackagesDetailRequest,
-    TravelPackagesDetailResponse,
-  } from '@/_interfaces/travel-packages.interface';
-import { createApiInstance } from '../api';
-import { AxiosResponse } from 'axios';
+  TravelPackagesResponse,
+  TravelPackagesRequest,
+  TravelPackagesDetailRequest,
+  TravelPackagesDetailResponse,
+} from "@/_interfaces/travel-packages.interface";
+import { createApiInstance } from "../api";
+import { AxiosResponse } from "axios";
 
-const api = createApiInstance(process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API);
-
-export async function fetchTravelPackages (
-    pagination: TravelPackagesRequest
-    ): Promise<TravelPackagesResponse> {
-    try {
-        const response = await api.get(
-            `/travel-packages?limit=${pagination.limit}&page=${pagination.page}&search=${pagination.search || ''}`
-        );
-        if(response.status !== 200){
-            throw new Error('Failed to  fetch travel packages');
-        }
-        return response.data;
-    } catch (error) {
-        throw error instanceof Error ? error : new Error(String(error));
-    }
-};
-
-export async function fetchTravelPackagesDetail (payload: TravelPackagesDetailRequest
-    ): Promise<TravelPackagesDetailResponse> {
-    const response : AxiosResponse = await api.get(
-        `/travel-packages/${payload.id}`
+export async function fetchTravelPackages(
+  pagination: TravelPackagesRequest,
+  headers?: Record<string, string>,
+  token?: string
+): Promise<TravelPackagesResponse> {
+  try {
+    const api = await createApiInstance(
+      headers || {},
+      process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API,
+      token
     );
-    if(response.status !== 200){
-        throw new Error('Failed to fetch travel packages detail');
+    const response = await api.get(
+      `/travel-packages?limit=${pagination.limit}&page=${
+        pagination.page
+      }&search=${pagination.search || ""}`
+    );
+    if (response.status !== 200) {
+      throw new Error("Failed to  fetch travel packages");
     }
     return response.data;
-};
+  } catch (error) {
+    throw error instanceof Error ? error : new Error(String(error));
+  }
+}
+
+export async function fetchTravelPackagesDetail(
+  payload: TravelPackagesDetailRequest,
+  headers?: Record<string, string>,
+  token?: string
+): Promise<TravelPackagesDetailResponse> {
+  const api = await createApiInstance(
+    headers || {},
+    process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API,
+    token
+  );
+  const response: AxiosResponse = await api.get(
+    `/travel-packages/${payload.id}`
+  );
+  if (response.status !== 200) {
+    throw new Error("Failed to fetch travel packages detail");
+  }
+  return response.data;
+}

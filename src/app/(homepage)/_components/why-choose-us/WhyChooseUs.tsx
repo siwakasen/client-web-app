@@ -1,8 +1,9 @@
+"use cache";
 import ContentDivider from "../content-divider/ContentDivider";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 
-export default function WhyChooseUs() {
+export default async function WhyChooseUs() {
   const features = [
     {
       number: "1",
