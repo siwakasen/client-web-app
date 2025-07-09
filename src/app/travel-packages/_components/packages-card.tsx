@@ -3,7 +3,6 @@ import type { TravelPackages } from "@/_interfaces/travel-packages.interface";
 import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 
 interface TourPackageCardProps {
   travelPackage: TravelPackages;

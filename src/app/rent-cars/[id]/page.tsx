@@ -9,10 +9,7 @@ import Link from "next/link";
 import React from "react";
 import { Car } from "@/_interfaces/rent-car.interface";
 import { notFound } from "next/navigation";
-import {
-  useGetCars,
-  useGetCarsDetail,
-} from "@/_hooks/rent-cars/server-side.hook";
+import { useGetCars, useGetCarsDetail } from "@/_hooks/rent-cars/cars.hook";
 import { getHeaders } from "@/lib";
 
 export default async function CarDetailPage({
@@ -27,12 +24,12 @@ export default async function CarDetailPage({
   try {
     const { data: car } = await useGetCarsDetail(Number(id), headers);
     const relatedCars = await useGetCars(
-      { limit: 10, page: 1, search: "" },
+      { limit: 6, page: 1, search: "" },
       headers
     );
     data = car;
     filteredRelatedCars = relatedCars.data
-      .filter((car) => car.id !== Number(id))
+      .filter((car: Car) => car.id !== Number(id))
       .slice(0, 4);
   } catch (error) {
     // TOAST ERROR

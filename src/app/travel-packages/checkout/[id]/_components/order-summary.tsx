@@ -1,5 +1,3 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { MapPin } from "lucide-react";
 import { TravelPackages } from "@/_interfaces/travel-packages.interface";
@@ -31,8 +29,8 @@ export function OrderSummary({ packageData }: OrderSummaryProps) {
             <div className="flex-1">
               <h3 className="font-semibold">{packageData.package_name}</h3>
               <p className="text-sm text-gray-600">{packageData.description}</p>
-              <p className="text-xs text-gray-500">
-                {packageData.duration} hours
+              <p className="text-sm text-gray-500">
+                Duration: {packageData.duration} hours
               </p>
             </div>
             <div className="text-right font-semibold">{formattedPrice}</div>

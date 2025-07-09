@@ -6,7 +6,7 @@ import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
 import Link from "next/link";
 import { TravelPackages } from "@/_interfaces/travel-packages.interface";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { useGetTravelPackages } from "@/_hooks/travel-packages/ssr-travel.hook";
+import { useGetTravelPackages } from "@/_hooks/travel-packages/travel.hook";
 export default async function PopularPackage({
   headers,
 }: {
@@ -52,7 +52,7 @@ export default async function PopularPackage({
         />
 
         {/* Cards Section */}
-        <div className="flex flex-col md:flex-row w-full justify-between gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 w-full justify-between gap-8">
           {packagesData.length > 0 ? (
             packagesData.map((pkg, index) => (
               <Link href={`/travel-packages/${pkg.id}`} key={pkg.id}>

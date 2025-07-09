@@ -7,17 +7,15 @@ import { Input } from "@/components/ui/input";
 import { TourPackageCard } from "./packages-card";
 import { Pagination } from "../../../components/shared/content/pagination";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { useGetTravelPackages } from "@/_hooks/travel-packages/csr-travel.hook";
+import { useGetTravelPackages } from "@/_hooks/travel-packages/travel.hook";
 
 interface TourPackagesProps {
   tourPackages: TravelPackages[];
   meta: Meta;
-  token?: string;
 }
 export default function MainContent({
   tourPackages: initialTourPackages,
   meta: initialMeta,
-  token,
 }: TourPackagesProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
@@ -38,25 +36,20 @@ export default function MainContent({
   }, [searchTerm]);
 
   // Fetch data when page or debounced search changes
+  const fetchData = async () => {
+    try {
+      const { data, meta: newMeta } = await useGetTravelPackages({
+        limit: 6,
+        page: currentPage,
+        search: debouncedSearchTerm,
+      });
+      setTourPackages(data);
+      setMeta(newMeta);
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
   useEffect(() => {
-    // must change to ssr
-    const fetchData = async () => {
-      try {
-        const { data, meta: newMeta } = await useGetTravelPackages(
-          {
-            limit: 6,
-            page: currentPage,
-            search: debouncedSearchTerm,
-          },
-          token
-        );
-        setTourPackages(data);
-        setMeta(newMeta);
-      } catch (error) {
-        // TOAST ERROR
-      }
-    };
-
     fetchData();
   }, [currentPage, debouncedSearchTerm]);
 

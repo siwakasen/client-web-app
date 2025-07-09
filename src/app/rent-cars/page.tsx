@@ -5,10 +5,10 @@ import Footer from "../../components/shared/content/footer";
 import { Car } from "@/_interfaces/rent-car.interface";
 import { Meta } from "@/_interfaces/rent-car.interface";
 import { getToken, hasSession } from "@/lib/session";
-import { getCustomer } from "@/_services/customers";
 import { Customer } from "@/_interfaces/customer.interface";
 import { getHeaders } from "@/lib";
-import { useGetCars } from "@/_hooks/rent-cars/server-side.hook";
+import { useGetCars } from "@/_hooks/rent-cars/cars.hook";
+import { useGetCustomer } from "@/_hooks/auth/auth.hook";
 export default async function RentCarsPage() {
   const headers = await getHeaders();
   let isAuthenticated = await hasSession();
@@ -17,7 +17,7 @@ export default async function RentCarsPage() {
     if (isAuthenticated) {
       const token = await getToken();
       const header = await getHeaders();
-      const { data } = await getCustomer(token!, header);
+      const { data } = await useGetCustomer(token!, header);
       customer = data;
     }
   } catch (error) {

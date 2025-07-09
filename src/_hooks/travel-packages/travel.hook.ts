@@ -1,3 +1,4 @@
+"use cache";
 import {
   TravelPackagesRequest,
   TravelPackagesDetailRequest,
@@ -10,14 +11,14 @@ import {
 } from "@/_services/travel-packages";
 export async function useGetTravelPackages(
   pagination: TravelPackagesRequest,
-  token?: string
+  headers?: Record<string, string>
 ): Promise<TravelPackagesResponse> {
-  return await fetchTravelPackages(pagination, undefined, token);
+  return await fetchTravelPackages(pagination, headers);
 }
 
 export async function useGetTravelPackagesDetail(
   pagination: TravelPackagesDetailRequest,
-  token?: string
+  headers?: Record<string, string>
 ): Promise<TravelPackagesDetailResponse> {
-  return await fetchTravelPackagesDetail(pagination, undefined, token);
+  return await fetchTravelPackagesDetail(pagination, headers);
 }

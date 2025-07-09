@@ -6,7 +6,7 @@ import { convertCarImageUrl } from "@/_helpers/images-url/car-images";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
 import { Car } from "@/_interfaces/rent-car.interface";
 import Link from "next/link";
-import { useGetCars } from "@/_hooks/rent-cars/server-side.hook";
+import { useGetCars } from "@/_hooks/rent-cars/cars.hook";
 
 export default async function PopularCars({
   headers,
@@ -40,7 +40,7 @@ export default async function PopularCars({
   }));
 
   return (
-    <section className="bg-gray-50 px-16 py-16 md:px-8 min-h-fit">
+    <section className="bg-gray-50 pt-16 px-4 md:px-8 min-h-fit">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <ContentDivider
@@ -52,7 +52,7 @@ export default async function PopularCars({
         />
 
         {/* Cards Section */}
-        <div className="flex flex-col md:flex-row w-full justify-between gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 w-full justify-between gap-8">
           {carsData.length > 0 ? (
             carsData.map((car) => (
               <Link href={`/rent-cars/${car.id}`} key={car.id}>

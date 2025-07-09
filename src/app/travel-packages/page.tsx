@@ -7,7 +7,7 @@ import { getToken, hasSession } from "@/lib/session";
 import { getCustomer } from "@/_services/customers";
 import { Customer } from "@/_interfaces/customer.interface";
 import { getHeaders } from "@/lib";
-import { useGetTravelPackages } from "@/_hooks/travel-packages/ssr-travel.hook";
+import { useGetTravelPackages } from "@/_hooks/travel-packages/travel.hook";
 
 export default async function TourPackagesPage() {
   const headers = await getHeaders();

@@ -7,7 +7,7 @@ import {
 import { fetchCars, fetchCarsDetail } from "@/_services/rent-cars";
 export async function useGetCars(
   pagination: CarsRequest,
-  headers: Record<string, string>
+  headers?: Record<string, string>
 ): Promise<CarsResponse> {
   return await fetchCars(pagination, headers);
 }

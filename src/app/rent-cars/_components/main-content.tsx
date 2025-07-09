@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { CarsCard } from "./cars-card";
 import { Pagination } from "../../../components/shared/content/pagination";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { useSearchCars } from "@/_hooks/rent-cars/client-side.hook";
+import { useGetCars } from "@/_hooks/rent-cars/cars.hook";
 
 interface CarsProps {
   cars: Car[];
@@ -35,23 +35,20 @@ export default function MainContent({
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  // Fetch data when page or debounced search changes
+  const fetchData = async () => {
+    try {
+      const { data, meta: newMeta } = await useGetCars({
+        limit: 6,
+        page: currentPage,
+        search: debouncedSearchTerm,
+      });
+      setCars(data);
+      setMeta(newMeta);
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
   useEffect(() => {
-    // must change to ssr
-    const fetchData = async () => {
-      try {
-        const { data, meta: newMeta } = await useSearchCars({
-          limit: 6,
-          page: currentPage,
-          search: debouncedSearchTerm,
-        });
-        setCars(data);
-        setMeta(newMeta);
-      } catch (error) {
-        // TOAST ERROR
-      }
-    };
-
     fetchData();
   }, [currentPage, debouncedSearchTerm]);
 

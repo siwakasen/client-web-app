@@ -6,25 +6,18 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronDownIcon } from "lucide-react";
 import { Customer } from "@/_interfaces/customer.interface";
-
-interface BookingData {
-  package_id: number;
-  number_of_persons: number;
-  start_date: string;
-  end_date: string;
-  payment_method: "MIDTRANS" | "PAYPAL";
-  pickup_location: string;
-  pickup_time: string;
-  email: string;
-  password: string;
-  name: string;
-  phone_number: string;
-  country_origin: string;
-}
-
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  BookingWithRegisterRequest,
+  BookingRequest,
+} from "@/_interfaces/booking.interface";
 interface CheckoutFormProps {
   packageId: number;
   customer?: Customer;
@@ -32,17 +25,20 @@ interface CheckoutFormProps {
 
 export function CheckoutForm({ packageId, customer }: CheckoutFormProps) {
   const [notes, setNotes] = useState("");
-  const [emailUpdates, setEmailUpdates] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-
+  const [bookingData, setBookingData] = useState<BookingRequest>({
+    package_id: packageId,
+    payment_method: "PAYPAL",
+    pickup_location: "",
+    pickup_time: "",
+    number_of_persons: 1,
+  });
+  const [open, setOpen] = useState(false);
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
     if (!bookingData.start_date) {
       newErrors.start_date = "Start date is required";
-    }
-    if (!bookingData.end_date) {
-      newErrors.end_date = "End date is required";
     }
     if (!bookingData.number_of_persons || bookingData.number_of_persons < 1) {
       newErrors.number_of_persons = "Number of persons is required (minimum 1)";
@@ -85,111 +81,81 @@ export function CheckoutForm({ packageId, customer }: CheckoutFormProps) {
     }
   };
 
-  const formatDateForDisplay = (dateString: string) => {
-    if (!dateString) return "Not selected";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("id-ID", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-  };
-
   return (
     <div className="bg-white p-6 lg:p-8 space-y-6">
       {/* Account Section */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-lg font-medium">Account</h2>
+          <h2 className="text-lg font-medium">Customer Details</h2>
           <ChevronDown className="h-4 w-4 text-gray-400" />
         </div>
-        <div className="text-sm text-gray-600">maderika20@gmail.com</div>
+        <div className="text-md text-gray-700 font-bold">{customer!.name}</div>
+        <div className="text-sm text-gray-600">{customer!.email}</div>
       </div>
 
       {/* Trip Details */}
       <div>
-        <h2 className="text-lg font-medium mb-4">Trip Details</h2>
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-lg font-medium mb-4">Trip Details</h2>
+          <ChevronDown className="h-4 w-4 text-gray-400" />
+        </div>
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="start-date">Start Date *</Label>
-              <Input
-                id="start-date"
-                type="date"
-                value={bookingData.start_date}
-                onChange={(e) => {
-                  setBookingData({
-                    ...bookingData,
-                    start_date: e.target.value,
-                  });
-                  if (errors.start_date) {
-                    setErrors((prev) => ({ ...prev, start_date: "" }));
-                  }
-                }}
-                className={`mt-1 ${
-                  errors.start_date ? "border-red-500 focus:border-red-500" : ""
-                }`}
-              />
-              {errors.start_date && (
-                <p className="text-red-500 text-sm mt-1">{errors.start_date}</p>
-              )}
+          <div className="flex gap-4">
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="date-picker" className="px-1">
+                Start Date
+              </Label>
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    id="date-picker"
+                    className="w-32 justify-between font-normal"
+                  >
+                    {bookingData.start_date
+                      ? bookingData.start_date.toLocaleDateString()
+                      : "Select date"}
+                    <ChevronDownIcon />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="w-auto overflow-hidden p-0"
+                  align="start"
+                >
+                  <Calendar
+                    mode="single"
+                    selected={bookingData.start_date}
+                    captionLayout="dropdown"
+                    onSelect={(date) => {
+                      setBookingData({
+                        ...bookingData,
+                        start_date: date,
+                      });
+                      setOpen(false);
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
-            <div>
-              <Label htmlFor="end-date">End Date *</Label>
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="time-picker" className="px-1">
+                Time
+              </Label>
               <Input
-                id="end-date"
-                type="date"
-                value={bookingData.end_date}
-                onChange={(e) => {
-                  setBookingData({
-                    ...bookingData,
-                    end_date: e.target.value,
-                  });
-                  if (errors.end_date) {
-                    setErrors((prev) => ({ ...prev, end_date: "" }));
-                  }
-                }}
-                className={`mt-1 ${
-                  errors.end_date ? "border-red-500 focus:border-red-500" : ""
-                }`}
+                type="time"
+                id="time-picker"
+                step="1"
+                defaultValue="10:30:00"
+                className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
               />
-              {errors.end_date && (
-                <p className="text-red-500 text-sm mt-1">{errors.end_date}</p>
-              )}
             </div>
           </div>
 
           <div>
-            <Label htmlFor="persons">Number of Persons *</Label>
-            <Input
-              id="persons"
-              type="number"
-              min="1"
-              value={bookingData.number_of_persons}
-              onChange={(e) => {
-                setBookingData({
-                  ...bookingData,
-                  number_of_persons: Number.parseInt(e.target.value) || 1,
-                });
-                if (errors.number_of_persons) {
-                  setErrors((prev) => ({ ...prev, number_of_persons: "" }));
-                }
-              }}
-              className={`mt-1 w-32 ${
-                errors.number_of_persons
-                  ? "border-red-500 focus:border-red-500"
-                  : ""
-              }`}
-            />
-            {errors.number_of_persons && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.number_of_persons}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="pickup-location">Pickup Location *</Label>
+            <Label htmlFor="pickup-location">
+              Pickup Location
+              <span className="text-red-500 text-xl font-bold">*</span>
+            </Label>
             <Input
               id="pickup-location"
               type="text"
@@ -218,50 +184,37 @@ export function CheckoutForm({ packageId, customer }: CheckoutFormProps) {
           </div>
 
           <div>
-            <Label htmlFor="pickup-time">Pickup Time *</Label>
+            <Label htmlFor="persons">
+              Number of Persons
+              <span className="text-red-500 text-xl font-bold">*</span>
+            </Label>
             <Input
-              id="pickup-time"
-              type="time"
-              value={bookingData.pickup_time}
+              id="persons"
+              type="number"
+              min="1"
+              value={bookingData.number_of_persons}
               onChange={(e) => {
                 setBookingData({
                   ...bookingData,
-                  pickup_time: e.target.value,
+                  number_of_persons: Number.parseInt(e.target.value) || 1,
                 });
-                if (errors.pickup_time) {
-                  setErrors((prev) => ({ ...prev, pickup_time: "" }));
+                if (errors.number_of_persons) {
+                  setErrors((prev) => ({ ...prev, number_of_persons: "" }));
                 }
               }}
               className={`mt-1 w-32 ${
-                errors.pickup_time ? "border-red-500 focus:border-red-500" : ""
+                errors.number_of_persons
+                  ? "border-red-500 focus:border-red-500"
+                  : ""
               }`}
             />
-            {errors.pickup_time && (
-              <p className="text-red-500 text-sm mt-1">{errors.pickup_time}</p>
+            {errors.number_of_persons && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.number_of_persons}
+              </p>
             )}
           </div>
         </div>
-      </div>
-
-      {/* Date Summary Display */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-        <p className="text-sm text-blue-800">
-          <span className="font-medium">Trip Duration:</span>{" "}
-          {formatDateForDisplay(bookingData.start_date)} –{" "}
-          {formatDateForDisplay(bookingData.end_date)}
-        </p>
-      </div>
-
-      {/* Email Updates */}
-      <div className="flex items-center space-x-2">
-        <Checkbox
-          id="email-updates"
-          checked={emailUpdates}
-          onCheckedChange={(checked) => setEmailUpdates(checked === true)}
-        />
-        <Label htmlFor="email-updates" className="text-sm">
-          Send me emails with news and offers
-        </Label>
       </div>
 
       {/* Notes */}

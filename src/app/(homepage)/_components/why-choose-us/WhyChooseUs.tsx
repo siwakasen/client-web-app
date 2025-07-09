@@ -42,19 +42,17 @@ export default async function WhyChooseUs() {
 
         <div className="flex flex-col  md:flex-row w-full justify-between md:gap-12 gap-8 items-center">
           {/* Image Card */}
-          <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer p-0 lg:w-1/2">
-            <CardContent className="p-0 w-full min-w-96 h-80 md:h-96 lg:h-[500px]">
-              <div className="relative h-full w-full">
-                <div className="relative w-full h-full overflow-hidden rounded-lg">
-                  <Image
-                    src="/images/hero3_img.jpg"
-                    alt="Why Choose Us"
-                    fill
-                    priority={true}
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
+          <Card className="p-0 group overflow-hidden border-0  transition-all duration-300 cursor-pointer lg:w-1/2 mx-4 md:mx-0">
+            <CardContent className="p-0 w-full min-w-96 h-80 md:h-96 lg:h-[500px] bg-transparent">
+              <div className="relative w-full h-full overflow-hidden">
+                <Image
+                  src="/images/hero3_img.jpg"
+                  alt="Why Choose Us"
+                  fill
+                  priority={true}
+                  sizes="(max-width: 768px)"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500 w-fit"
+                />
               </div>
             </CardContent>
           </Card>

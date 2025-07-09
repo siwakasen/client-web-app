@@ -1,7 +1,9 @@
 "use server";
-import { toast } from "sonner";
-import { RegisterRequest } from "@/_interfaces/customer.interface";
-import { forgotPassword, register } from "@/_services/customers";
+import {
+  CustomerResponse,
+  RegisterRequest,
+} from "@/_interfaces/customer.interface";
+import { forgotPassword, getCustomer, register } from "@/_services/customers";
 import { RegisterFormSchema, type FormState } from "@/lib/validation";
 import { LoginFormSchema, type LoginFormState } from "@/lib/validation";
 import { login } from "@/_services/customers";
@@ -101,4 +103,12 @@ export async function useLogoutUser() {
   return {
     message: "Logout successful!",
   };
+}
+
+export async function useGetCustomer(
+  token: string,
+  headers: Record<string, string>
+): Promise<CustomerResponse> {
+  "use cache";
+  return await getCustomer(token, headers);
 }

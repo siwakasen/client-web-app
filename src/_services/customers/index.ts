@@ -59,7 +59,6 @@ export const getCustomer = async (
   token: string,
   headers: Record<string, string>
 ): Promise<CustomerResponse> => {
-  "use cache";
   try {
     const api = await createApiInstance(
       headers,

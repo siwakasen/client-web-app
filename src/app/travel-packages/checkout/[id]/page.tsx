@@ -2,30 +2,10 @@ import { fetchTravelPackagesDetail } from "@/_services/travel-packages";
 import { CheckoutForm } from "./_components/checkout-form";
 import { OrderSummary } from "./_components/order-summary";
 import { getToken, hasSession } from "@/lib/session";
-import { getCustomer } from "@/_services/customers";
 import { Customer } from "@/_interfaces/customer.interface";
 import { getHeaders } from "@/lib";
-import { useGetTravelPackagesDetail } from "@/_hooks/travel-packages/ssr-travel.hook";
-
-interface BookingData {
-  package_id: number;
-  number_of_persons: number;
-  start_date: string;
-  end_date: string;
-  payment_method: "MIDTRANS" | "PAYPAL";
-  pickup_location: string;
-  pickup_time: string;
-}
-
-interface PackageData {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  duration: string;
-  image_url?: string;
-}
-
+import { useGetTravelPackagesDetail } from "@/_hooks/travel-packages/travel.hook";
+import { useGetCustomer } from "@/_hooks/auth/auth.hook";
 interface CheckoutPageProps {
   params: {
     id: string;
@@ -48,7 +28,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
     if (isAuthenticated) {
       const token = await getToken();
       const header = await getHeaders();
-      const { data } = await getCustomer(token!, header);
+      const { data } = await useGetCustomer(token!, header);
       customer = data;
     }
   } catch (error) {
@@ -72,7 +52,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
         </div>
 
         {/* Right Column - Server Component (Order Summary) */}
-        <div className="lg:col-span-1 bg-gray-50 p-6 md:p-8 border-l ">
+        <div className="order-first lg:order-last lg:col-span-1 bg-gray-50 p-6 md:p-8 border-l ">
           <OrderSummary packageData={packageData} />
         </div>
       </div>

@@ -12,7 +12,7 @@ import { notFound } from "next/navigation";
 import {
   useGetTravelPackages,
   useGetTravelPackagesDetail,
-} from "@/_hooks/travel-packages/ssr-travel.hook";
+} from "@/_hooks/travel-packages/travel.hook";
 import { getHeaders } from "@/lib";
 
 export default async function TravelPackageDetailPage({
@@ -34,7 +34,7 @@ export default async function TravelPackageDetailPage({
     );
     const relatedPackages = await useGetTravelPackages(
       {
-        limit: 10,
+        limit: 6,
         page: 1,
         search: "",
       },
@@ -183,16 +183,6 @@ export default async function TravelPackageDetailPage({
                   Price based on per person
                 </p>
                 <Separator />
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span>Duration:</span>
-                    <span>{data.duration} days</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Max Group:</span>
-                    <span>{data.max_persons} people</span>
-                  </div>
-                </div>
               </CardContent>
             </Card>
           </div>
