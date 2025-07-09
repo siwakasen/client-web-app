@@ -8,6 +8,7 @@ export interface BookingWithRegisterRequest {
   payment_method: string;
   pickup_location: string;
   pickup_time: string;
+  additional_notes?: string;
   email: string;
   password: string;
   name: string;
@@ -20,19 +21,29 @@ export interface BookingRequest {
   car_id?: number;
   with_driver?: boolean;
   number_of_persons?: number;
-  start_date?: Date;
-  end_date?: Date;
+  start_date?: string;
+  end_date?: string;
   payment_method: string;
   pickup_location: string;
   pickup_time: string;
+  additional_notes?: string;
 }
 export interface BookingWithRegisterResponse {
   success: boolean;
-  data: Data;
+  data: DataWithRegister;
 }
 
-export interface Data {
+export interface DataWithRegister {
   message: string;
   redirect_url: string;
   token: string;
+}
+
+export interface DataWithoutRegister {
+  message: string;
+  redirect_url: string;
+}
+
+export interface BookingResponse {
+  data: DataWithoutRegister;
 }

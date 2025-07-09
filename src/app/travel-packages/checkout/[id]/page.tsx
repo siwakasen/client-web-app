@@ -45,17 +45,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 pb-8">
-        {/* Left Column - Client Component (Form) */}
-        <div className="lg:col-span-1">
-          <CheckoutForm packageId={Number(id)} customer={customer!} />
-        </div>
-
-        {/* Right Column - Server Component (Order Summary) */}
-        <div className="order-first lg:order-last lg:col-span-1 bg-gray-50 p-6 md:p-8 border-l ">
-          <OrderSummary packageData={packageData} />
-        </div>
-      </div>
+      <CheckoutForm travelPackage={packageData} customer={customer!} />
 
       {/* Footer Links */}
       <div className="bg-white border-t px-4 py-6">

@@ -71,11 +71,7 @@ export default async function TourPackagesPage() {
         </div>
       </section>
 
-      <MainContent
-        tourPackages={travelPackages}
-        meta={metaPackages}
-        token={token}
-      />
+      <MainContent tourPackages={travelPackages} meta={metaPackages} />
       <Footer />
     </div>
   );

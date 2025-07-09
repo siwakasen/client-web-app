@@ -13,6 +13,7 @@ import {
 } from "@/lib/validation";
 import { createSession, deleteSession } from "@/lib/session";
 import { getHeaders } from "@/lib";
+import { unstable_cacheLife as cacheLife } from "next/cache";
 
 export async function useRegisterUser(
   state: FormState,
@@ -110,5 +111,6 @@ export async function useGetCustomer(
   headers: Record<string, string>
 ): Promise<CustomerResponse> {
   "use cache";
+  cacheLife("hours");
   return await getCustomer(token, headers);
 }

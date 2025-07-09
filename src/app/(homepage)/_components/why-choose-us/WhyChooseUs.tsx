@@ -1,4 +1,3 @@
-"use cache";
 import ContentDivider from "../content-divider/ContentDivider";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
@@ -42,7 +41,7 @@ export default async function WhyChooseUs() {
 
         <div className="flex flex-col  md:flex-row w-full justify-between md:gap-12 gap-8 items-center">
           {/* Image Card */}
-          <Card className="p-0 group overflow-hidden border-0  transition-all duration-300 cursor-pointer lg:w-1/2 mx-4 md:mx-0">
+          <Card className="p-0 group overflow-hidden border-0  transition-all duration-300 lg:w-1/2 mx-4 md:mx-0">
             <CardContent className="p-0 w-full min-w-96 h-80 md:h-96 lg:h-[500px] bg-transparent">
               <div className="relative w-full h-full overflow-hidden">
                 <Image
