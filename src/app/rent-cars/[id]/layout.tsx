@@ -1,8 +1,8 @@
 import Navbar from "@/components/shared/navbar/Navbar";
 import Footer from "../../../components/shared/content/footer";
 import { getToken, hasSession } from "@/lib/session";
-import { getCustomer } from "@/_services/customers";
-import { Customer } from "@/_interfaces";
+import { getCustomer } from "@/services/customers";
+import { Customer } from "@/interfaces";
 import { getHeaders } from "@/lib";
 export default async function RentCarDetailLayout({
   children,

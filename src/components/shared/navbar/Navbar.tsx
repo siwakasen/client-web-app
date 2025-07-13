@@ -12,7 +12,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useLogoutUser } from "@/_hooks";
+import { useLogoutUser } from "@/hooks";
 import { toast } from "sonner";
 import {
   DropdownMenu,
@@ -20,7 +20,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Customer } from "@/_interfaces";
+import { Customer } from "@/interfaces";
 
 export default function Navbar({
   isAuthenticated,

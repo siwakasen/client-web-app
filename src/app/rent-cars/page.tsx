@@ -2,10 +2,10 @@ import MainContent from "./_components/main-content";
 import Image from "next/image";
 import Navbar from "@/components/shared/navbar/Navbar";
 import Footer from "../../components/shared/content/footer";
-import { Car, Meta, Customer } from "@/_interfaces";
+import { Car, Meta, Customer } from "@/interfaces";
 import { getToken, hasSession } from "@/lib/session";
 import { getHeaders } from "@/lib";
-import { useGetCustomer, useGetCars } from "@/_hooks";
+import { useGetCustomer, useGetCars } from "@/hooks";
 export default async function RentCarsPage() {
   const headers = await getHeaders();
   let isAuthenticated = await hasSession();

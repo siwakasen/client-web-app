@@ -3,7 +3,7 @@ import {
   Pagination,
   CarsDetailResponse,
   CarsDetailRequest,
-} from "@/_interfaces/";
+} from "@/interfaces";
 import { createApiInstance } from "../api";
 import { AxiosResponse } from "axios";
 

@@ -1,12 +1,12 @@
 "use server";
-import { CustomerResponse } from "@/_interfaces";
-import { forgotPassword, getCustomer, register } from "@/_services/customers";
+import { CustomerResponse } from "@/interfaces";
+import { forgotPassword, getCustomer, register } from "@/services/customers";
 import {
   RegisterFormSchema,
   ForgotPasswordFormSchema,
   LoginFormSchema,
 } from "@/lib/validation";
-import { login } from "@/_services/customers";
+import { login } from "@/services/customers";
 import { createSession, deleteSession } from "@/lib/session";
 import { getHeaders } from "@/lib";
 import { unstable_cacheLife as cacheLife } from "next/cache";

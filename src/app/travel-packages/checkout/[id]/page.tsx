@@ -1,8 +1,8 @@
 import { CheckoutForm } from "./_components/checkout-form";
 import { getToken, hasSession } from "@/lib/session";
-import { Customer } from "@/_interfaces";
+import { Customer } from "@/interfaces";
 import { getHeaders } from "@/lib";
-import { useGetTravelPackagesDetail, useGetCustomer } from "@/_hooks";
+import { useGetTravelPackagesDetail, useGetCustomer } from "@/hooks";
 interface CheckoutPageProps {
   params: {
     id: string;

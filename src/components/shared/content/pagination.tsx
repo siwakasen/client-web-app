@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Meta } from "@/_interfaces";
+import { Meta } from "@/interfaces";
 interface PaginationProps {
   meta: Meta;
   currentPage: number;

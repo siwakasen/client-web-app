@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronDown, ChevronDownIcon } from "lucide-react";
-import { Customer, TravelPackages, BookingRequest } from "@/_interfaces";
+import { Customer, TravelPackages, BookingRequest } from "@/interfaces";
 import {
   Popover,
   PopoverContent,

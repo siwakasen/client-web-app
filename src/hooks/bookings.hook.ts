@@ -1,6 +1,6 @@
 "use server";
-import { BookingRequest, BookingResponse } from "@/_interfaces";
-import { createBooking } from "@/_services/bookings";
+import { BookingRequest, BookingResponse } from "@/interfaces";
+import { createBooking } from "@/services/bookings";
 import { getHeaders } from "@/lib";
 
 export async function useCreateBooking(

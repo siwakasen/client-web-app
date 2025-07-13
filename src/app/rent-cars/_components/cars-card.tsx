@@ -1,6 +1,6 @@
 import type React from "react";
-import type { Car } from "@/_interfaces";
-import { convertCarImageUrl } from "@/_helpers/images-url/car-images";
+import type { Car } from "@/interfaces";
+import { convertCarImageUrl } from "@/helpers/images-url/car-images";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 

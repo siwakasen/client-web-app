@@ -4,11 +4,11 @@ import {
   TravelPackagesDetailRequest,
   TravelPackagesDetailResponse,
   TravelPackagesResponse,
-} from "@/_interfaces";
+} from "@/interfaces";
 import {
   fetchTravelPackages,
   fetchTravelPackagesDetail,
-} from "@/_services/travel-packages";
+} from "@/services/travel-packages";
 import { unstable_cacheLife as cacheLife } from "next/cache";
 export async function useGetTravelPackages(
   pagination: Pagination,

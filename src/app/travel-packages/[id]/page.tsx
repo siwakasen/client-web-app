@@ -5,11 +5,11 @@ import { DollarSign, Calendar, Users, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ImageCarousel } from "./_components/carousel-images";
 import { Separator } from "@/components/ui/separator";
-import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
+import { convertTravelImageUrl } from "@/helpers/images-url/travel-images";
 import Link from "next/link";
-import { TravelPackages } from "@/_interfaces";
+import { TravelPackages } from "@/interfaces";
 import { notFound } from "next/navigation";
-import { useGetTravelPackages, useGetTravelPackagesDetail } from "@/_hooks";
+import { useGetTravelPackages, useGetTravelPackagesDetail } from "@/hooks";
 import { getHeaders } from "@/lib";
 
 export default async function TravelPackageDetailPage({

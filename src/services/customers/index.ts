@@ -7,7 +7,7 @@ import {
   RegisterRequest,
   CustomerResponse,
   RegisterResponse,
-} from "@/_interfaces";
+} from "@/interfaces";
 import { createApiInstance } from "../api";
 
 export const login = async (

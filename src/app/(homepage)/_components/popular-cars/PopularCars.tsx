@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import ContentDivider from "../content-divider/ContentDivider";
-import { convertCarImageUrl } from "@/_helpers/images-url/car-images";
+import { convertCarImageUrl } from "@/helpers/images-url/car-images";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { Car } from "@/_interfaces";
+import { Car } from "@/interfaces";
 import Link from "next/link";
-import { useGetCars } from "@/_hooks/";
+import { useGetCars } from "@/hooks";
 
 export default async function PopularCars({
   headers,

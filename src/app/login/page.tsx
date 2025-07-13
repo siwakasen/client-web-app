@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { useLoginUser } from "@/_hooks";
+import { useLoginUser } from "@/hooks";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";

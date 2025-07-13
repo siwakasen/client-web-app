@@ -1,7 +1,7 @@
 "use server";
 import { unstable_cacheLife as cacheLife } from "next/cache";
-import { CarsDetailResponse, CarsResponse, Pagination } from "@/_interfaces";
-import { fetchCars, fetchCarsDetail } from "@/_services/rent-cars";
+import { CarsDetailResponse, CarsResponse, Pagination } from "@/interfaces";
+import { fetchCars, fetchCarsDetail } from "@/services/rent-cars";
 export async function useGetCars(
   pagination: Pagination,
   headers?: Record<string, string>

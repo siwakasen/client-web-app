@@ -1,5 +1,5 @@
 "use client";
-import { Car, Meta } from "@/_interfaces";
+import { Car, Meta } from "@/interfaces";
 import { useState, useMemo, useEffect } from "react";
 import { FilterSearch } from "./filter-search";
 import { Search } from "lucide-react";
@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { CarsCard } from "./cars-card";
 import { Pagination } from "../../../components/shared/content/pagination";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { useGetCars } from "@/_hooks";
+import { useGetCars } from "@/hooks";
 
 interface CarsProps {
   cars: Car[];

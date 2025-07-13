@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import ContentDivider from "../content-divider/ContentDivider";
-import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
+import { convertTravelImageUrl } from "@/helpers/images-url/travel-images";
 import Link from "next/link";
-import { TravelPackages } from "@/_interfaces";
+import { TravelPackages } from "@/interfaces";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { useGetTravelPackages } from "@/_hooks";
+import { useGetTravelPackages } from "@/hooks";
 export default async function PopularPackage({
   headers,
 }: {

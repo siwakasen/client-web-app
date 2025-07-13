@@ -1,5 +1,5 @@
 "use client";
-import { Meta, TravelPackages } from "@/_interfaces";
+import { Meta, TravelPackages } from "@/interfaces";
 import { useState, useMemo, useEffect } from "react";
 import { FilterSearch } from "./filter-search";
 import { Search } from "lucide-react";
@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { TourPackageCard } from "./packages-card";
 import { Pagination } from "../../../components/shared/content/pagination";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { useGetTravelPackages } from "@/_hooks";
+import { useGetTravelPackages } from "@/hooks";
 
 interface TourPackagesProps {
   tourPackages: TravelPackages[];

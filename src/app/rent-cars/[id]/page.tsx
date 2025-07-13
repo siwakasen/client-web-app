@@ -4,12 +4,12 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { DollarSign, Users, Check, Key, Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { convertCarImageUrl } from "@/_helpers/images-url/car-images";
+import { convertCarImageUrl } from "@/helpers/images-url/car-images";
 import Link from "next/link";
 import React from "react";
-import { Car } from "@/_interfaces";
+import { Car } from "@/interfaces";
 import { notFound } from "next/navigation";
-import { useGetCars, useGetCarsDetail } from "@/_hooks";
+import { useGetCars, useGetCarsDetail } from "@/hooks";
 import { getHeaders } from "@/lib";
 
 export default async function CarDetailPage({

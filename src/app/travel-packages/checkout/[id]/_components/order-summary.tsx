@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { MapPin } from "lucide-react";
-import { TravelPackages } from "@/_interfaces";
+import { TravelPackages } from "@/interfaces";
 
 interface OrderSummaryProps {
   packageData: TravelPackages;

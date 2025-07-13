@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
+import { convertTravelImageUrl } from "@/helpers/images-url/travel-images";
 
 interface ImageCarouselProps {
   images: string[];

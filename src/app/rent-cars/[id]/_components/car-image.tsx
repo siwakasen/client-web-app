@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { convertCarImageUrl } from "@/_helpers/images-url/car-images";
+import { convertCarImageUrl } from "@/helpers/images-url/car-images";
 import React from "react";
 
 interface CarImageProps {
