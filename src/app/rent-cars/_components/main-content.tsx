@@ -1,5 +1,5 @@
 "use client";
-import { Meta, Car } from "@/_interfaces/rent-car.interface";
+import { Car, Meta } from "@/_interfaces";
 import { useState, useMemo, useEffect } from "react";
 import { FilterSearch } from "./filter-search";
 import { Search } from "lucide-react";

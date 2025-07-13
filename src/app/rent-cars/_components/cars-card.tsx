@@ -1,9 +1,8 @@
 import type React from "react";
-import type { Car } from "@/_interfaces/rent-car.interface";
+import type { Car } from "@/_interfaces";
 import { convertCarImageUrl } from "@/_helpers/images-url/car-images";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 
 interface CarsCardProps {
   car: Car;

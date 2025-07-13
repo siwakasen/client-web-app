@@ -1,5 +1,5 @@
 "use server";
-import { CustomerResponse } from "@/_interfaces/customer.interface";
+import { CustomerResponse } from "@/_interfaces";
 import { forgotPassword, getCustomer, register } from "@/_services/customers";
 import {
   RegisterFormSchema,

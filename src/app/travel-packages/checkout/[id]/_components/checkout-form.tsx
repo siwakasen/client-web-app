@@ -7,15 +7,13 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronDown, ChevronDownIcon } from "lucide-react";
-import { Customer } from "@/_interfaces/customer.interface";
+import { Customer, TravelPackages, BookingRequest } from "@/_interfaces";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { BookingRequest } from "@/_interfaces/booking.interface";
-import { TravelPackages } from "@/_interfaces/travel-packages.interface";
 import { OrderSummary } from "./order-summary";
 interface CheckoutFormProps {
   travelPackage: TravelPackages;

@@ -1,14 +1,14 @@
 import {
   TravelPackagesResponse,
-  TravelPackagesRequest,
+  Pagination,
   TravelPackagesDetailRequest,
   TravelPackagesDetailResponse,
-} from "@/_interfaces/travel-packages.interface";
+} from "@/_interfaces";
 import { createApiInstance } from "../api";
 import { AxiosResponse } from "axios";
 
 export async function fetchTravelPackages(
-  pagination: TravelPackagesRequest,
+  pagination: Pagination,
   headers?: Record<string, string>,
   token?: string
 ): Promise<TravelPackagesResponse> {

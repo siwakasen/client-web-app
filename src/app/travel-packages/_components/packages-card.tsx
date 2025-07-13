@@ -1,5 +1,5 @@
 import type React from "react";
-import type { TravelPackages } from "@/_interfaces/travel-packages.interface";
+import type { TravelPackages } from "@/_interfaces";
 import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";

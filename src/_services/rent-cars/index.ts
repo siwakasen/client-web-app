@@ -1,14 +1,14 @@
 import {
   CarsResponse,
-  CarsRequest,
+  Pagination,
   CarsDetailResponse,
   CarsDetailRequest,
-} from "@/_interfaces/rent-car.interface";
+} from "@/_interfaces/";
 import { createApiInstance } from "../api";
 import { AxiosResponse } from "axios";
 
 export async function fetchCars(
-  pagination: CarsRequest,
+  pagination: Pagination,
   headers?: Record<string, string>,
   token?: string
 ): Promise<CarsResponse> {

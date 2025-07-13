@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import ContentDivider from "../content-divider/ContentDivider";
 import { convertCarImageUrl } from "@/_helpers/images-url/car-images";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { Car } from "@/_interfaces/rent-car.interface";
+import { Car } from "@/_interfaces";
 import Link from "next/link";
 import { useGetCars } from "@/_hooks/";
 

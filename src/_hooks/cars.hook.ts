@@ -1,13 +1,9 @@
 "use server";
 import { unstable_cacheLife as cacheLife } from "next/cache";
-import {
-  CarsDetailResponse,
-  CarsRequest,
-  CarsResponse,
-} from "@/_interfaces/rent-car.interface";
+import { CarsDetailResponse, CarsResponse, Pagination } from "@/_interfaces";
 import { fetchCars, fetchCarsDetail } from "@/_services/rent-cars";
 export async function useGetCars(
-  pagination: CarsRequest,
+  pagination: Pagination,
   headers?: Record<string, string>
 ): Promise<CarsResponse> {
   "use cache";

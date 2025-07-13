@@ -2,7 +2,7 @@
 import Navbar from "@/components/shared/navbar/Navbar";
 import Footer from "./_components/footer-section/Footer";
 import { getCustomer } from "@/_services/customers";
-import { Customer } from "@/_interfaces/customer.interface";
+import { Customer } from "@/_interfaces";
 import { getHeaders, getToken, hasSession } from "@/lib";
 export default async function HomeLayout({
   children,

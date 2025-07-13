@@ -1,17 +1,17 @@
 "use server";
 import {
-  TravelPackagesRequest,
+  Pagination,
   TravelPackagesDetailRequest,
   TravelPackagesDetailResponse,
   TravelPackagesResponse,
-} from "@/_interfaces/travel-packages.interface";
+} from "@/_interfaces";
 import {
   fetchTravelPackages,
   fetchTravelPackagesDetail,
 } from "@/_services/travel-packages";
 import { unstable_cacheLife as cacheLife } from "next/cache";
 export async function useGetTravelPackages(
-  pagination: TravelPackagesRequest,
+  pagination: Pagination,
   headers?: Record<string, string>
 ): Promise<TravelPackagesResponse> {
   "use cache";

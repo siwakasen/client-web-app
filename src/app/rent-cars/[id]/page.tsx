@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { convertCarImageUrl } from "@/_helpers/images-url/car-images";
 import Link from "next/link";
 import React from "react";
-import { Car } from "@/_interfaces/rent-car.interface";
+import { Car } from "@/_interfaces";
 import { notFound } from "next/navigation";
 import { useGetCars, useGetCarsDetail } from "@/_hooks";
 import { getHeaders } from "@/lib";

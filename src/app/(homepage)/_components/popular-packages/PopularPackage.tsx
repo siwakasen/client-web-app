@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import ContentDivider from "../content-divider/ContentDivider";
 import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
 import Link from "next/link";
-import { TravelPackages } from "@/_interfaces/travel-packages.interface";
+import { TravelPackages } from "@/_interfaces";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
 import { useGetTravelPackages } from "@/_hooks";
 export default async function PopularPackage({

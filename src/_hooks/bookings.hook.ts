@@ -1,8 +1,5 @@
 "use server";
-import {
-  BookingRequest,
-  BookingResponse,
-} from "@/_interfaces/booking.interface";
+import { BookingRequest, BookingResponse } from "@/_interfaces";
 import { createBooking } from "@/_services/bookings";
 import { getHeaders } from "@/lib";
 

@@ -7,7 +7,7 @@ import { ImageCarousel } from "./_components/carousel-images";
 import { Separator } from "@/components/ui/separator";
 import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
 import Link from "next/link";
-import { TravelPackages } from "@/_interfaces/travel-packages.interface";
+import { TravelPackages } from "@/_interfaces";
 import { notFound } from "next/navigation";
 import { useGetTravelPackages, useGetTravelPackagesDetail } from "@/_hooks";
 import { getHeaders } from "@/lib";

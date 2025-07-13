@@ -2,10 +2,8 @@ import MainContent from "./_components/main-content";
 import Image from "next/image";
 import Navbar from "@/components/shared/navbar/Navbar";
 import Footer from "../../components/shared/content/footer";
-import { Car } from "@/_interfaces/rent-car.interface";
-import { Meta } from "@/_interfaces/rent-car.interface";
+import { Car, Meta, Customer } from "@/_interfaces";
 import { getToken, hasSession } from "@/lib/session";
-import { Customer } from "@/_interfaces/customer.interface";
 import { getHeaders } from "@/lib";
 import { useGetCustomer, useGetCars } from "@/_hooks";
 export default async function RentCarsPage() {

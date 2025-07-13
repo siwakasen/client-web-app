@@ -20,7 +20,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Customer } from "@/_interfaces/customer.interface";
+import { Customer } from "@/_interfaces";
 
 export default function Navbar({
   isAuthenticated,

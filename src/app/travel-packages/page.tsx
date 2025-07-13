@@ -2,10 +2,9 @@ import MainContent from "./_components/main-content";
 import Image from "next/image";
 import Navbar from "@/components/shared/navbar/Navbar";
 import Footer from "../../components/shared/content/footer";
-import { Meta, TravelPackages } from "@/_interfaces/travel-packages.interface";
+import { Meta, TravelPackages, Customer } from "@/_interfaces";
 import { getToken, hasSession } from "@/lib/session";
 import { getCustomer } from "@/_services/customers";
-import { Customer } from "@/_interfaces/customer.interface";
 import { getHeaders } from "@/lib";
 import { useGetTravelPackages } from "@/_hooks";
 

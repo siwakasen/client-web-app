@@ -1,5 +1,5 @@
 "use client";
-import { Meta, TravelPackages } from "@/_interfaces/travel-packages.interface";
+import { Meta, TravelPackages } from "@/_interfaces";
 import { useState, useMemo, useEffect } from "react";
 import { FilterSearch } from "./filter-search";
 import { Search } from "lucide-react";
