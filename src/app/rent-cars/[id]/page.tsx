@@ -9,7 +9,7 @@ import Link from "next/link";
 import React from "react";
 import { Car } from "@/_interfaces/rent-car.interface";
 import { notFound } from "next/navigation";
-import { useGetCars, useGetCarsDetail } from "@/_hooks/rent-cars/cars.hook";
+import { useGetCars, useGetCarsDetail } from "@/_hooks";
 import { getHeaders } from "@/lib";
 
 export default async function CarDetailPage({

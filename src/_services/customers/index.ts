@@ -19,9 +19,6 @@ export const login = async (
     process.env.NEXT_PUBLIC_CUSTOMERS_API_URL
   );
   const response = await api.post("/customers/login", payload);
-  if (response.status !== 200) {
-    throw new Error("Failed to login");
-  }
   return response.data;
 };
 
@@ -34,9 +31,7 @@ export const register = async (
     process.env.NEXT_PUBLIC_CUSTOMERS_API_URL
   );
   const response = await api.post("/customers/register", payload);
-  if (response.status !== 200) {
-    throw new Error("Failed to register");
-  }
+
   return response.data;
 };
 
@@ -49,9 +44,6 @@ export const forgotPassword = async (
     process.env.NEXT_PUBLIC_CUSTOMERS_API_URL
   );
   const response = await api.post("/customers/forgot-password", payload);
-  if (response.status !== 200) {
-    throw new Error("Failed to forgot password");
-  }
   return response.data;
 };
 
@@ -59,15 +51,11 @@ export const getCustomer = async (
   token: string,
   headers: Record<string, string>
 ): Promise<CustomerResponse> => {
-  try {
-    const api = await createApiInstance(
-      headers,
-      process.env.NEXT_PUBLIC_CUSTOMERS_API_URL,
-      token
-    );
-    const response = await api.get("/customers/me");
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const api = await createApiInstance(
+    headers,
+    process.env.NEXT_PUBLIC_CUSTOMERS_API_URL,
+    token
+  );
+  const response = await api.get("/customers/me");
+  return response.data;
 };

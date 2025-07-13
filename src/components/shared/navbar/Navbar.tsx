@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react"; // Import useEffect
+import { useState, useEffect } from "react";
 
 import { Menu, User, LogOut, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useLogoutUser } from "@/_hooks/auth/auth.hook";
+import { useLogoutUser } from "@/_hooks";
 import { toast } from "sonner";
 import {
   DropdownMenu,
@@ -56,7 +56,6 @@ export default function Navbar({
 
   const handleLogout = async () => {
     const { message } = await useLogoutUser();
-    toast.info(message);
     setIsOpen(false); // Close mobile menu after logout
   };
 

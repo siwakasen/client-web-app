@@ -9,10 +9,7 @@ import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
 import Link from "next/link";
 import { TravelPackages } from "@/_interfaces/travel-packages.interface";
 import { notFound } from "next/navigation";
-import {
-  useGetTravelPackages,
-  useGetTravelPackagesDetail,
-} from "@/_hooks/travel-packages/travel.hook";
+import { useGetTravelPackages, useGetTravelPackagesDetail } from "@/_hooks";
 import { getHeaders } from "@/lib";
 
 export default async function TravelPackageDetailPage({

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { TourPackageCard } from "./packages-card";
 import { Pagination } from "../../../components/shared/content/pagination";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { useGetTravelPackages } from "@/_hooks/travel-packages/travel.hook";
+import { useGetTravelPackages } from "@/_hooks";
 
 interface TourPackagesProps {
   tourPackages: TravelPackages[];

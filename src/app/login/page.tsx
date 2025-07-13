@@ -4,24 +4,69 @@ import { useActionState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { useLoginUser } from "@/_hooks/auth/auth.hook";
+import { useLoginUser } from "@/_hooks";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { LoginFormSchema } from "@/lib/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 export default function LoginPage() {
-  const [state, action, pending] = useActionState(useLoginUser, undefined);
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  useEffect(() => {
-    if (state?.message) {
-      toast.success(state.message);
-      router.push("/");
-    }
-  }, [state?.message]);
+  const form = useForm<z.infer<typeof LoginFormSchema>>({
+    resolver: zodResolver(LoginFormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
+  async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
+    setIsSubmitting(true);
+    try {
+      const response = await useLoginUser(values);
+      if (response.status && response.status !== 200) {
+        switch (true) {
+          case !!response.errors?.email:
+            form.setFocus("email");
+            form.setError("email", { message: response.errors.email });
+            break;
+
+          case !!response.errors?.password:
+            form.setFocus("password");
+            form.setError("password", { message: response.errors.password });
+            break;
+
+          case !!response.errors?.message:
+            toast.error(response.errors.message);
+            break;
+        }
+        return;
+      }
+      if (response.message) {
+        toast.success(response.message);
+        router.push("/");
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white">
       <div className="w-full max-w-md space-y-6 p-8 shadow-lg rounded-lg bg-white">
@@ -34,92 +79,93 @@ export default function LoginPage() {
           <h1 className="text-2xl font-bold text-gray-900">Welcome!</h1>
           <p className="text-gray-500 text-sm">Login to Ride Bali Explore</p>
         </div>
-        <form action={action} className="space-y-4">
-          {/* Email Field */}
-          <div className="space-y-2">
-            <Label
-              htmlFor="email"
-              className="text-sm font-medium text-gray-700"
-            >
-              Email
-            </Label>
-            <Input
-              id="email"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {/* Email Field */}
+            <FormField
+              control={form.control}
               name="email"
-              type="email"
-              placeholder="Enter your email..."
-              className="w-full"
-              required
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="Enter your email..."
+                      className="w-full"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {state?.errors?.email && (
-              <p className="text-sm text-red-500">{state.errors.email[0]}</p>
-            )}
-          </div>
-          {/* Password Field */}
-          <div className="space-y-2">
-            <Label
-              htmlFor="password"
-              className="text-sm font-medium text-gray-700"
+            {/* Password Field */}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter Password"
+                        className="w-full pr-10"
+                        {...field}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4 text-gray-500" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-gray-500" />
+                        )}
+                      </button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium"
             >
-              Password
-            </Label>
-            <div className="relative">
-              <Input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter your password..."
-                className="w-full pr-10"
-                required
-              />
-              <button
-                type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                onClick={() => setShowPassword(!showPassword)}
-                tabIndex={-1}
-              >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4 text-gray-400" />
-                ) : (
-                  <Eye className="h-4 w-4 text-gray-400" />
-                )}
-              </button>
-            </div>
-            {state?.errors?.password && (
-              <p className="text-sm text-red-500">{state.errors.password[0]}</p>
-            )}
-          </div>
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            disabled={pending}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium"
-          >
-            {pending ? "Memproses..." : "Masuk"}
-          </Button>
+              {isSubmitting ? <Loader2 /> : "Login"}
+            </Button>
 
-          {/* Forgot Password Link */}
-          <div className="text-center">
-            <Link
-              href="/forgot-password"
-              className="text-sm text-blue-500 hover:text-blue-600 underline"
-            >
-              Forgot Password?
-            </Link>
-          </div>
-          {/* Register Link */}
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              Don't have an account?{" "}
+            {/* Forgot Password Link */}
+            <div className="text-center">
               <Link
-                href="/register"
-                className="text-blue-500 hover:text-blue-600 underline"
+                href="/forgot-password"
+                className="text-sm text-blue-500 hover:text-blue-600 underline"
               >
-                Register Now!
+                Forgot Password?
               </Link>
-            </p>
-          </div>
-        </form>
+            </div>
+            {/* Register Link */}
+            <div className="text-center">
+              <p className="text-sm text-gray-600">
+                Don't have an account?{" "}
+                <Link
+                  href="/register"
+                  className="text-blue-500 hover:text-blue-600 underline"
+                >
+                  Register Now!
+                </Link>
+              </p>
+            </div>
+          </form>
+        </Form>
       </div>
     </div>
   );

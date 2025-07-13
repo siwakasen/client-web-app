@@ -5,7 +5,7 @@ import { convertCarImageUrl } from "@/_helpers/images-url/car-images";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
 import { Car } from "@/_interfaces/rent-car.interface";
 import Link from "next/link";
-import { useGetCars } from "@/_hooks/rent-cars/cars.hook";
+import { useGetCars } from "@/_hooks/";
 
 export default async function PopularCars({
   headers,

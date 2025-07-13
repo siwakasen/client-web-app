@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { CarsCard } from "./cars-card";
 import { Pagination } from "../../../components/shared/content/pagination";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { useGetCars } from "@/_hooks/rent-cars/cars.hook";
+import { useGetCars } from "@/_hooks";
 
 interface CarsProps {
   cars: Car[];

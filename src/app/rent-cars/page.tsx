@@ -7,8 +7,7 @@ import { Meta } from "@/_interfaces/rent-car.interface";
 import { getToken, hasSession } from "@/lib/session";
 import { Customer } from "@/_interfaces/customer.interface";
 import { getHeaders } from "@/lib";
-import { useGetCars } from "@/_hooks/rent-cars/cars.hook";
-import { useGetCustomer } from "@/_hooks/auth/auth.hook";
+import { useGetCustomer, useGetCars } from "@/_hooks";
 export default async function RentCarsPage() {
   const headers = await getHeaders();
   let isAuthenticated = await hasSession();

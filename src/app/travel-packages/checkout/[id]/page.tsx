@@ -1,11 +1,8 @@
-import { fetchTravelPackagesDetail } from "@/_services/travel-packages";
 import { CheckoutForm } from "./_components/checkout-form";
-import { OrderSummary } from "./_components/order-summary";
 import { getToken, hasSession } from "@/lib/session";
 import { Customer } from "@/_interfaces/customer.interface";
 import { getHeaders } from "@/lib";
-import { useGetTravelPackagesDetail } from "@/_hooks/travel-packages/travel.hook";
-import { useGetCustomer } from "@/_hooks/auth/auth.hook";
+import { useGetTravelPackagesDetail, useGetCustomer } from "@/_hooks";
 interface CheckoutPageProps {
   params: {
     id: string;

@@ -5,7 +5,7 @@ import { convertTravelImageUrl } from "@/_helpers/images-url/travel-images";
 import Link from "next/link";
 import { TravelPackages } from "@/_interfaces/travel-packages.interface";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { useGetTravelPackages } from "@/_hooks/travel-packages/travel.hook";
+import { useGetTravelPackages } from "@/_hooks";
 export default async function PopularPackage({
   headers,
 }: {

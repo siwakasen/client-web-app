@@ -12,10 +12,8 @@ export default function Footer() {
           backgroundImage: `url('/images/hero3_img.jpg')`,
         }}
       />
-
       {/* Gradient Overlay - White to Transparent */}
       <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-gray-50/60 to-transparent" />
-
       {/* Content */}
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         {/* Small Label */}
