@@ -9,7 +9,7 @@ const createApiInstance = async (
 ) => {
   const api = axios.create({
     baseURL: baseURL || defaultBaseURL, // Gunakan baseURL custom atau default
-    timeout: 10000, // Timeout 10 detik
+    timeout: 20000, // Timeout 10 detik
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

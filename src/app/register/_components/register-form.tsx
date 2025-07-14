@@ -45,9 +45,6 @@ export default function RegisterForm() {
   async function onSubmit(values: z.infer<typeof RegisterFormSchema>) {
     setIsSubmitting(true);
     try {
-      // Client-side validation is already handled by react-hook-form + zodResolver
-      // This will automatically show validation errors for each field
-
       const response = await useRegisterUser(values);
 
       // Check if the response has errors (API errors)

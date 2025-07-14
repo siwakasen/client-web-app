@@ -20,7 +20,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
 
   let isAuthenticated = await hasSession();
 
-  let customer: Customer;
+  let customer: Customer | null = null;
   try {
     if (isAuthenticated) {
       const token = await getToken();
@@ -42,7 +42,11 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
         </div>
       </div>
 
-      <CheckoutForm travelPackage={packageData} customer={customer!} />
+      {customer ? (
+        <CheckoutForm travelPackage={packageData} customer={customer} />
+      ) : (
+        <CheckoutForm travelPackage={packageData} />
+      )}
 
       {/* Footer Links */}
       <div className="bg-white border-t px-4 py-6">

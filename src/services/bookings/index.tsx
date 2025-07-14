@@ -22,8 +22,8 @@ export const createBookingWithRegister = async (
 };
 
 export const createBooking = async (
-  token: string,
   payload: BookingRequest,
+  token: string,
   headers: Record<string, string>
 ): Promise<BookingResponse> => {
   const api = await createApiInstance(
@@ -32,6 +32,6 @@ export const createBooking = async (
     token
   );
 
-  const response: BookingResponse = await api.post("/bookings", payload);
-  return response;
+  const response = await api.post("/bookings", payload);
+  return response.data;
 };

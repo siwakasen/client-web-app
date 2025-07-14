@@ -9,13 +9,11 @@ import {
   fetchTravelPackages,
   fetchTravelPackagesDetail,
 } from "@/services/travel-packages";
-import { unstable_cacheLife as cacheLife } from "next/cache";
 export async function useGetTravelPackages(
   pagination: Pagination,
   headers?: Record<string, string>
 ): Promise<TravelPackagesResponse> {
   "use cache";
-  cacheLife("hours");
   return await fetchTravelPackages(pagination, headers);
 }
 
@@ -24,6 +22,5 @@ export async function useGetTravelPackagesDetail(
   headers?: Record<string, string>
 ): Promise<TravelPackagesDetailResponse> {
   "use cache";
-  cacheLife("hours");
   return await fetchTravelPackagesDetail(pagination, headers);
 }

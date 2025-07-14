@@ -9,7 +9,6 @@ import {
 import { login } from "@/services/customers";
 import { createSession, deleteSession } from "@/lib/session";
 import { getHeaders } from "@/lib";
-import { unstable_cacheLife as cacheLife } from "next/cache";
 import { z } from "zod";
 
 export async function useRegisterUser(
@@ -75,6 +74,5 @@ export async function useGetCustomer(
   headers: Record<string, string>
 ): Promise<CustomerResponse> {
   "use cache";
-  cacheLife("hours");
   return await getCustomer(token, headers);
 }

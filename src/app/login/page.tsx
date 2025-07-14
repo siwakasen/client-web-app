@@ -61,8 +61,8 @@ export default function LoginPage() {
         toast.success(response.message);
         router.push("/");
       }
-    } catch (error) {
-      toast.error("An unexpected error occurred. Please try again.");
+    } catch (error: any) {
+      toast.error(error.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -140,7 +140,7 @@ export default function LoginPage() {
               disabled={isSubmitting}
               className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium"
             >
-              {isSubmitting ? <Loader2 /> : "Login"}
+              {isSubmitting ? <Loader2 className="animate-spin" /> : "Login"}
             </Button>
 
             {/* Forgot Password Link */}
