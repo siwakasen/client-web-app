@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronDown, ChevronDownIcon, Loader2 } from "lucide-react";
-import { BookingResponse, Customer, TravelPackages } from "@/interfaces";
+import { Customer, TravelPackages } from "@/interfaces";
 import {
   Popover,
   PopoverContent,
@@ -28,12 +28,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner";
-import {
-  permanentRedirect,
-  redirect,
-  RedirectType,
-  useRouter,
-} from "next/navigation";
+import { useRouter } from "next/navigation";
 interface CheckoutFormProps {
   travelPackage: TravelPackages;
   customer?: Customer;
@@ -41,7 +36,6 @@ interface CheckoutFormProps {
 
 export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
   const form = useForm<z.infer<typeof BookingFormSchema>>({
     resolver: zodResolver(BookingFormSchema),
     defaultValues: {
@@ -59,11 +53,9 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
 
   const [open, setOpen] = useState(false);
 
-  // Automatically set end_date when start_date is filled
   const startDate = form.watch("start_date");
   const pickupTime = form.watch("pickup_time");
 
-  // Helper to combine date and time into ISO string
   function combineDateAndTime(dateString: string, timeString: string) {
     if (!dateString) return "";
     const date = new Date(dateString);
@@ -79,14 +71,13 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
     return date.toISOString();
   }
 
-  // Keep start_date always containing both date and time
   useEffect(() => {
     if (startDate) {
       const combined = combineDateAndTime(startDate, pickupTime);
       if (combined !== startDate) {
         form.setValue("start_date", combined);
       }
-      form.setValue("end_date", combined); // keep end_date in sync as before
+      form.setValue("end_date", combined);
     }
   }, [startDate, pickupTime, form]);
 
@@ -100,6 +91,7 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
         end_date: convertedDate,
       };
       const response = await useCreateBooking(formData);
+
       if ("errors" in response) {
         toast.error(response.errors.message || "An error occurred", {
           description: response.status
@@ -108,6 +100,7 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
         });
         return;
       }
+      window.location.href = response.data.redirect_url;
     } catch (error: any) {
       console.log(error);
       toast.error("An unexpected error occurred. Please try again.");

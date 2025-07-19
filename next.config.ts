@@ -11,13 +11,16 @@ const nextConfig: NextConfig = {
         protocol: "http",
         hostname: "localhost",
       },
-      
     ],
   },
-  allowedDevOrigins: ["https://siwakasen.mole-mintaka.ts.net","https://vulpies.tail66dfd8.ts.net/"],
-  experimental:{
-    useCache:true,
-  }
+  allowedDevOrigins: [
+    "https://siwakasen.mole-mintaka.ts.net",
+    "https://vulpies.tail66dfd8.ts.net/",
+    "localhost:3005",
+  ],
+  experimental: {
+    useCache: true,
+  },
 };
 
 export default nextConfig;
