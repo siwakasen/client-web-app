@@ -1,6 +1,6 @@
-import { redirect, RedirectType } from "next/navigation";
+import { notFound, redirect, RedirectType } from "next/navigation";
 import { capturePaymentPaypal } from "@/services/payment";
-import { CheckCircle, Loader2, XCircle, TimerIcon } from "lucide-react";
+import { CheckCircle, XCircle, TimerIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -12,7 +12,7 @@ export default async function PaymentSuccessPage({
   const { token } = await searchParams;
 
   if (!token) {
-    redirect("/", RedirectType.replace);
+    notFound();
   }
 
   let isSuccess = false;
@@ -25,15 +25,21 @@ export default async function PaymentSuccessPage({
     orderId,
   } = await capturePaymentPaypal(token);
 
+  console.log(resultMessage, statusCode);
   if (statusCode === 201 || statusCode === 200) {
     isSuccess = true;
     message = resultMessage;
   } else if (statusCode === 422) {
-    isPending = true;
-    message =
-      resultMessage == "ORDER_ALREADY_CAPTURED"
-        ? "Your payment has already been processed."
-        : `Your payment has not completed yet. Please the button below to continue.`;
+    if (resultMessage === "ORDER_ALREADY_CAPTURED") {
+      isSuccess = true;
+      message = "Your payment has already been processed.";
+    } else if (resultMessage === "ORDER_NOT_APPROVED") {
+      isPending = true;
+      message =
+        "Your payment has not completed yet. Please click the button below to continue.";
+    } else {
+      redirect("/", RedirectType.replace);
+    }
   } else {
     redirect("/", RedirectType.replace);
   }
@@ -54,29 +60,31 @@ export default async function PaymentSuccessPage({
 
         {/* Success Message */}
         <h1 className="text-2xl font-bold text-gray-900 mb-4">
-          {isSuccess ? "Payment Successful!" : "Payment Failed!"}
+          {isSuccess
+            ? "Payment Successful!"
+            : isPending
+            ? "Payment Pending!"
+            : "Payment Failed!"}
         </h1>
 
-        <p className="text-gray-600 mb-6">
-          {isSuccess && "Your payment has been successfully."}
-        </p>
-
         {/* Show message if there's an error */}
-        {(!isSuccess || isPending) && (
-          <div
-            className={`mb-6 p-4 ${
-              isPending ? "bg-yellow-50" : "bg-red-50"
-            } rounded-lg`}
+        <div
+          className={`mb-6 p-4 ${
+            isPending ? "bg-yellow-50" : isSuccess ? "bg-green-50" : "bg-red-50"
+          } rounded-lg`}
+        >
+          <p
+            className={`${
+              isPending
+                ? "text-yellow-700"
+                : isSuccess
+                ? "text-green-700"
+                : "text-red-700"
+            } text-sm`}
           >
-            <p
-              className={`${
-                isPending ? "text-yellow-700" : "text-red-700"
-              } text-sm`}
-            >
-              {message}
-            </p>
-          </div>
-        )}
+            {message}
+          </p>
+        </div>
         {/* Action Buttons */}
         <div className="space-y-3">
           {(resultMessage == "ORDER_ALREADY_CAPTURED" || isSuccess) && (
