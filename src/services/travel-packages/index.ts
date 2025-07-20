@@ -8,15 +8,11 @@ import { createApiInstance } from "../api";
 import { AxiosResponse } from "axios";
 
 export async function fetchTravelPackages(
-  pagination: Pagination,
-  headers?: Record<string, string>,
-  token?: string
+  pagination: Pagination
 ): Promise<TravelPackagesResponse> {
   try {
     const api = await createApiInstance(
-      headers || {},
-      process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API,
-      token
+      process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API
     );
     const response = await api.get(
       `/travel-packages?limit=${pagination.limit}&page=${
@@ -33,14 +29,10 @@ export async function fetchTravelPackages(
 }
 
 export async function fetchTravelPackagesDetail(
-  payload: TravelPackagesDetailRequest,
-  headers?: Record<string, string>,
-  token?: string
+  payload: TravelPackagesDetailRequest
 ): Promise<TravelPackagesDetailResponse> {
   const api = await createApiInstance(
-    headers || {},
-    process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API,
-    token
+    process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API
   );
   const response: AxiosResponse = await api.get(
     `/travel-packages/${payload.id}`

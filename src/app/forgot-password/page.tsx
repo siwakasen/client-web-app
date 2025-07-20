@@ -94,7 +94,7 @@ export default function ForgotPasswordPage() {
               disabled={isSubmitting}
               className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? <Loader2 /> : "Register"}
+              {isSubmitting ? <Loader2 /> : "Send Email"}
             </Button>
             <div className="text-center">
               <Link

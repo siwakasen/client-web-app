@@ -10,10 +10,7 @@ import { createApiInstance } from "../api";
 export const createBookingWithRegister = async (
   payload: BookingWithRegisterRequest
 ): Promise<BookingWithRegisterResponse> => {
-  const api = await createApiInstance({
-    baseURL:
-      process.env.NEXT_PUBLIC_BOOKINGS_API_URL || "http://localhost:3005",
-  });
+  const api = await createApiInstance(process.env.NEXT_PUBLIC_BOOKINGS_API_URL);
   const response: BookingWithRegisterResponse = await api.post(
     "/bookings/and-register",
     payload
@@ -27,8 +24,8 @@ export const createBooking = async (
   headers: Record<string, string>
 ): Promise<BookingResponse> => {
   const api = await createApiInstance(
+    process.env.NEXT_PUBLIC_BOOKINGS_API_URL,
     headers,
-    process.env.NEXT_PUBLIC_BOOKINGS_API_URL || "http://localhost:3005",
     token
   );
 

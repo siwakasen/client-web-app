@@ -1,26 +1,15 @@
 import MainContent from "./_components/main-content";
 import Image from "next/image";
 import Navbar from "@/components/shared/navbar/Navbar";
-import Footer from "../../components/shared/content/footer";
-import { Meta, TravelPackages, Customer } from "@/interfaces";
-import { getToken, hasSession } from "@/lib/session";
-import { getCustomer } from "@/services/customers";
-import { getHeaders } from "@/lib";
+import Footer from "@/components/shared/content/footer";
+
+import { Meta, TravelPackages } from "@/interfaces";
 import { useGetTravelPackages } from "@/hooks";
+import { useGetCustomer } from "@/hooks/auth.hook";
+import { getHeaders } from "@/lib";
 
 export default async function TourPackagesPage() {
-  const headers = await getHeaders();
-  let isAuthenticated = await hasSession();
-  let token: string = "";
-  let customer: Customer;
-  try {
-    if (isAuthenticated) {
-      token = (await getToken()) || "";
-      const header = await getHeaders();
-      const { data } = await getCustomer(token, header);
-      customer = data;
-    }
-  } catch (error) {}
+  const { isAuthenticated, customer } = await useGetCustomer();
   let travelPackages: TravelPackages[] = [];
   let metaPackages: Meta = {
     currentPage: 1,
@@ -31,14 +20,11 @@ export default async function TourPackagesPage() {
     hasPrevPage: false,
   };
   try {
-    const { data, meta: metaData } = await useGetTravelPackages(
-      {
-        limit: 6,
-        page: 1,
-        search: "",
-      },
-      headers
-    );
+    const { data, meta: metaData } = await useGetTravelPackages({
+      limit: 6,
+      page: 1,
+      search: "",
+    });
     travelPackages = data;
     metaPackages = metaData;
   } catch (error) {

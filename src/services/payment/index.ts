@@ -8,8 +8,8 @@ export async function capturePaymentPaypal(
 ) {
   try {
     const api = await createApiInstance(
-      headers!,
-      process.env.NEXT_PUBLIC_BOOKINGS_API_URL
+      process.env.NEXT_PUBLIC_BOOKINGS_API_URL,
+      headers
     );
 
     const response = await api.post("/payments/capture-paypal", {
@@ -39,8 +39,8 @@ export async function cancelPaymentPaypal(
 ) {
   try {
     const api = await createApiInstance(
-      headers!,
-      process.env.NEXT_PUBLIC_BOOKINGS_API_URL
+      process.env.NEXT_PUBLIC_BOOKINGS_API_URL,
+      headers
     );
 
     const response = await api.patch("/payments/cancel-paypal", {

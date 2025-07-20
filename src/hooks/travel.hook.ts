@@ -10,17 +10,15 @@ import {
   fetchTravelPackagesDetail,
 } from "@/services/travel-packages";
 export async function useGetTravelPackages(
-  pagination: Pagination,
-  headers?: Record<string, string>
+  pagination: Pagination
 ): Promise<TravelPackagesResponse> {
   "use cache";
-  return await fetchTravelPackages(pagination, headers);
+  return await fetchTravelPackages(pagination);
 }
 
 export async function useGetTravelPackagesDetail(
-  pagination: TravelPackagesDetailRequest,
-  headers?: Record<string, string>
+  pagination: TravelPackagesDetailRequest
 ): Promise<TravelPackagesDetailResponse> {
   "use cache";
-  return await fetchTravelPackagesDetail(pagination, headers);
+  return await fetchTravelPackagesDetail(pagination);
 }

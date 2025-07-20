@@ -19,14 +19,13 @@ export async function getToken(): Promise<string | undefined> {
   const token = cookieStore.get("session")?.value;
   return token;
 }
-export async function hasSession(): Promise<boolean> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("session")?.value;
-  if (!token) return false;
-  return true;
-}
 
 export async function deleteSession() {
+  "use server";
   console.log("delete session");
-  (await cookies()).delete("session");
+  const cookieStore = await cookies();
+  cookieStore.delete("session");
+  return {
+    message: "Session deleted successfully",
+  };
 }

@@ -1,7 +1,4 @@
 import { CheckoutForm } from "./_components/checkout-form";
-import { getToken, hasSession } from "@/lib/session";
-import { Customer } from "@/interfaces";
-import { getHeaders } from "@/lib";
 import { useGetTravelPackagesDetail, useGetCustomer } from "@/hooks";
 interface CheckoutPageProps {
   params: {
@@ -11,26 +8,10 @@ interface CheckoutPageProps {
 
 export default async function CheckoutPage({ params }: CheckoutPageProps) {
   const { id } = await params;
-  const { data: packageData } = await useGetTravelPackagesDetail(
-    {
-      id: Number(id),
-    },
-    await getHeaders()
-  );
-
-  let isAuthenticated = await hasSession();
-
-  let customer: Customer | null = null;
-  try {
-    if (isAuthenticated) {
-      const token = await getToken();
-      const header = await getHeaders();
-      const { data } = await useGetCustomer(token!, header);
-      customer = data;
-    }
-  } catch (error) {
-    isAuthenticated = false;
-  }
+  const { data: packageData } = await useGetTravelPackagesDetail({
+    id: Number(id),
+  });
+  const { customer } = await useGetCustomer();
 
   return (
     <div className="min-h-screen bg-white">

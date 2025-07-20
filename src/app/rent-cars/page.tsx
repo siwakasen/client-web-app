@@ -1,25 +1,12 @@
 import MainContent from "./_components/main-content";
 import Image from "next/image";
 import Navbar from "@/components/shared/navbar/Navbar";
-import Footer from "../../components/shared/content/footer";
-import { Car, Meta, Customer } from "@/interfaces";
-import { getToken, hasSession } from "@/lib/session";
-import { getHeaders } from "@/lib";
+import Footer from "@/components/shared/content/footer";
+import { Car, Meta } from "@/interfaces";
+
 import { useGetCustomer, useGetCars } from "@/hooks";
 export default async function RentCarsPage() {
-  const headers = await getHeaders();
-  let isAuthenticated = await hasSession();
-  let customer: Customer;
-  try {
-    if (isAuthenticated) {
-      const token = await getToken();
-      const header = await getHeaders();
-      const { data } = await useGetCustomer(token!, header);
-      customer = data;
-    }
-  } catch (error) {
-    isAuthenticated = false;
-  }
+  const { isAuthenticated, customer } = await useGetCustomer();
   let cars: Car[] = [];
   let meta: Meta = {
     currentPage: 1,
@@ -30,14 +17,11 @@ export default async function RentCarsPage() {
     hasPrevPage: false,
   };
   try {
-    const { data, meta: metaData } = await useGetCars(
-      {
-        limit: 6,
-        page: 1,
-        search: "",
-      },
-      headers
-    );
+    const { data, meta: metaData } = await useGetCars({
+      limit: 6,
+      page: 1,
+      search: "",
+    });
     cars = data;
     meta = metaData;
   } catch (error) {

@@ -15,8 +15,8 @@ export const login = async (
   headers: Record<string, string>
 ): Promise<LoginResponse> => {
   const api = await createApiInstance(
-    headers,
-    process.env.NEXT_PUBLIC_CUSTOMERS_API_URL
+    process.env.NEXT_PUBLIC_CUSTOMERS_API_URL,
+    headers
   );
   const response = await api.post("/customers/login", payload);
   return response.data;
@@ -27,8 +27,8 @@ export const register = async (
   headers: Record<string, string>
 ): Promise<RegisterResponse> => {
   const api = await createApiInstance(
-    headers,
-    process.env.NEXT_PUBLIC_CUSTOMERS_API_URL
+    process.env.NEXT_PUBLIC_CUSTOMERS_API_URL,
+    headers
   );
   const response = await api.post("/customers/register", payload);
 
@@ -40,8 +40,8 @@ export const forgotPassword = async (
   headers: Record<string, string>
 ): Promise<ForgotPasswordResponse> => {
   const api = await createApiInstance(
-    headers,
-    process.env.NEXT_PUBLIC_CUSTOMERS_API_URL
+    process.env.NEXT_PUBLIC_CUSTOMERS_API_URL,
+    headers
   );
   const response = await api.post("/customers/forgot-password", payload);
   return response.data;
@@ -51,9 +51,10 @@ export const getCustomer = async (
   token: string,
   headers: Record<string, string>
 ): Promise<CustomerResponse> => {
+  "use cache";
   const api = await createApiInstance(
-    headers,
     process.env.NEXT_PUBLIC_CUSTOMERS_API_URL,
+    headers,
     token
   );
   const response = await api.get("/customers/me");

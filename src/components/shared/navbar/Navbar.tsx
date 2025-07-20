@@ -13,7 +13,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useLogoutUser } from "@/hooks";
-import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuItem,

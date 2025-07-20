@@ -3,8 +3,8 @@ import axios from "axios";
 const defaultBaseURL = "https://example.com";
 
 const createApiInstance = async (
-  headers: Record<string, string>,
   baseURL?: string,
+  headers?: Record<string, string>,
   token?: string
 ) => {
   const api = axios.create({
