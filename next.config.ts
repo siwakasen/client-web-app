@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
   },
   allowedDevOrigins: [
     "https://siwakasen.mole-mintaka.ts.net",
-    "https://vulpies.tail66dfd8.ts.net/",
+    "https://vulpies.tail66dfd8.ts.net",
     "localhost:3005",
   ],
   experimental: {

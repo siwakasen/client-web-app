@@ -25,9 +25,9 @@ export default async function PopularPackage({
     id: pkg.id,
     title: pkg.package_name,
     image:
-      pkg.images && pkg.images.length > 0
-        ? convertTravelImageUrl(pkg.images[0])
-        : "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      pkg.images &&
+      pkg.images.length > 0 &&
+      convertTravelImageUrl(pkg.images[0]),
     alt: pkg.package_name,
   }));
 
@@ -48,9 +48,9 @@ export default async function PopularPackage({
         />
 
         {/* Cards Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 w-full justify-between gap-8">
-          {packagesData.length > 0 ? (
-            packagesData.map((pkg, index) => (
+        {packagesData.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 w-full justify-between gap-8">
+            {packagesData.map((pkg, index) => (
               <Link href={`/travel-packages/${pkg.id}`} key={pkg.id}>
                 <Card
                   key={pkg.id}
@@ -63,14 +63,18 @@ export default async function PopularPackage({
                   >
                     <div className="relative h-full w-full">
                       <div className="relative w-full h-full overflow-hidden">
-                        <Image
-                          src={pkg.image}
-                          alt={pkg.alt}
-                          fill
-                          priority={true}
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
+                        {pkg.image && pkg.image.length > 0 ? (
+                          <Image
+                            src={pkg.image}
+                            alt={pkg.alt}
+                            fill
+                            priority={true}
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        ) : (
+                          <SkeletonCard />
+                        )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300"></div>
                       </div>
                       <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -82,18 +86,18 @@ export default async function PopularPackage({
                   </CardContent>
                 </Card>
               </Link>
-            ))
-          ) : (
-            <div className="w-full text-center py-8 flex flex-row gap-4 justify-center">
-              <div className="w-full">
-                <SkeletonCard />
-              </div>
-              <div className="w-full">
-                <SkeletonCard />
-              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 w-full justify-between gap-8">
+            <div className="w-full">
+              <SkeletonCard />
             </div>
-          )}
-        </div>
+            <div className="w-full hidden md:block">
+              <SkeletonCard />
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

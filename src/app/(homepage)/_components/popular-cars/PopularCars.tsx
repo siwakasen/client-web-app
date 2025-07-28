@@ -24,14 +24,13 @@ export default async function PopularCars({
     // TOAST ERROR
   }
 
-  // Use the actual data from the API response
   const carsData = cars.map((car) => ({
     id: car.id,
     title: car.car_name,
     image:
-      car.car_image && car.car_image.length > 0
-        ? convertCarImageUrl(car.car_image)
-        : "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      car.car_image &&
+      car.car_image.length > 0 &&
+      convertCarImageUrl(car.car_image),
     alt: car.car_name,
   }));
 
@@ -48,9 +47,9 @@ export default async function PopularCars({
         />
 
         {/* Cards Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 w-full justify-between gap-8">
-          {carsData.length > 0 ? (
-            carsData.map((car) => (
+        {carsData.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 w-full justify-between gap-8">
+            {carsData.map((car) => (
               <Link href={`/rent-cars/${car.id}`} key={car.id}>
                 <Card
                   key={car.id}
@@ -61,14 +60,18 @@ export default async function PopularCars({
                   >
                     <div className="relative h-full w-full">
                       <div className="relative w-full h-full overflow-hidden">
-                        <Image
-                          src={car.image}
-                          alt={car.alt}
-                          fill
-                          priority={true}
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
+                        {car.image && car.image.length > 0 ? (
+                          <Image
+                            src={car.image}
+                            alt={car.alt}
+                            fill
+                            priority={true}
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        ) : (
+                          <SkeletonCard />
+                        )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300"></div>
                       </div>
                       <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -80,18 +83,18 @@ export default async function PopularCars({
                   </CardContent>
                 </Card>
               </Link>
-            ))
-          ) : (
-            <div className="w-full text-center py-8 flex flex-row gap-4 justify-center">
-              <div className="w-full">
-                <SkeletonCard />
-              </div>
-              <div className="w-full">
-                <SkeletonCard />
-              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 w-full justify-between gap-8">
+            <div className="w-full">
+              <SkeletonCard />
             </div>
-          )}
-        </div>
+            <div className="w-full hidden md:block">
+              <SkeletonCard />
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

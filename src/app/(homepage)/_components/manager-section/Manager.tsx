@@ -17,8 +17,8 @@ export default function Manager() {
             <div className="relative mb-6">
               <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-white shadow-lg">
                 <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face"
-                  alt="John Doe"
+                  src="images/profile2.jpg"
+                  alt="Manager"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -29,12 +29,12 @@ export default function Manager() {
             </div>
 
             {/* Name and Title */}
-            <h3 className="text-3xl font-bold text-gray-900 mb-2">John Doe</h3>
+            <h3 className="text-3xl font-bold text-gray-900 mb-2">Ms. Hanna</h3>
             <p className="text-lg text-gray-600 mb-8">Manager</p>
 
             {/* Description */}
             <p className="text-gray-700 text-lg leading-relaxed max-w-3xl mx-auto">
-              With over 15 years of industry experience, Agung leads our company
+              With over 15 years of industry experience, Hanna leads our company
               with vision and innovation. His commitment to excellence and
               sustainable practices has transformed how we approach business in
               the modern era.
