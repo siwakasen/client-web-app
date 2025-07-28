@@ -3,8 +3,8 @@ export interface BookingWithRegisterRequest {
   car_id?: number;
   with_driver?: boolean;
   number_of_persons?: number;
-  start_date: string;
-  end_date: string;
+  start_date?: string;
+  end_date?: string;
   payment_method: string;
   pickup_location: string;
   pickup_time: string;
@@ -29,7 +29,6 @@ export interface BookingRequest {
   additional_notes?: string;
 }
 export interface BookingWithRegisterResponse {
-  success: boolean;
   data: DataWithRegister;
 }
 

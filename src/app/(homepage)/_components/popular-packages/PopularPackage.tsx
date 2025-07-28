@@ -13,14 +13,11 @@ export default async function PopularPackage({
 }) {
   let packages: TravelPackages[] = [];
   try {
-    const { data } = await useGetTravelPackages(
-      {
-        limit: 2,
-        page: 1,
-        search: "",
-      },
-      headers
-    );
+    const { data } = await useGetTravelPackages({
+      limit: 2,
+      page: 1,
+      search: "",
+    });
     packages = data;
   } catch (error) {}
 

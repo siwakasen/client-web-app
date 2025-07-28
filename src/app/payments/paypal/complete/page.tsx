@@ -1,8 +1,8 @@
 import { notFound, redirect, RedirectType } from "next/navigation";
-import { capturePaymentPaypal } from "@/services/payment";
 import { CheckCircle, XCircle, TimerIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useCapturePaymentPaypal } from "@/hooks/payments.hook";
 
 export default async function PaymentSuccessPage({
   searchParams,
@@ -19,20 +19,17 @@ export default async function PaymentSuccessPage({
   let isPending = false;
   let message = "";
 
-  const {
-    statusCode,
-    message: resultMessage,
-    orderId,
-  } = await capturePaymentPaypal(token);
+  const { statusCode, message: resultMessage } = await useCapturePaymentPaypal(
+    token
+  );
 
-  console.log(resultMessage, statusCode);
-  if (statusCode === 201 || statusCode === 200) {
+  if (statusCode === 200) {
     isSuccess = true;
-    message = resultMessage;
+    message = "Your payment has been successfull";
   } else if (statusCode === 422) {
     if (resultMessage === "ORDER_ALREADY_CAPTURED") {
       isSuccess = true;
-      message = "Your payment has already been processed.";
+      message = "Your payment has been processed.";
     } else if (resultMessage === "ORDER_NOT_APPROVED") {
       isPending = true;
       message =
@@ -95,7 +92,7 @@ export default async function PaymentSuccessPage({
           {resultMessage == "ORDER_NOT_APPROVED" && (
             <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
               <Link
-                href={`https://www.sandbox.paypal.com/checkoutnow?token=${orderId}`}
+                href={`https://www.sandbox.paypal.com/checkoutnow?token=${token}`}
               >
                 Complete The Payment
               </Link>

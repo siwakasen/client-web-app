@@ -33,6 +33,14 @@ export interface ForgotPasswordResponse {
   message: string;
 }
 
+export interface ChangePasswordRequest {
+  token: string;
+  password: string;
+}
+
+export interface ChangePasswordResponse {
+  message: string;
+}
 export interface CustomerResponse {
   data: Customer;
 }

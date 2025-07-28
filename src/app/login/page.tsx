@@ -1,9 +1,7 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useLoginUser } from "@/hooks";
@@ -25,7 +23,6 @@ import {
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
@@ -36,7 +33,6 @@ export default function LoginPage() {
   });
 
   async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
-    setIsSubmitting(true);
     try {
       const response = await useLoginUser(values);
       if (response.status && response.status !== 200) {
@@ -63,8 +59,6 @@ export default function LoginPage() {
       }
     } catch (error: any) {
       toast.error(error.message);
-    } finally {
-      setIsSubmitting(false);
     }
   }
   return (
@@ -137,10 +131,14 @@ export default function LoginPage() {
             {/* Submit Button */}
             <Button
               type="submit"
-              disabled={isSubmitting}
+              disabled={form.formState.isSubmitting}
               className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium"
             >
-              {isSubmitting ? <Loader2 className="animate-spin" /> : "Login"}
+              {form.formState.isSubmitting ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                "Login"
+              )}
             </Button>
 
             {/* Forgot Password Link */}

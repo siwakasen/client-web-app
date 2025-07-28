@@ -5,7 +5,11 @@ export const RegisterFormSchema = z
       .string()
       .min(3, { message: "Name must be at least 3 characters long." })
       .trim(),
-    email: z.string().email({ message: "Please enter a valid email." }).trim(),
+    email: z
+      .string()
+      .min(1, { message: "Email must be provided" })
+      .email({ message: "Please enter a valid email." })
+      .trim(),
     password: z
       .string()
       .min(8, { message: "Password must be at least 8 characters long" })
@@ -22,6 +26,6 @@ export const RegisterFormSchema = z
     country_origin: z.string().optional(),
   })
   .refine((data) => data.password === data.confirm_password, {
-    message: "Passwords must match",
+    message: "Passwords must be match",
     path: ["confirm_password"], // This will attach the error to the confirm_password field
   });

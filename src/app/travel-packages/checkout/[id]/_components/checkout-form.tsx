@@ -1,5 +1,5 @@
 "use client";
-import { convertISOToCurrentTimezone } from "@/lib/utils";
+import { combineDateAndTime, convertISOToCurrentTimezone } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -30,11 +30,10 @@ import {
 import { toast } from "sonner";
 interface CheckoutFormProps {
   travelPackage: TravelPackages;
-  customer?: Customer;
+  customer: Customer;
 }
 
 export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<z.infer<typeof BookingFormSchema>>({
     resolver: zodResolver(BookingFormSchema),
     defaultValues: {
@@ -50,25 +49,10 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
     },
   });
 
-  const [open, setOpen] = useState(false);
+  const [openDate, setOpenDate] = useState(false);
 
   const startDate = form.watch("start_date");
   const pickupTime = form.watch("pickup_time");
-
-  function combineDateAndTime(dateString: string, timeString: string) {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    if (timeString) {
-      const [hours, minutes, seconds] = timeString.split(":");
-      date.setHours(
-        Number(hours) || 0,
-        Number(minutes) || 0,
-        Number(seconds) || 0,
-        0
-      );
-    }
-    return date.toISOString();
-  }
 
   useEffect(() => {
     if (startDate) {
@@ -82,7 +66,6 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
 
   async function onSubmit(values: z.infer<typeof BookingFormSchema>) {
     try {
-      setIsSubmitting(true);
       const convertedDate = convertISOToCurrentTimezone(values.start_date);
       const formData = {
         ...values,
@@ -103,8 +86,6 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
     } catch (error: any) {
       console.log(error);
       toast.error("An unexpected error occurred. Please try again.");
-    } finally {
-      setIsSubmitting(false);
     }
   }
   return (
@@ -143,7 +124,7 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                           <FormLabel htmlFor="date-picker">
                             Start Date
                           </FormLabel>
-                          <Popover open={open} onOpenChange={setOpen}>
+                          <Popover open={openDate} onOpenChange={setOpenDate}>
                             <PopoverTrigger asChild>
                               <Button
                                 variant="outline"
@@ -178,7 +159,7 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                                   field.onChange(
                                     date ? date.toISOString() : ""
                                   );
-                                  setOpen(false);
+                                  setOpenDate(false);
                                 }}
                               />
                             </PopoverContent>
@@ -338,7 +319,7 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                             </label>
                           </div>
                           {field.value === "PAYPAL" && (
-                            <div className="p-4 bg-gray-50 rounded">
+                            <div className="p-4 bg-gray-50  rounded-lg">
                               <div className="flex justify-center mb-4">
                                 <div className="w-24 h-16 bg-white border rounded flex items-center justify-center">
                                   <div className="text-blue-600 font-bold text-lg">
@@ -396,7 +377,7 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                             </label>
                           </div>
                           {field.value === "MIDTRANS" && (
-                            <div className="p-4 bg-gray-50">
+                            <div className="p-4 bg-gray-50 rounded-lg">
                               <div className="flex justify-center mb-4">
                                 <div className="w-32 h-20 bg-white border rounded flex items-center justify-center relative">
                                   <div className="absolute top-2 left-2 flex gap-1">
@@ -445,11 +426,11 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
               {/* Pay Now Button */}
               <Button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={form.formState.isSubmitting}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold mt-8"
                 size="lg"
               >
-                {isSubmitting ? (
+                {form.formState.isSubmitting ? (
                   <Loader2 className="animate-spin" />
                 ) : (
                   "Pay now"

@@ -7,6 +7,8 @@ import {
   RegisterRequest,
   CustomerResponse,
   RegisterResponse,
+  ChangePasswordRequest,
+  ChangePasswordResponse,
 } from "@/interfaces";
 import { createApiInstance } from "../api";
 
@@ -47,11 +49,21 @@ export const forgotPassword = async (
   return response.data;
 };
 
+export const changePassword = async (
+  payload: ChangePasswordRequest
+): Promise<ChangePasswordResponse> => {
+  const api = await createApiInstance(
+    process.env.NEXT_PUBLIC_CUSTOMERS_API_URL
+  );
+
+  const response = await api.post("/customers/change-password", payload);
+  return response.data;
+};
+
 export const getCustomer = async (
   token: string,
   headers: Record<string, string>
 ): Promise<CustomerResponse> => {
-  "use cache";
   const api = await createApiInstance(
     process.env.NEXT_PUBLIC_CUSTOMERS_API_URL,
     headers,

@@ -7,7 +7,7 @@ export async function createSession(token: string) {
   const cookieStore = await cookies();
   cookieStore.set("session", token, {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     expires: new Date(decodedJsonToken.exp! * 1000),
     sameSite: "lax",
     path: "/",
@@ -22,7 +22,6 @@ export async function getToken(): Promise<string | undefined> {
 
 export async function deleteSession() {
   "use server";
-  console.log("delete session");
   const cookieStore = await cookies();
   cookieStore.delete("session");
   return {

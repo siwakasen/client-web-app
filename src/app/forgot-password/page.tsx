@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useForgotPasswordUser } from "@/hooks";
 import Link from "next/link";
 import {
@@ -36,7 +35,6 @@ export default function ForgotPasswordPage() {
     try {
       const response = await useForgotPasswordUser(values);
       if (response.status && response.status !== 200) {
-        console.log(response);
         form.setFocus("email");
         form.setError("email", { message: response.errors.email });
         return;

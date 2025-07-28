@@ -10,7 +10,7 @@ import React from "react";
 import { Car } from "@/interfaces";
 import { notFound } from "next/navigation";
 import { useGetCars, useGetCarsDetail } from "@/hooks";
-import { getHeaders } from "@/lib";
+import { getHeaders } from "@/lib/users-provider";
 
 export default async function CarDetailPage({
   params,

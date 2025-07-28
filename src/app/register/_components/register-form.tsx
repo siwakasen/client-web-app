@@ -32,6 +32,7 @@ export default function RegisterForm() {
   const router = useRouter();
   const form = useForm<z.infer<typeof RegisterFormSchema>>({
     resolver: zodResolver(RegisterFormSchema),
+    mode: "onChange",
     defaultValues: {
       name: "",
       email: "",

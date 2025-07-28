@@ -1,5 +1,6 @@
 import { CheckoutForm } from "./_components/checkout-form";
 import { useGetTravelPackagesDetail, useGetCustomer } from "@/hooks";
+import { CheckoutRegisterForm } from "./_components/checkout-register-form";
 interface CheckoutPageProps {
   params: {
     id: string;
@@ -26,7 +27,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
       {customer ? (
         <CheckoutForm travelPackage={packageData} customer={customer} />
       ) : (
-        <CheckoutForm travelPackage={packageData} />
+        <CheckoutRegisterForm travelPackage={packageData} />
       )}
 
       {/* Footer Links */}

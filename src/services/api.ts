@@ -18,26 +18,9 @@ const createApiInstance = async (
     },
   });
 
-  api.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (error) => {
-      console.log(error);
-      // If the error has a response with data, return it so we can access the message
-      if (error.response && error.response.data) {
-        // Create a custom error that includes the backend response
-        const customError = new Error();
-        customError.message = error.response.data.message || error.message;
-        customError.name = "ApiError";
-        (customError as any).status = error.response.status;
-        (customError as any).data = error.response.data;
-        return Promise.reject(customError);
-      }
-
-      return Promise.reject(error);
-    }
-  );
+  api.interceptors.response.use((response) => {
+    return response;
+  });
   return api;
 };
 

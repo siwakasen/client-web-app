@@ -14,14 +14,11 @@ export default async function PopularCars({
 }) {
   let cars: Car[] = [];
   try {
-    const { data } = await useGetCars(
-      {
-        limit: 2,
-        page: 1,
-        search: "",
-      },
-      headers
-    );
+    const { data } = await useGetCars({
+      limit: 2,
+      page: 1,
+      search: "",
+    });
     cars = data;
   } catch (error) {
     // TOAST ERROR

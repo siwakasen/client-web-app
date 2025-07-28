@@ -2,68 +2,32 @@
 
 import { createApiInstance } from "../api";
 
-export async function capturePaymentPaypal(
+export const capturePaymentPaypal = async (
   orderId: string,
   headers?: Record<string, string>
-) {
-  try {
-    const api = await createApiInstance(
-      process.env.NEXT_PUBLIC_BOOKINGS_API_URL,
-      headers
-    );
+) => {
+  const api = await createApiInstance(
+    process.env.NEXT_PUBLIC_BOOKINGS_API_URL,
+    headers
+  );
+  const response = await api.post("/payments/capture-paypal", {
+    orderId: orderId,
+  });
+  return response.data;
+};
 
-    const response = await api.post("/payments/capture-paypal", {
-      orderId: orderId,
-    });
-
-    if (response.status !== 201) {
-      throw new Error("Failed to process payment with backend");
-    }
-
-    return {
-      statusCode: response.status,
-      message: "Payment processed successfully",
-      orderId: orderId,
-    };
-  } catch (error: any) {
-    return {
-      statusCode: error.status,
-      message: error.message,
-      orderId: orderId,
-    };
-  }
-}
-export async function cancelPaymentPaypal(
+export const cancelPaymentPaypal = async (
   orderId: string,
   headers?: Record<string, string>
-) {
-  try {
-    const api = await createApiInstance(
-      process.env.NEXT_PUBLIC_BOOKINGS_API_URL,
-      headers
-    );
+) => {
+  const api = await createApiInstance(
+    process.env.NEXT_PUBLIC_BOOKINGS_API_URL,
+    headers
+  );
 
-    const response = await api.patch("/payments/cancel-paypal", {
-      orderId: orderId,
-    });
+  const response = await api.patch("/payments/cancel-paypal", {
+    orderId: orderId,
+  });
 
-    console.log(response.data);
-
-    if (response.status !== 200) {
-      throw new Error("Failed to process payment with backend");
-    }
-
-    return {
-      statusCode: response.status,
-      message: response.data.message,
-      orderId: orderId,
-    };
-  } catch (error: any) {
-    console.log(error);
-    return {
-      statusCode: error.status,
-      message: error.message,
-      orderId: orderId,
-    };
-  }
-}
+  return response.data;
+};

@@ -23,3 +23,17 @@ export function convertISOToCurrentTimezone(isoString: string): string {
 
   return adjustedDate.toISOString();
 }
+export function combineDateAndTime(dateString: string, timeString: string) {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  if (timeString) {
+    const [hours, minutes, seconds] = timeString.split(":");
+    date.setHours(
+      Number(hours) || 0,
+      Number(minutes) || 0,
+      Number(seconds) || 0,
+      0
+    );
+  }
+  return date.toISOString();
+}

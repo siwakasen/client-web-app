@@ -20,13 +20,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Customer } from "@/interfaces";
+import { toast } from "sonner";
 
 export default function Navbar({
   isAuthenticated,
   customer,
 }: {
   isAuthenticated: boolean;
-  customer: Customer;
+  customer?: Customer;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   // --- 1. State to track scroll position ---
@@ -55,6 +56,7 @@ export default function Navbar({
 
   const handleLogout = async () => {
     const { message } = await useLogoutUser();
+    toast.error(message);
     setIsOpen(false); // Close mobile menu after logout
   };
 
@@ -147,10 +149,10 @@ export default function Navbar({
                       </div>
                       <div>
                         <p className="text-sm font-medium text-gray-800">
-                          {customer.name}
+                          {customer?.name}
                         </p>
                         <p className="text-xs text-gray-600">
-                          {customer.email}
+                          {customer?.email}
                         </p>
                       </div>
                     </div>
@@ -209,7 +211,7 @@ export default function Navbar({
         </div>
 
         {/* Auth Buttons/Profile Icon */}
-        <div className="ml-4 hidden md:flex items-center">
+        <div className="ml-4 hidden md:flex items-center min-w-[200px]">
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger className="outline-none">
@@ -232,8 +234,8 @@ export default function Navbar({
               <DropdownMenuContent align="end" className="w-40">
                 <DropdownMenuItem>
                   <div className="flex flex-col justify-start items-start">
-                    <p className="text-xs text-gray-800">{customer.name}</p>
-                    <p className="text-xs text-gray-600">{customer.email}</p>
+                    <p className="text-xs text-gray-800">{customer?.name}</p>
+                    <p className="text-xs text-gray-600">{customer?.email}</p>
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem

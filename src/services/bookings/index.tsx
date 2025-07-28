@@ -1,4 +1,3 @@
-// utils/apiService.ts
 import {
   BookingWithRegisterRequest,
   BookingWithRegisterResponse,
@@ -11,11 +10,8 @@ export const createBookingWithRegister = async (
   payload: BookingWithRegisterRequest
 ): Promise<BookingWithRegisterResponse> => {
   const api = await createApiInstance(process.env.NEXT_PUBLIC_BOOKINGS_API_URL);
-  const response: BookingWithRegisterResponse = await api.post(
-    "/bookings/and-register",
-    payload
-  );
-  return response;
+  const response = await api.post("/bookings/and-register", payload);
+  return response.data;
 };
 
 export const createBooking = async (

@@ -10,7 +10,7 @@ import Link from "next/link";
 import { TravelPackages } from "@/interfaces";
 import { notFound } from "next/navigation";
 import { useGetTravelPackages, useGetTravelPackagesDetail } from "@/hooks";
-import { getHeaders } from "@/lib";
+import { getHeaders } from "@/lib/users-provider";
 
 export default async function TravelPackageDetailPage({
   params,
