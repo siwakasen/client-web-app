@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ChangePasswordFormSchema } from "@/lib/validation/forgot-password-schema";
+import { ChangePasswordFormSchema } from "@/lib/validation/forget-password-schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
@@ -44,7 +44,7 @@ const ChangePasswordForm = ({ token }: { token: string }) => {
 
       if (errors) {
         toast.error(`${errors.message}`);
-        router.push("/forgot-password");
+        router.push("/forget-password");
         return;
       }
       toast.success(message);

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useForgotPasswordUser } from "@/hooks";
+import { useForgetPasswordUser } from "@/hooks";
 import Link from "next/link";
 import {
   Form,
@@ -15,25 +15,25 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ForgotPasswordFormSchema } from "@/lib/validation";
+import { ForgetPasswordFormSchema } from "@/lib/validation";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
-export default function ForgotPasswordPage() {
+export default function ForgetPasswordPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<z.infer<typeof ForgotPasswordFormSchema>>({
-    resolver: zodResolver(ForgotPasswordFormSchema),
+  const form = useForm<z.infer<typeof ForgetPasswordFormSchema>>({
+    resolver: zodResolver(ForgetPasswordFormSchema),
     defaultValues: {
       email: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof ForgotPasswordFormSchema>) {
+  async function onSubmit(values: z.infer<typeof ForgetPasswordFormSchema>) {
     setIsSubmitting(true);
     try {
-      const response = await useForgotPasswordUser(values);
+      const response = await useForgetPasswordUser(values);
       if (response.status && response.status !== 200) {
         form.setFocus("email");
         form.setError("email", { message: response.errors.email });
@@ -58,7 +58,7 @@ export default function ForgotPasswordPage() {
             className="h-16 mb-2"
           />
           <h1 className="text-2xl font-bold text-gray-900 text-center">
-            Forgot Password
+            Forget Password
           </h1>
           <p className="text-gray-500 text-sm text-center">
             Enter your email to receive a password reset link

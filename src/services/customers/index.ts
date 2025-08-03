@@ -1,7 +1,7 @@
 "use server";
 import {
-  ForgotPasswordRequest,
-  ForgotPasswordResponse,
+  ForgetPasswordRequest,
+  ForgetPasswordResponse,
   LoginRequest,
   LoginResponse,
   RegisterRequest,
@@ -37,15 +37,15 @@ export const register = async (
   return response.data;
 };
 
-export const forgotPassword = async (
-  payload: ForgotPasswordRequest,
+export const forgetPassword = async (
+  payload: ForgetPasswordRequest,
   headers: Record<string, string>
-): Promise<ForgotPasswordResponse> => {
+): Promise<ForgetPasswordResponse> => {
   const api = await createApiInstance(
     process.env.NEXT_PUBLIC_CUSTOMERS_API_URL,
     headers
   );
-  const response = await api.post("/customers/forgot-password", payload);
+  const response = await api.post("/customers/forget-password", payload);
   return response.data;
 };
 

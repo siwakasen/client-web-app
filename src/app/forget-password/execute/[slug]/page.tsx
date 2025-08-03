@@ -1,6 +1,6 @@
 import { ChangePasswordForm } from "./_components/change-password-form";
 
-export default async function ForgotPasswordExecutePage({
+export default async function ForgetPasswordExecutePage({
   params,
 }: {
   params: Promise<{ slug: string }>;

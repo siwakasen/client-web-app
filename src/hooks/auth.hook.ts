@@ -1,13 +1,13 @@
 "use server";
 import {
   changePassword,
-  forgotPassword,
+  forgetPassword,
   getCustomer,
   register,
 } from "@/services/customers";
 import {
   RegisterFormSchema,
-  ForgotPasswordFormSchema,
+  ForgetPasswordFormSchema,
   LoginFormSchema,
 } from "@/lib/validation";
 import { ChangePasswordRequest } from "@/interfaces";
@@ -64,15 +64,15 @@ export async function useLoginUser(formData: z.infer<typeof LoginFormSchema>) {
   }
 }
 
-export async function useForgotPasswordUser(
-  formData: z.infer<typeof ForgotPasswordFormSchema>
+export async function useForgetPasswordUser(
+  formData: z.infer<typeof ForgetPasswordFormSchema>
 ) {
   try {
     const headers = await getHeaders();
-    const { message } = await forgotPassword(formData, headers);
+    const { message } = await forgetPassword(formData, headers);
 
     return {
-      message: message || "Forgot password successful!",
+      message: message || "Email to reset password sent!",
     };
   } catch (error: any) {
     console.log(error.response);
@@ -117,10 +117,13 @@ export async function useGetCustomer() {
     console.warn(error);
     const message: string = error.message;
     console.info(error.code);
+    console.log(error.response?.data);
     if (
       message.includes("Invalid token") ||
+      error.code == "ERR_BAD_REQUEST" ||
       error.code == "ECONNREFUSED" ||
-      error.code == "ERR_NETWORK"
+      error.code == "ERR_NETWORK" ||
+      error.response?.data.message.includes("Invalid token")
     ) {
       redirect("/redirect/reset-cookie", RedirectType.replace);
     }

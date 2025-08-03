@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const defaultBaseURL = "https://example.com";
+const defaultBaseURL = "http://localhost:3003";
 
 const createApiInstance = async (
   baseURL?: string,

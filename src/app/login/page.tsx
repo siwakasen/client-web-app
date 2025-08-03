@@ -141,13 +141,13 @@ export default function LoginPage() {
               )}
             </Button>
 
-            {/* Forgot Password Link */}
+            {/* Forget Password Link */}
             <div className="text-center">
               <Link
-                href="/forgot-password"
+                href="/forget-password"
                 className="text-sm text-blue-500 hover:text-blue-600 underline"
               >
-                Forgot Password?
+                Forget Password?
               </Link>
             </div>
             {/* Register Link */}

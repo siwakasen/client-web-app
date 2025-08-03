@@ -25,11 +25,11 @@ export interface RegisterResponse {
   };
 }
 
-export interface ForgotPasswordRequest {
+export interface ForgetPasswordRequest {
   email: string;
 }
 
-export interface ForgotPasswordResponse {
+export interface ForgetPasswordResponse {
   message: string;
 }
 
