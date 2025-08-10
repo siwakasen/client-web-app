@@ -31,3 +31,17 @@ export const cancelPaymentPaypal = async (
 
   return response.data;
 };
+
+
+export const getPaymentByBookingId = async (bookingId: number, token: string, headers?: Record<string, string>) => {
+  const api = await createApiInstance(
+    process.env.NEXT_PUBLIC_BOOKINGS_API_URL,
+    headers
+  );
+  const response = await api.get(`/payments/${bookingId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};

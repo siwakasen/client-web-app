@@ -58,7 +58,7 @@ export default function MainContent({
       const matchesMaxPrice =
         !maxPrice || pkg.package_price <= Number.parseInt(maxPrice);
       const matchesGroupSize =
-        !maxGroupSize || pkg.max_persons <= Number.parseInt(maxGroupSize);
+        !maxGroupSize || pkg.max_persons >= Number.parseInt(maxGroupSize);
 
       return matchesMaxPrice && matchesGroupSize;
     });

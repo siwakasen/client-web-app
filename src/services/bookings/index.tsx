@@ -28,3 +28,9 @@ export const createBooking = async (
   const response = await api.post("/bookings", payload);
   return response.data;
 };
+
+export const getBookingById = async (order_id: string, headers: Record<string, string>, token: string) => {
+  const api = await createApiInstance(process.env.NEXT_PUBLIC_BOOKINGS_API_URL, headers, token);
+  const response = await api.get(`/bookings/${order_id}`);
+  return response.data;
+}

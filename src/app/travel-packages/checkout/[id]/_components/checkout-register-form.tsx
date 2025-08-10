@@ -342,7 +342,7 @@ export function CheckoutRegisterForm({
                       render={({ field }) => (
                         <FormItem className="flex flex-col gap-3">
                           <FormLabel htmlFor="time-picker" className="px-1">
-                            Time
+                            Pickup Time
                           </FormLabel>
                           <FormControl>
                             <Input

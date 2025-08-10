@@ -1,3 +1,5 @@
+import { Payment } from "./payment.interface";
+
 export interface BookingWithRegisterRequest {
   package_id?: number;
   car_id?: number;
@@ -46,3 +48,29 @@ export interface DataWithoutRegister {
 export interface BookingResponse {
   data: DataWithoutRegister;
 }
+
+export interface BookingResponseById {
+  data: Booking;
+  message: string;
+}
+
+export interface Booking {
+  id: number
+  package_id: number
+  car_id: any
+  customer_id: number
+  employee_id: any
+  with_driver: boolean
+  number_of_persons: number
+  start_date: string
+  end_date: string
+  total_price: number
+  status: string
+  pickup_location: string
+  pickup_time: string
+  additional_notes: string
+  created_at: string
+  updated_at: string
+  payments: Payment[]
+}
+

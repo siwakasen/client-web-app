@@ -1,10 +1,10 @@
 "use server";
-import { createBooking, createBookingWithRegister } from "@/services/bookings";
+import { createBooking, createBookingWithRegister, getBookingById } from "@/services/bookings";
 import { getHeaders } from "@/lib/users-provider";
 import { z } from "zod";
 import { BookingFormSchema, BookingRegisterFormSchema } from "@/lib/validation";
 import { createSession, getToken } from "@/lib/users-provider/cookies";
-import { BookingResponse } from "@/interfaces";
+import { BookingResponse, BookingResponseById } from "@/interfaces";
 
 export async function useCreateBooking(
   formData: z.infer<typeof BookingFormSchema>
@@ -35,6 +35,19 @@ export async function useCreateBookingWithRegister(
     return response;
   } catch (error: any) {
     console.warn("booking error:", error.response);
+    return {
+      status: error.response.status,
+      errors: error.response.data,
+    };
+  }
+}
+export async function useGetBookingById(order_id: string) {
+  try {
+    const headers = await getHeaders();
+    const token = await getToken();
+    const response: BookingResponseById = await getBookingById(order_id, headers, token!);
+    return response;
+  } catch (error: any) {
     return {
       status: error.response.status,
       errors: error.response.data,

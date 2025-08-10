@@ -46,12 +46,12 @@ export function FilterSearch({
 
           <div>
             <Label htmlFor="max-group" className="mb-2">
-              Max Group Size
+              People in Group
             </Label>
             <Input
               id="max-group"
               type="number"
-              placeholder="Enter max group size"
+              placeholder="Enter number of people"
               value={maxGroupSize}
               onChange={(e) => setMaxGroupSize(e.target.value)}
             />

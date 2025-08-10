@@ -89,7 +89,7 @@ export default async function PaymentSuccessPage({
               <Link href="/">Check your bookings</Link>
             </Button>
           )}
-          {resultMessage == "ORDER_NOT_APPROVED" && (
+          {isPending && (
             <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
               <Link
                 href={`https://www.sandbox.paypal.com/checkoutnow?token=${token}`}

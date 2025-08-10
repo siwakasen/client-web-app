@@ -17,7 +17,6 @@ export default async function TravelPackageDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const headers = await getHeaders();
   // Fetch data on the server
   const { id } = await params;
   let data: TravelPackages | null = null;
@@ -27,7 +26,6 @@ export default async function TravelPackageDetailPage({
       {
         id: Number(id),
       },
-      headers
     );
     const relatedPackages = await useGetTravelPackages(
       {
@@ -35,7 +33,6 @@ export default async function TravelPackageDetailPage({
         page: 1,
         search: "",
       },
-      headers
     );
     data = travel;
     filteredRelatedPackages = relatedPackages.data
@@ -87,7 +84,7 @@ export default async function TravelPackageDetailPage({
 
             {/* Description */}
             <div>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className=" leading-relaxed">
                 {data.description}
               </p>
             </div>
@@ -133,7 +130,7 @@ export default async function TravelPackageDetailPage({
                       {index + 1}
                     </div>
                     <div>
-                      <p className="text-muted-foreground">{item}</p>
+                      <p className="">{item}</p>
                     </div>
                   </div>
                 ))}

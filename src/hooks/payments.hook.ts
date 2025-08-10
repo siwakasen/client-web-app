@@ -1,6 +1,8 @@
 "use server";
 
-import { cancelPaymentPaypal, capturePaymentPaypal } from "@/services/payment";
+import { getHeaders, getToken } from "@/lib/users-provider";
+import { cancelPaymentPaypal, capturePaymentPaypal, getPaymentByBookingId } from "@/services/payment";
+import { PaymentResponse } from "@/interfaces";
 
 export async function useCapturePaymentPaypal(orderId: string): Promise<{
   statusCode: number;
@@ -36,6 +38,23 @@ export async function useCancelPaymentPaypal(orderId: string): Promise<{
     return {
       statusCode: error.response.status,
       message: error.response.data.message,
+    };
+  }
+}
+
+export async function   useGetPaymentByBookingId(bookingId: number) : Promise<PaymentResponse | {
+  status: number;
+  errors: any;
+}> {
+  try {
+    const headers = await getHeaders();
+    const token = await getToken();
+    const response = await getPaymentByBookingId(bookingId, token!, headers);
+    return response;
+  } catch (error: any) {
+    return {
+      status: error.response.status,
+      errors: error.response.data,
     };
   }
 }

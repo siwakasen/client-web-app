@@ -30,7 +30,11 @@ export const TourPackageCard: React.FC<TourPackageCardProps> = ({
               {travelPackage.package_name}
             </h3>
             <p className="mt-2 text-sm text-gray-600">
-              {travelPackage.description}
+              {travelPackage.description
+                .split(" ")
+                .slice(0, 40)
+                .join(" ")}
+              {travelPackage.description.split(" ").length > 40 && "..."}
             </p>
           </div>
           {/* 3. Add `mt-auto` to push the price to the bottom */}

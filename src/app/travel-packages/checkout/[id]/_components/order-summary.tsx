@@ -37,9 +37,8 @@ export function OrderSummary({
           </div>
           <div className="flex-1">
             <h3 className="font-semibold">{packageData.package_name}</h3>
-            <p className="text-sm text-gray-600">{packageData.description}</p>
             <p className="text-sm text-gray-500">
-              Duration: {packageData.duration} hours
+              Duration Trip: {packageData.duration} hours
             </p>
           </div>
           <div className="text-right font-semibold">{formattedPrice}</div>
