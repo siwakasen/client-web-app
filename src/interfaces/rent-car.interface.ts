@@ -29,3 +29,16 @@ export interface CarsDetailResponse {
 export interface CarsDetailRequest {
   id: number;
 }
+
+export interface CarsAvailableRequest {
+  limit: number;
+  page: number;
+  search?: string;
+  start_date: string;
+  end_date: string;
+}
+
+export interface CarsAvailableResponse {
+  data: Car[];
+  meta: Meta;
+}

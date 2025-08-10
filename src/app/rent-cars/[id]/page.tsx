@@ -9,24 +9,25 @@ import Link from "next/link";
 import React from "react";
 import { Car } from "@/interfaces";
 import { notFound } from "next/navigation";
-import { useGetCars, useGetCarsDetail } from "@/hooks";
-import { getHeaders } from "@/lib/users-provider";
+import { useGetAvailableCars, useGetCarsDetail } from "@/hooks";
 
 export default async function CarDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const headers = await getHeaders();
   const { id } = await params;
   let data: Car | null = null;
   let filteredRelatedCars: Car[] = [];
   try {
-    const { data: car } = await useGetCarsDetail(Number(id), headers);
-    const relatedCars = await useGetCars(
-      { limit: 6, page: 1, search: "" },
-      headers
-    );
+    const { data: car } = await useGetCarsDetail(Number(id));
+    const relatedCars = await useGetAvailableCars({
+      limit: 10,
+      page: 1,
+      search: "",
+      start_date: "",
+      end_date: "",
+    });
     data = car;
     filteredRelatedCars = relatedCars.data
       .filter((car: Car) => car.id !== Number(id))

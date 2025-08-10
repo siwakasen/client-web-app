@@ -4,7 +4,7 @@ import Navbar from "@/components/shared/navbar/Navbar";
 import Footer from "@/components/shared/content/footer";
 import { Car, Meta } from "@/interfaces";
 
-import { useGetCustomer, useGetCars } from "@/hooks";
+import { useGetCustomer, useGetAvailableCars } from "@/hooks";
 export default async function RentCarsPage() {
   const { isAuthenticated, customer } = await useGetCustomer();
   let cars: Car[] = [];
@@ -12,15 +12,17 @@ export default async function RentCarsPage() {
     currentPage: 1,
     totalItems: 0,
     totalPages: 0,
-    limit: 6,
+    limit: 10,
     hasNextPage: false,
     hasPrevPage: false,
   };
   try {
-    const { data, meta: metaData } = await useGetCars({
-      limit: 6,
+    const { data, meta: metaData } = await useGetAvailableCars({
+      limit: 10,
       page: 1,
       search: "",
+      start_date: "",
+      end_date: "",
     });
     cars = data;
     meta = metaData;
