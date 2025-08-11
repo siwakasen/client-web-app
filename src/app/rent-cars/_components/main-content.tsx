@@ -9,23 +9,56 @@ import { Pagination } from "../../../components/shared/content/pagination";
 import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
 import { useGetAvailableCars } from "@/hooks";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
+import { useRouter, useSearchParams } from "next/navigation";
 
-interface CarsProps {
-  cars: Car[];
-  meta: Meta;
+interface MainContentProps {
+  initialStartDate?: string;
+  initialEndDate?: string;
+  initialSearch?: string;
 }
+
 export default function MainContent({
-  cars: initialCars,
-  meta: initialMeta,
-}: CarsProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [startDate, setStartDate] = useState<string | undefined>(undefined);
-  const [endDate, setEndDate] = useState<string | undefined>(undefined);
+  initialStartDate,
+  initialEndDate,
+  initialSearch,
+}: MainContentProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  const [searchTerm, setSearchTerm] = useState(initialSearch || "");
+  const [startDate, setStartDate] = useState<string | undefined>(initialStartDate);
+  const [endDate, setEndDate] = useState<string | undefined>(initialEndDate);
   const [currentPage, setCurrentPage] = useState(1);
   const [cars, setCars] = useState<Car[]>([]);
-  const [meta, setMeta] = useState(initialMeta);
+  const [meta, setMeta] = useState<Meta>({
+    currentPage: 1,
+    totalItems: 0,
+    totalPages: 0,
+    limit: 10,
+    hasNextPage: false,
+    hasPrevPage: false,
+  });
   const [isLoading, setIsLoading] = useState(false);
 
+  // Function to update URL parameters
+  const updateUrlParams = (params: { start_date?: string; end_date?: string; search?: string }) => {
+    const current = new URLSearchParams(Array.from(searchParams.entries()));
+    
+    // Update or remove parameters
+    Object.entries(params).forEach(([key, value]) => {
+      if (value && value.trim() !== '') {
+        current.set(key, value);
+      } else {
+        current.delete(key);
+      }
+    });
+
+    // Create new URL with updated params
+    const search = current.toString();
+    const query = search ? `?${search}` : '';
+    
+    router.push(`/rent-cars${query}`, { scroll: false });
+  };
 
   const fetchData = async () => {
     if (!startDate || !endDate) {
@@ -65,6 +98,13 @@ export default function MainContent({
     setStartDate(start);
     setEndDate(end);
     setCurrentPage(1);
+    
+    // Update URL parameters
+    updateUrlParams({
+      start_date: start,
+      end_date: end,
+      search: searchTerm,
+    });
   };
 
   const handleApply = () => {
@@ -76,7 +116,39 @@ export default function MainContent({
     setEndDate(undefined);
     setCars([]);
     setCurrentPage(1);
+    
+    // Clear URL parameters
+    updateUrlParams({
+      start_date: undefined,
+      end_date: undefined,
+      search: searchTerm,
+    });
   };
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    
+    // Update URL parameters with search term
+    updateUrlParams({
+      start_date: startDate,
+      end_date: endDate,
+      search: value,
+    });
+  };
+
+  // Fetch data when component mounts with initial parameters or when page changes
+  useEffect(() => {
+    if (startDate && endDate) {
+      fetchData();
+    }
+  }, [currentPage]);
+
+  // Fetch data on initial load if dates are provided
+  useEffect(() => {
+    if (initialStartDate && initialEndDate) {
+      fetchData();
+    }
+  }, []);
 
   return (
     <>
@@ -90,6 +162,7 @@ export default function MainContent({
               onDateRangeChange={handleDateRangeChange}
               onApply={handleApply}
               onClear={handleClear}
+              
               className="bg-white shadow-lg"
             />
           </div>
@@ -107,7 +180,7 @@ export default function MainContent({
                       placeholder="Search cars..."
                       className="pl-10 h-12 bg-white"
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={(e) => handleSearchChange(e.target.value)}
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
                           fetchData();
@@ -136,7 +209,7 @@ export default function MainContent({
                   <>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {filteredCars.map((car) => (
-                        <CarsCard key={car.id} car={car} />
+                        <CarsCard key={car.id} car={car} start_date={startDate} end_date={endDate} />
                       ))}
                     </div>
                     {filteredCars.length === 0 && (

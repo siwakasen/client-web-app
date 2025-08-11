@@ -112,7 +112,7 @@ DropdownMenuContent.displayName = "DropdownMenuContent";
 const DropdownMenuItem = React.forwardRef<
   HTMLDivElement,
   DropdownMenuItemProps
->(({ children, className, onClick, ...props }, ref) => {
+>(({ children, className, onClick, asChild = false, ...props }, ref) => {
   const context = React.useContext(DropdownMenuContext);
   if (!context)
     throw new Error("DropdownMenuItem must be used within DropdownMenu");
@@ -121,6 +121,25 @@ const DropdownMenuItem = React.forwardRef<
     onClick?.();
     context.setIsOpen(false);
   };
+
+  if (asChild) {
+    // When asChild is true, clone the child element and add the necessary props
+    const child = React.Children.only(children) as React.ReactElement;
+    return React.cloneElement(child, {
+      ...child.props,
+      className: cn(
+        "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+        className,
+        child.props.className
+      ),
+      onClick: (e: React.MouseEvent) => {
+        handleClick();
+        child.props.onClick?.(e);
+      },
+      ref,
+      ...props,
+    });
+  }
 
   return (
     <div

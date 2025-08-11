@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-import { Menu, User, LogOut, ChevronDown } from "lucide-react";
+import { Menu, User, LogOut, ChevronDown, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -157,6 +157,18 @@ export default function Navbar({
                       </div>
                     </div>
 
+                    {/* History Order Button */}
+                    <Button
+                      asChild
+                      variant="ghost"
+                      className="w-full justify-start text-gray-800 hover:text-green-600 hover:bg-green-50 py-3 px-4"
+                    >
+                      <Link href="/history-order" onClick={() => setIsOpen(false)}>
+                        <History className="h-5 w-5 mr-3" />
+                        History Order
+                      </Link>
+                    </Button>
+
                     {/* Logout Button */}
                     <Button
                       onClick={handleLogout}
@@ -237,6 +249,15 @@ export default function Navbar({
                     <p className="text-xs text-gray-800">{customer?.name}</p>
                     <p className="text-xs text-gray-600">{customer?.email}</p>
                   </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link 
+                    href="/history-order"
+                    className="flex items-center w-full cursor-pointer hover:bg-gray-50"
+                  >
+                    <History className="h-4 w-4 mr-2" />
+                    History Order
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={handleLogout}

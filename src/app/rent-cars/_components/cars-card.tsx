@@ -6,14 +6,16 @@ import { Button } from "@/components/ui/button";
 
 interface CarsCardProps {
   car: Car;
+  start_date: string;
+  end_date: string;
 }
 
 export {};
 
-export const CarsCard: React.FC<CarsCardProps> = ({ car }) => {
+export const CarsCard: React.FC<CarsCardProps> = ({ car, start_date, end_date }) => {
   return (
     <Link
-      href={`/rent-cars/${car.id}`}
+      href={`/rent-cars/${car.id}?start_date=${start_date}&end_date=${end_date}`}
       className="hover:scale-103 transition-all duration-300 "
     >
       <div className="bg-white rounded-lg shadow-lg overflow-hidden  h-full flex flex-col">

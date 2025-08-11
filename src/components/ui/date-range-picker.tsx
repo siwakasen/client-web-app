@@ -113,7 +113,7 @@ export function DateRangePicker({
               disabled={(date) => {
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
-                return date < today;
+                return date <= today;
               }}
             />
             <div className="flex gap-2 p-3 border-t">

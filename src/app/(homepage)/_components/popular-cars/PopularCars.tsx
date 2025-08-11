@@ -50,7 +50,7 @@ export default async function PopularCars({
         {carsData.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 w-full justify-between gap-8">
             {carsData.map((car) => (
-              <Link href={`/rent-cars/${car.id}`} key={car.id}>
+              <Link href={`/rent-cars`} key={car.id}>
                 <Card
                   key={car.id}
                   className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer p-0"

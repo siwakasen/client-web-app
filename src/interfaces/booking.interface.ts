@@ -1,3 +1,4 @@
+import { Meta } from "./common.interface";
 import { Payment } from "./payment.interface";
 
 export interface BookingWithRegisterRequest {
@@ -57,9 +58,9 @@ export interface BookingResponseById {
 export interface Booking {
   id: number
   package_id: number
-  car_id: any
+  car_id: number
   customer_id: number
-  employee_id: any
+  employee_id: number
   with_driver: boolean
   number_of_persons: number
   start_date: string
@@ -73,4 +74,7 @@ export interface Booking {
   updated_at: string
   payments: Payment[]
 }
-
+export interface BookingHistoryResponse {
+  data: Booking[]
+  meta: Meta
+}

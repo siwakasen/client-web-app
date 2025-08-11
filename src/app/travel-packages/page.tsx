@@ -5,7 +5,7 @@ import Footer from "@/components/shared/content/footer";
 
 import { Meta, TravelPackages } from "@/interfaces";
 import { useGetTravelPackages } from "@/hooks";
-import { useGetCustomer } from "@/hooks/auth.hook";
+import { useGetCustomer } from "@/hooks/customer.hook";
 import { getHeaders } from "@/lib/users-provider";
 
 export default async function TourPackagesPage() {

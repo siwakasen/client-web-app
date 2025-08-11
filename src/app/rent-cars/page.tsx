@@ -2,33 +2,16 @@ import MainContent from "./_components/main-content";
 import Image from "next/image";
 import Navbar from "@/components/shared/navbar/Navbar";
 import Footer from "@/components/shared/content/footer";
-import { Car, Meta } from "@/interfaces";
 
-import { useGetCustomer, useGetAvailableCars } from "@/hooks";
-export default async function RentCarsPage() {
+import { useGetCustomer } from "@/hooks";
+export default async function RentCarsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ start_date?: string; end_date?: string; search?: string }>;
+}) {
   const { isAuthenticated, customer } = await useGetCustomer();
-  let cars: Car[] = [];
-  let meta: Meta = {
-    currentPage: 1,
-    totalItems: 0,
-    totalPages: 0,
-    limit: 10,
-    hasNextPage: false,
-    hasPrevPage: false,
-  };
-  try {
-    const { data, meta: metaData } = await useGetAvailableCars({
-      limit: 10,
-      page: 1,
-      search: "",
-      start_date: "",
-      end_date: "",
-    });
-    cars = data;
-    meta = metaData;
-  } catch (error) {
-    console.log("Error fetching cars:", error);
-  }
+  const { start_date, end_date, search } = await searchParams;
+
 
   return (
     <div className="min-h-screen bg-gray-200">
@@ -54,7 +37,11 @@ export default async function RentCarsPage() {
         </div>
       </section>
 
-      <MainContent cars={cars} meta={meta} />
+      <MainContent 
+        initialStartDate={start_date}
+        initialEndDate={end_date}
+        initialSearch={search}
+      />
       <Footer />
     </div>
   );

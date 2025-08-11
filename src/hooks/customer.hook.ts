@@ -4,6 +4,7 @@ import {
   forgetPassword,
   getCustomer,
   register,
+  uploadIdentityFile,
 } from "@/services/customers";
 import {
   RegisterFormSchema,
@@ -128,5 +129,15 @@ export async function useGetCustomer() {
       redirect("/redirect/reset-cookie", RedirectType.replace);
     }
     return { isAuthenticated: false, customer: undefined };
+  }
+}
+
+export async function useUploadIdentityFile(identityFile: File[]) {
+  try {
+    const token = (await getToken()) || "";
+    const response = await uploadIdentityFile(identityFile, token);
+    return { message: response };
+  } catch (error: any) {
+    return { status: error.response.status, errors: error.response.data };
   }
 }

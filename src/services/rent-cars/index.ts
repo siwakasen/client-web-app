@@ -9,6 +9,20 @@ import { createApiInstance } from "../api";
 import { AxiosResponse } from "axios";
 
 
+export async function fetchCars(
+  payload: Pagination
+): Promise<CarsResponse> {
+  try {
+    const api = await createApiInstance(process.env.NEXT_PUBLIC_CARS_API_URL);
+    const response: AxiosResponse = await api.get(`/cars?limit=${payload.limit}&page=${payload.page}&search=${payload.search || ""}`);
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch cars");
+    }
+    return response.data;
+  } catch (error) {
+    throw error instanceof Error ? error : new Error(String(error));
+  }
+}
 export async function availableCars(
   payload: CarsAvailableRequest
 ): Promise<CarsResponse> {

@@ -22,6 +22,7 @@ export default async function PaymentCompletePage({
 
   const response = await useGetPaymentByBookingId(Number(order_id));
   if ('errors' in response && 'status' in response) {
+    console.log(response);
     if(response.status === 404) {
       notFound();
     }else{

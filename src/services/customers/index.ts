@@ -72,3 +72,25 @@ export const getCustomer = async (
   const response = await api.get("/customers/me");
   return response.data;
 };
+
+export const uploadIdentityFile = async (
+  identityFile: File[],
+  token: string,
+): Promise<string> => {
+  const formData = new FormData();
+  identityFile.forEach((file) => {
+    formData.append("identity-file", file);
+  });
+  const api = await createApiInstance(
+    process.env.NEXT_PUBLIC_CUSTOMERS_API_URL,
+    {},
+    token
+  );
+  const response = await api.post(`/customers/upload-identity-file`, formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};  

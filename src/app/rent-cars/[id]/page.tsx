@@ -8,30 +8,26 @@ import { convertCarImageUrl } from "@/helpers/images-url/car-images";
 import Link from "next/link";
 import React from "react";
 import { Car } from "@/interfaces";
-import { notFound } from "next/navigation";
-import { useGetAvailableCars, useGetCarsDetail } from "@/hooks";
+import { notFound, redirect } from "next/navigation";
+import { useGetCarsDetail } from "@/hooks";
 
 export default async function CarDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ start_date?: string; end_date?: string }>;
 }) {
+
+  const { start_date, end_date } = await searchParams;
+  if (!start_date || !end_date) {
+    redirect("/rent-cars");
+  }
   const { id } = await params;
   let data: Car | null = null;
-  let filteredRelatedCars: Car[] = [];
   try {
     const { data: car } = await useGetCarsDetail(Number(id));
-    const relatedCars = await useGetAvailableCars({
-      limit: 10,
-      page: 1,
-      search: "",
-      start_date: "",
-      end_date: "",
-    });
     data = car;
-    filteredRelatedCars = relatedCars.data
-      .filter((car: Car) => car.id !== Number(id))
-      .slice(0, 4);
   } catch (error) {
     // TOAST ERROR
   }
@@ -154,7 +150,7 @@ export default async function CarDetailPage({
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Link href={`/rent-cars/checkout/${data.id}`}>
+                <Link href={`/rent-cars/checkout/${data.id}?start_date=${start_date}&end_date=${end_date} `}>
                   <Button className="w-full cursor-pointer" size="lg">
                     Rent Now
                   </Button>
@@ -179,50 +175,6 @@ export default async function CarDetailPage({
                 </div>
               </CardContent>
             </Card>
-          </div>
-        </div>
-        {/* Related Cars */}
-        <div className="mt-16">
-          <h2 className="text-2xl font-bold mb-8">Explore More Cars</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredRelatedCars.map((car) => (
-              <Link
-                key={car.id}
-                href={`/rent-cars/${car.id}`}
-                className="block h-full"
-              >
-                <Card className="flex flex-col h-full rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow cursor-pointer bg-white p-0">
-                  <div className="relative h-48 w-full">
-                    <Image
-                      src={convertCarImageUrl(car.car_image || "")}
-                      alt={car.car_name}
-                      fill
-                      className="object-cover w-full h-full rounded-t-2xl"
-                      sizes="(max-width: 768px) 100vw, 25vw"
-                    />
-                  </div>
-                  <CardContent className="flex-1 p-4 flex flex-col">
-                    <h3 className="text-lg font-semibold mb-2">
-                      {car.car_name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground mb-2">
-                      {car.description}
-                    </p>
-                    <div className="mt-auto flex items-center justify-between">
-                      <span className="text-primary font-bold">
-                        {formatPrice(car.price_per_day)}
-                      </span>
-                      <Button
-                        size="sm"
-                        className="bg-slate-700 hover:bg-slate-900 text-white cursor-pointer"
-                      >
-                        View
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
           </div>
         </div>
       </div>

@@ -51,7 +51,7 @@ export interface Customer {
   phone_number: any;
   country_origin: any;
   email: string;
-  identity_file: any;
+  identity_file: string[];
   created_at: string;
   updated_at: string;
   deleted_at: string;

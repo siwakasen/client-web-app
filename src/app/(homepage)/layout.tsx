@@ -1,7 +1,7 @@
 "use server";
 import Navbar from "@/components/shared/navbar/Navbar";
 import Footer from "./_components/footer-section/Footer";
-import { useGetCustomer } from "@/hooks/auth.hook";
+import { useGetCustomer } from "@/hooks/customer.hook";
 export default async function HomeLayout({
   children,
 }: {

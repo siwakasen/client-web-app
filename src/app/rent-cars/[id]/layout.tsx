@@ -5,6 +5,7 @@ export default async function RentCarDetailLayout({
   children,
 }: {
   children: React.ReactNode;
+  searchParams: Promise<{ start_date?: string; end_date?: string }>;
 }) {
   const { isAuthenticated, customer } = await useGetCustomer();
   return (

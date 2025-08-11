@@ -18,6 +18,7 @@ export const BookingFormSchema = z
       .min(1, { message: "Pickup time must be provided" })
       .trim(),
     additional_notes: z.string().optional(),
+    identity_file: z.array(z.instanceof(File)).optional(),
   })
   .refine(
     (data) => {
@@ -85,6 +86,7 @@ export const BookingRegisterFormSchema = z
     confirm_password: z.string().trim(),
     phone_number: z.string().optional(),
     country_origin: z.string().optional(),
+    identity_file: z.array(z.instanceof(File)).optional(),
   })
   .refine(
     (data) => {
@@ -113,4 +115,16 @@ export const BookingRegisterFormSchema = z
   .refine((data) => data.password === data.confirm_password, {
     message: "Passwords must be match",
     path: ["confirm_password"],
-  });
+  })
+  .refine(
+    (data) => {
+      if (data.car_id !== undefined) {
+        return data.identity_file && data.identity_file.length === 2;
+      }
+      return true;
+    },
+    {
+      message: "Please upload 2 identity files to proceed",
+      path: ["identity_file"],
+    }
+  );
