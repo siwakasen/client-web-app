@@ -5,14 +5,14 @@ import {
   getCustomer,
   register,
   uploadIdentityFile,
-} from "@/services/customers";
+  login
+} from "@/services";
 import {
   RegisterFormSchema,
   ForgetPasswordFormSchema,
   LoginFormSchema,
 } from "@/lib/validation";
 import { ChangePasswordRequest } from "@/interfaces";
-import { login } from "@/services/customers";
 import {
   createSession,
   deleteSession,

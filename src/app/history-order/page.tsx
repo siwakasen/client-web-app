@@ -1,17 +1,19 @@
 import { useGetBookingHistory } from "@/hooks/bookings.hook";
-import { Booking, BookingHistoryResponse } from "@/interfaces";
+import { useGetTravelPackagesDetailHistory, useGetCarsDetailHistory  } from "@/hooks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, MapPin, Clock, Users, Car, Package, CreditCard } from "lucide-react";
+
+import { Calendar, MapPin, Clock, Users, Car, CreditCard, TreePalm } from "lucide-react";
 import { HistoryPagination } from "./_components/history-pagination";
+import { BookingActions } from "./_components/booking-actions";
+import Image from "next/image";
+import Footer from "@/components/shared/content/footer";
+import Link from "next/link";
 
-interface HistoryPageProps {
-  searchParams: {
-    page?: string;
-  };
-}
 
-export default async function HistoryPage({ searchParams }: HistoryPageProps) {
+export default async function HistoryPage({ searchParams }: {searchParams: Promise<{
+  page?: string;
+}>}) {
   const { page } = await searchParams;
   const currentPage = Number(page) || 1;
   const limit = 10;
@@ -34,19 +36,60 @@ export default async function HistoryPage({ searchParams }: HistoryPageProps) {
 
   const { data: bookings, meta } = response;
 
+  // Fetch package and car data for bookings
+  const enrichedBookings = await Promise.all(
+    bookings.map(async (booking) => {
+      let packageName = null;
+      let carName = null;
+
+      // Fetch package data if package_id exists
+      if (booking.package_id) {
+        try {
+          const packageResponse = await useGetTravelPackagesDetailHistory(booking.package_id);
+          if ('data' in packageResponse) {
+            packageName = packageResponse.data.package_name;
+          }
+        } catch (error) {
+          console.error(`Error fetching package ${booking.package_id}:`, error);
+        }
+      }
+
+      // Fetch car data if car_id exists
+      if (booking.car_id) {
+        try {
+          const carResponse = await useGetCarsDetailHistory(booking.car_id);
+          if ('data' in carResponse) {
+            carName = carResponse.data.car_name;
+          }
+        } catch (error) {
+          console.error(`Error fetching car ${booking.car_id}:`, error);
+        }
+      }
+
+      return {
+        ...booking,
+        packageName,
+        carName,
+      };
+    })
+  );
+
   const getStatusColor = (status: string) => {
     switch (status?.toUpperCase()) {
       case 'CONFIRMED':
-        return 'success';
+        return 'default';
       case 'COMPLETED':
-        return 'success';
+        return 'default';
       case 'ONGOING':
         return 'default';
       case 'WAITING_PAYMENT':
+        return 'default';
       case 'WAITING_CONFIRMATION':
-        return 'secondary';
+        return 'default';
       case 'CANCELLED':
+        return 'destructive';
       case 'NO_SHOW':
+        return 'destructive';
       case 'PAYMENT_FAILED':
         return 'destructive';
       default:
@@ -91,18 +134,46 @@ export default async function HistoryPage({ searchParams }: HistoryPageProps) {
         return status?.charAt(0).toUpperCase() + status?.slice(1).toLowerCase();
     }
   };
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Booking History</h1>
-        <p className="text-muted-foreground">
-          View and manage your past bookings and reservations
-        </p>
-      </div>
 
-      {bookings.length === 0 ? (
+  const getBookingTitle = (booking: any) => {
+    if (booking.packageName) {
+      return booking.packageName;
+    }
+    if (booking.carName) {
+      return booking.carName;
+    }
+    return `Order #${booking.id}`;
+  };
+
+
+  return (
+    <>
+    
+    {/* Hero Section */}
+    <section className="relative h-64 md:h-80">
+        <Image
+          src="/images/bali_1.jpg"
+          priority
+          alt="Bali landscape"
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover "
+        />
+        <div className="absolute inset-0 " />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+          <div className="text-white">
+            <h1 className="text-3xl md:text-5xl font-bold mb-4">History Order</h1>
+            <p className="text-lg md:text-xl opacity-90">
+              View and manage your bookings and rental history
+            </p>
+          </div>
+        </div>
+      </section>
+      
+    <div className="container mx-auto px-4 py-8">
+      {enrichedBookings.length === 0 ? (
         <div className="text-center py-12">
-          <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <TreePalm className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-lg font-semibold mb-2">No Bookings Found</h3>
           <p className="text-muted-foreground">
             You haven't made any bookings yet. Start exploring our services!
@@ -111,28 +182,34 @@ export default async function HistoryPage({ searchParams }: HistoryPageProps) {
       ) : (
         <>
           <div className="grid gap-6">
-            {bookings.map((booking) => (
-              <Card key={booking.id} className="w-full hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="flex items-center gap-2">
-                        {booking.package_id ? (
-                          <Package className="h-5 w-5 text-blue-600" />
-                        ) : (
-                          <Car className="h-5 w-5 text-green-600" />
+            {enrichedBookings.map((booking) => (
+              <Link key={booking.id} href={`/history-order/${booking.id}`}>
+                <Card className="w-full hover:shadow-lg transition-shadow cursor-pointer">
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <CardTitle className="flex items-center gap-2">
+                          {booking.package_id ? (
+                            <TreePalm className="h-5 w-5 text-blue-600" />
+                          ) : (
+                            <Car className="h-5 w-5 text-green-600" />
+                          )}
+                          {getBookingTitle(booking)}
+                        </CardTitle>
+                        {(booking.packageName || booking.carName) && (
+                          <p className="text-xs text-muted-foreground">
+                            Order #{booking.id}
+                          </p>
                         )}
-                        Order #{booking.id}
-                      </CardTitle>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Placed on {formatDate(booking.created_at)}
-                      </p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Placed on {formatDate(booking.created_at)}
+                        </p>
+                      </div>
+                      <Badge variant={getStatusColor(booking.status)}>
+                        {formatStatusText(booking.status)}
+                      </Badge>
                     </div>
-                    <Badge variant={getStatusColor(booking.status)}>
-                      {formatStatusText(booking.status)}
-                    </Badge>
-                  </div>
-                </CardHeader>
+                  </CardHeader>
                 
                 <CardContent>
                   <div className="space-y-4">
@@ -210,9 +287,13 @@ export default async function HistoryPage({ searchParams }: HistoryPageProps) {
                         {formatCurrency(booking.total_price)}
                       </span>
                     </div>
+
+                    {/* Action Buttons */}
+                    <BookingActions bookingId={booking.id} status={booking.status} />
                   </div>
                 </CardContent>
-              </Card>
+                </Card>
+              </Link>
             ))}
           </div>
 
@@ -223,5 +304,7 @@ export default async function HistoryPage({ searchParams }: HistoryPageProps) {
         </>
       )}
     </div>
+    <Footer />
+      </>
   );
 }

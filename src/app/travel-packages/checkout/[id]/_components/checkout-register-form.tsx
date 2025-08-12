@@ -477,7 +477,8 @@ export function CheckoutRegisterForm({
                             >
                               <div className="flex items-center gap-3 justify-between ">
                                 <span className="font-medium text-lg">
-                                  PayPal
+                                PayPal <span className="text-xs text-slate-500">(Recommended for international payments)</span>
+
                                 </span>
                                 <div className="bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold">
                                   PayPal
@@ -600,7 +601,7 @@ export function CheckoutRegisterForm({
                 {form.formState.isSubmitting ? (
                   <Loader2 className="animate-spin" />
                 ) : (
-                  "Pay now"
+                  "Create Account & Pay"
                 )}
               </Button>
             </div>

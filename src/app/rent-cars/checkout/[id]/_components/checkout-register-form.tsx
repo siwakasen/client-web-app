@@ -387,7 +387,7 @@ export function CheckoutRegisterForm({
                       <div className="mt-4">
                         <label htmlFor="file-upload-register" className="cursor-pointer">
                           <span className="mt-2 block text-sm font-medium text-gray-900">
-                            Upload Identity Images
+                            Upload Identity Files
                           </span>
                           <span className="mt-1 block text-xs text-gray-500">
                             PNG, JPG, JPEG up to 30MB each (2 files required)
@@ -395,7 +395,7 @@ export function CheckoutRegisterForm({
                         </label>
                         <input
                           id="file-upload-register"
-                          type="file"
+                          type="file" 
                           className="sr-only"
                           multiple
                           accept="image/*"
@@ -732,7 +732,8 @@ export function CheckoutRegisterForm({
                             >
                               <div className="flex items-center gap-3 justify-between ">
                                 <span className="font-medium text-lg">
-                                  PayPal
+                                PayPal <span className="text-xs text-gray-500">(Recommended for international payments)</span>
+
                                 </span>
                                 <div className="bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold">
                                   PayPal

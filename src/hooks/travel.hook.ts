@@ -8,7 +8,9 @@ import {
 import {
   fetchTravelPackages,
   fetchTravelPackagesDetail,
-} from "@/services/travel-packages";
+  fetchTravelPackagesDetailHistory,
+} from "@/services";
+
 export async function useGetTravelPackages(
   pagination: Pagination
 ): Promise<TravelPackagesResponse> {
@@ -21,4 +23,10 @@ export async function useGetTravelPackagesDetail(
 ): Promise<TravelPackagesDetailResponse> {
   "use cache";
   return await fetchTravelPackagesDetail(pagination);
+}
+
+export async function useGetTravelPackagesDetailHistory(
+  id: number
+): Promise<TravelPackagesDetailResponse> {  
+  return await fetchTravelPackagesDetailHistory(id);
 }

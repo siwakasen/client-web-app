@@ -5,7 +5,7 @@ import {
   CarsResponse,
   Pagination,
 } from "@/interfaces";
-import { availableCars, fetchCars, fetchCarsDetail } from "@/services/rent-cars";
+import { availableCars, fetchCars, fetchCarsDetail, fetchCarsDetailHistory } from "@/services";
 
 export async function useGetCars(
   payload: Pagination
@@ -22,6 +22,10 @@ export async function useGetAvailableCars(
 export async function useGetCarsDetail(
   id: number
 ): Promise<CarsDetailResponse> {
-  "use cache";
   return await fetchCarsDetail({ id });
+}
+export async function useGetCarsDetailHistory(
+  id: number,
+): Promise<CarsDetailResponse> {
+  return await fetchCarsDetailHistory({ id });
 }

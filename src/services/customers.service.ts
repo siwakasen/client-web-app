@@ -10,7 +10,7 @@ import {
   ChangePasswordRequest,
   ChangePasswordResponse,
 } from "@/interfaces";
-import { createApiInstance } from "../api";
+import { createApiInstance } from "./api";
 
 export const login = async (
   payload: LoginRequest,

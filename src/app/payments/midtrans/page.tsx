@@ -89,7 +89,7 @@ export default async function PaymentCompletePage({
 
       {isSuccess && (
         <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
-          <Link href="/">Check your bookings</Link>
+          <Link href="/history-order">Check your bookings</Link>
         </Button>
       )}
 

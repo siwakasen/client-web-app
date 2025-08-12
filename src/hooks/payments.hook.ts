@@ -1,7 +1,7 @@
 "use server";
 
 import { getHeaders, getToken } from "@/lib/users-provider";
-import { cancelPaymentPaypal, capturePaymentPaypal, getPaymentByBookingId } from "@/services/payment";
+import { cancelPaymentPaypal, capturePaymentPaypal, getPaymentByBookingId } from "@/services";
 import { PaymentResponse } from "@/interfaces";
 
 export async function useCapturePaymentPaypal(orderId: string): Promise<{

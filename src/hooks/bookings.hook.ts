@@ -1,5 +1,5 @@
 "use server";
-import { createBooking, createBookingWithRegister, getBookingById, getBookingHistory } from "@/services/bookings";
+import { createBooking, createBookingWithRegister, getBookingById, getBookingHistory } from "@/services";
 import { getHeaders } from "@/lib/users-provider";
 import { z } from "zod";
 import { BookingFormSchema, BookingRegisterFormSchema } from "@/lib/validation";
@@ -53,7 +53,10 @@ export async function useCreateBookingWithRegister(
     };
   }
 }
-export async function useGetBookingById(order_id: string) {
+export async function useGetBookingById(order_id: string): Promise<BookingResponseById | {
+  status: number;
+  errors: any;
+}> {
   try {
     const headers = await getHeaders();
     const token = await getToken();

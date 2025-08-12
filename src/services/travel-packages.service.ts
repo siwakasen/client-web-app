@@ -4,7 +4,7 @@ import {
   TravelPackagesDetailRequest,
   TravelPackagesDetailResponse,
 } from "@/interfaces";
-import { createApiInstance } from "../api";
+import { createApiInstance } from "./api";
 import { AxiosResponse } from "axios";
 
 export async function fetchTravelPackages(
@@ -40,5 +40,14 @@ export async function fetchTravelPackagesDetail(
   if (response.status !== 200) {
     throw new Error("Failed to fetch travel packages detail");
   }
+  return response.data;
+}
+export async function fetchTravelPackagesDetailHistory(
+  id: number,
+): Promise<TravelPackagesDetailResponse> {
+  const api = await createApiInstance(
+    process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API
+  );
+  const response: AxiosResponse = await api.get(`/travel-packages/${id}/history`);
   return response.data;
 }

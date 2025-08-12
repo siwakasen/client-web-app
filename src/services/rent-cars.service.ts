@@ -5,7 +5,7 @@ import {
   CarsDetailRequest,
   CarsAvailableRequest,
 } from "@/interfaces";
-import { createApiInstance } from "../api";
+import { createApiInstance } from "./api";
 import { AxiosResponse } from "axios";
 
 
@@ -48,6 +48,21 @@ export async function fetchCarsDetail(
   try {
     const api = await createApiInstance(process.env.NEXT_PUBLIC_CARS_API_URL);
     const response = await api.get(`/cars/${payload.id}`);
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch car detail");
+    }
+    return response.data;
+  } catch (error) {
+    throw error instanceof Error ? error : new Error(String(error));
+  }
+}
+
+export async function fetchCarsDetailHistory(
+  payload : CarsDetailRequest,
+): Promise<CarsDetailResponse> {
+  try {
+    const api = await createApiInstance(process.env.NEXT_PUBLIC_CARS_API_URL);
+    const response = await api.get(`/cars/${payload.id}/history`);
     if (response.status !== 200) {
       throw new Error("Failed to fetch car detail");
     }

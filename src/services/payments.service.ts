@@ -1,6 +1,6 @@
 "use server";
 
-import { createApiInstance } from "../api";
+import { createApiInstance } from "./api";
 
 export const capturePaymentPaypal = async (
   orderId: string,

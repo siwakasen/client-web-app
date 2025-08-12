@@ -4,7 +4,7 @@ import {
   BookingRequest,
   BookingResponse,
 } from "@/interfaces";
-import { createApiInstance } from "../api";
+import { createApiInstance } from "./api";
 
 export const createBookingWithRegister = async (
   payload: BookingWithRegisterRequest

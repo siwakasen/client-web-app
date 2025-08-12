@@ -310,7 +310,8 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                             >
                               <div className="flex items-center gap-3 justify-between ">
                                 <span className="font-medium text-lg">
-                                  PayPal
+                                PayPal <span className="text-xs text-gray-500">(Recommended for international payments)</span>
+
                                 </span>
                                 <div className="bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold">
                                   PayPal
