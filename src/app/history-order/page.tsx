@@ -2,6 +2,7 @@ import { useGetBookingHistory } from "@/hooks/bookings.hook";
 import { useGetTravelPackagesDetailHistory, useGetCarsDetailHistory  } from "@/hooks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { BookingStatus } from "@/constants/booking-status";
 
 import { Calendar, MapPin, Clock, Users, Car, CreditCard, TreePalm } from "lucide-react";
 import { HistoryPagination } from "./_components/history-pagination";
@@ -74,26 +75,26 @@ export default async function HistoryPage({ searchParams }: {searchParams: Promi
     })
   );
 
-  const getStatusColor = (status: string) => {
+  const getStatusBadgeClass = (status: string) => {
     switch (status?.toUpperCase()) {
-      case 'CONFIRMED':
-        return 'default';
-      case 'COMPLETED':
-        return 'default';
-      case 'ONGOING':
-        return 'default';
-      case 'WAITING_PAYMENT':
-        return 'default';
-      case 'WAITING_CONFIRMATION':
-        return 'default';
-      case 'CANCELLED':
-        return 'destructive';
-      case 'NO_SHOW':
-        return 'destructive';
-      case 'PAYMENT_FAILED':
-        return 'destructive';
+      case BookingStatus.CONFIRMED:
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case BookingStatus.ONGOING:
+        return "bg-cyan-100 text-cyan-800 border-cyan-200";
+      case BookingStatus.COMPLETED:
+        return "bg-green-100 text-green-800 border-green-200";
+      case BookingStatus.CANCELLED:
+        return "bg-red-100 text-red-800 border-red-200";
+      case BookingStatus.WAITING_PAYMENT:
+        return "bg-orange-100 text-orange-800 border-orange-200";
+      case BookingStatus.WAITING_CONFIRMATION:
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case BookingStatus.NO_SHOW:
+        return "bg-gray-100 text-gray-800 border-gray-200";
+      case BookingStatus.PAYMENT_FAILED:
+        return "bg-red-100 text-red-800 border-red-200";
       default:
-        return 'outline';
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
@@ -205,7 +206,7 @@ export default async function HistoryPage({ searchParams }: {searchParams: Promi
                           Placed on {formatDate(booking.created_at)}
                         </p>
                       </div>
-                      <Badge variant={getStatusColor(booking.status)}>
+                      <Badge className={`${getStatusBadgeClass(booking.status)} px-3 py-1.5 text-sm font-medium`}>
                         {formatStatusText(booking.status)}
                       </Badge>
                     </div>

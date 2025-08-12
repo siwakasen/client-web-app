@@ -3,6 +3,7 @@ import { useGetCarsDetailHistory } from "@/hooks/cars.hook";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { BookingStatus } from "@/constants/booking-status";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/utils";
 import { convertCarImageUrl, convertTravelImageUrl } from "@/helpers/images-url";
@@ -51,16 +52,26 @@ export default async function HistoryOrderDetailPage({
     }
   }
 
-  const getStatusVariant = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'completed':
-        return 'default';
-      case 'pending':
-        return 'secondary';
-      case 'cancelled':
-        return 'destructive';
+  const getStatusBadgeClass = (status: string) => {
+    switch (status?.toUpperCase()) {
+      case BookingStatus.CONFIRMED:
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case BookingStatus.ONGOING:
+        return "bg-cyan-100 text-cyan-800 border-cyan-200";
+      case BookingStatus.COMPLETED:
+        return "bg-green-100 text-green-800 border-green-200";
+      case BookingStatus.CANCELLED:
+        return "bg-red-100 text-red-800 border-red-200";
+      case BookingStatus.WAITING_PAYMENT:
+        return "bg-orange-100 text-orange-800 border-orange-200";
+      case BookingStatus.WAITING_CONFIRMATION:
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case BookingStatus.NO_SHOW:
+        return "bg-gray-100 text-gray-800 border-gray-200";
+      case BookingStatus.PAYMENT_FAILED:
+        return "bg-red-100 text-red-800 border-red-200";
       default:
-        return 'outline';
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
@@ -97,7 +108,7 @@ export default async function HistoryOrderDetailPage({
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               Booking Information
-              <Badge variant={getStatusVariant(booking.status)}>
+              <Badge className={getStatusBadgeClass(booking.status)}>
                 {booking.status}
               </Badge>
             </CardTitle>
@@ -167,14 +178,13 @@ export default async function HistoryOrderDetailPage({
                   <div key={index} className="p-3 bg-gray-50 rounded-lg">
                     <div className="flex justify-between items-center mb-2">
                       <span className="font-medium">Payment #{payment.id}</span>
-                      <Badge variant={getStatusVariant(payment.status)}>
+                      <Badge className={getStatusBadgeClass(payment.status)}>
                         {payment.status}
                       </Badge>
                     </div>
                     <div className="text-sm text-gray-600 space-y-1">
                       <p>Method: {payment.payment_method}</p>
-                      <p>Gross Amount: {formatCurrency(payment.gross_amount)}</p>
-                      <p>Net Amount: {formatCurrency(payment.net_amount)}</p>
+                      <p>Amount: {formatCurrency(payment.gross_amount)}</p>
                       <p>Payment Date: {payment.payment_date ? formatDateTime(payment.payment_date) : 'N/A'}</p>
                       <p>Created: {formatDateTime(payment.created_at)}</p>
                     </div>
