@@ -7,11 +7,15 @@ export default async function HistoryPage({
 }: {
   searchParams: Promise<{
     page?: string;
+    status?: string;
   }>;
 }) {
-  const { page } = await searchParams;
+  const { page, status } = await searchParams;
   const currentPage = Number(page) || 1;
-  const limit = 20;
+  const limit = 10; // Changed from 20 to 10 as requested
+
+  // Ensure default status is "All" (empty string) when no status is provided
+  const currentStatus = status || '';
 
   return (
     <>
@@ -39,7 +43,11 @@ export default async function HistoryPage({
       </section>
 
       <div className="container mx-auto px-4 py-8">
-        <BookingList currentPage={currentPage} limit={limit} />
+        <BookingList
+          currentPage={currentPage}
+          limit={limit}
+          status={currentStatus}
+        />
       </div>
       <Footer />
     </>

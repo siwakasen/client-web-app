@@ -70,14 +70,14 @@ export async function useGetBookingById(order_id: string): Promise<BookingRespon
   }
 }
 
-export async function useGetBookingHistory(page: number, limit: number) : Promise<BookingHistoryResponse | {
+export async function useGetBookingHistory(page: number, limit: number, status?: string) : Promise<BookingHistoryResponse | {
   status: number;
   errors: any;
 }> {
   try {
     const headers = await getHeaders();
     const token = await getToken();
-    const response: BookingHistoryResponse = await getBookingHistory(headers, token!, page, limit);
+    const response: BookingHistoryResponse = await getBookingHistory(headers, token!, page, limit, status);
     return response;
   } catch (error: any) {
     return {

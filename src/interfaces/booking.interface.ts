@@ -67,7 +67,7 @@ export interface Booking {
   start_date: string
   end_date: string
   total_price: number
-  status: string
+  status: BookingStatus
   pickup_location: string
   pickup_time: string
   additional_notes: string
@@ -81,4 +81,14 @@ export interface BookingHistoryResponse {
   meta: Meta
 }
 
+export enum BookingStatus {
+  WAITING_PAYMENT = 'WAITING_PAYMENT',
+  WAITING_CONFIRMATION = 'WAITING_CONFIRMATION',
+  CONFIRMED = 'CONFIRMED',
+  ONGOING = 'ONGOING',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+  NO_SHOW = 'NO_SHOW',
+  PAYMENT_FAILED = 'PAYMENT_FAILED',
+}
 

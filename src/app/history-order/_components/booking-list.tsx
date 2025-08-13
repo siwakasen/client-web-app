@@ -27,6 +27,7 @@ import { Booking, BookingAdjustment, Meta, RequestType } from '@/interfaces';
 interface BookingListProps {
   currentPage: number;
   limit: number;
+  status?: string;
 }
 
 // Skeleton component for loading state
@@ -90,7 +91,7 @@ function BookingSkeleton() {
   );
 }
 
-export function BookingList({ currentPage, limit }: BookingListProps) {
+export function BookingList({ currentPage, limit, status }: BookingListProps) {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [meta, setMeta] = useState<Meta>({
     totalPages: 0,
@@ -108,8 +109,8 @@ export function BookingList({ currentPage, limit }: BookingListProps) {
       setLoading(true);
       setError(null);
 
-      // Fetch booking history
-      const response = await useGetBookingHistory(currentPage, limit);
+      // Fetch booking history with status filter
+      const response = await useGetBookingHistory(currentPage, limit, status);
 
       if ('errors' in response) {
         setError(response.errors.message);
@@ -173,7 +174,7 @@ export function BookingList({ currentPage, limit }: BookingListProps) {
 
   useEffect(() => {
     fetchBookings();
-  }, [currentPage, limit]);
+  }, [currentPage, limit, status]);
 
   const getStatusBadgeClass = (status: string) => {
     switch (status?.toUpperCase()) {
@@ -426,7 +427,11 @@ export function BookingList({ currentPage, limit }: BookingListProps) {
 
       {/* Pagination */}
       {meta && meta.totalPages > 1 && (
-        <HistoryPagination meta={meta} currentPage={currentPage} />
+        <HistoryPagination
+          meta={meta}
+          currentPage={currentPage}
+          status={status}
+        />
       )}
     </>
   );

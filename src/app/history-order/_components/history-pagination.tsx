@@ -1,24 +1,35 @@
-"use client";
+'use client';
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Meta } from "@/interfaces";
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Meta } from '@/interfaces';
 
 interface HistoryPaginationProps {
   meta: Meta;
   currentPage: number;
+  status?: string;
 }
 
-export function HistoryPagination({ meta, currentPage }: HistoryPaginationProps) {
+export function HistoryPagination({
+  meta,
+  currentPage,
+  status,
+}: HistoryPaginationProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const { totalPages, hasNextPage, hasPrevPage } = meta;
 
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('page', page.toString());
+
+    // Preserve status filter when changing pages
+    if (status) {
+      params.set('status', status);
+    }
+
     router.push(`/history-order?${params.toString()}`);
   };
 
@@ -59,7 +70,7 @@ export function HistoryPagination({ meta, currentPage }: HistoryPaginationProps)
       {pageNumbers.map((page) => (
         <Button
           key={page}
-          variant={currentPage === page ? "default" : "outline"}
+          variant={currentPage === page ? 'default' : 'outline'}
           size="sm"
           onClick={() => handlePageChange(page)}
           className="min-w-[40px]"

@@ -36,16 +36,13 @@ export const getBookingById = async (order_id: string, headers: Record<string, s
   return response.data;
 }
 
-export const getBookingHistory = async (headers: Record<string, string>, token: string, page: number, limit: number) : Promise<BookingHistoryResponse> => {
+export const getBookingHistory = async (headers: Record<string, string>, token: string, page: number, limit: number, status?: string) : Promise<BookingHistoryResponse> => {
   const api = await createApiInstance(process.env.NEXT_PUBLIC_BOOKINGS_API_URL, headers, token);
   const response = await api.get("/bookings", {
     params: {
       page,
       limit,
-    },
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
+      search:status
     },
   });
   return response.data;
