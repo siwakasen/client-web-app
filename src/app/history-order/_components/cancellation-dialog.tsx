@@ -96,6 +96,7 @@ export function CancellationDialog({
             onClick={handleClose}
             disabled={isLoading}
             type="button"
+            className="cursor-pointer"
           >
             Keep Booking
           </Button>
@@ -104,6 +105,7 @@ export function CancellationDialog({
             onClick={handleConfirm}
             disabled={isLoading}
             type="button"
+            className="cursor-pointer"
           >
             {isLoading ? 'Cancelling...' : 'Cancel Booking'}
           </Button>

@@ -6,6 +6,7 @@ import { useCancelBooking } from '@/hooks';
 import { RotateCcw, X, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
 import { CancellationDialog } from './cancellation-dialog';
+import { RescheduleDialog } from './reschedule-dialog';
 
 interface BookingActionsProps {
   bookingId: number;
@@ -15,6 +16,9 @@ interface BookingActionsProps {
   isRequestingReschedule: boolean;
   payment_method: string;
   payment_gateway_id: string;
+  isCarRental: boolean;
+  currentStartDate: string;
+  currentEndDate: string;
 }
 
 export function BookingActions({
@@ -25,12 +29,17 @@ export function BookingActions({
   isRequestingReschedule,
   payment_method,
   payment_gateway_id,
+  isCarRental,
+  currentStartDate,
+  currentEndDate,
 }: BookingActionsProps) {
   const [showCancellationDialog, setShowCancellationDialog] = useState(false);
+  const [showRescheduleDialog, setShowRescheduleDialog] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
 
   const canRescheduleOrCancel = (status: string) => {
     const upperStatus = status?.toUpperCase();
+    // new Date(booking.start_date).getTime() - new Date().getTime() <= 1000 * 60 * 60 * 24
     return (
       upperStatus === 'WAITING_CONFIRMATION' || upperStatus === 'CONFIRMED'
     );
@@ -53,8 +62,7 @@ export function BookingActions({
   const handleReschedule = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // TODO: Implement reschedule functionality
-    alert(`Reschedule booking #${bookingId}`);
+    setShowRescheduleDialog(true);
   };
 
   const handleCancelClick = (e: React.MouseEvent) => {
@@ -170,6 +178,14 @@ export function BookingActions({
           bookingId={bookingId}
           status={status}
           isLoading={isCancelling}
+        />
+        <RescheduleDialog
+          isOpen={showRescheduleDialog}
+          onClose={() => setShowRescheduleDialog(false)}
+          bookingId={bookingId}
+          isCarRental={isCarRental}
+          currentStartDate={currentStartDate}
+          currentEndDate={currentEndDate}
         />
       </>
     );

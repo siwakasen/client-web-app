@@ -1,5 +1,6 @@
 import { useGetBookingById, useGetTravelPackagesDetailHistory } from '@/hooks';
 import { useGetCarsDetailHistory } from '@/hooks/cars.hook';
+import { useGetRefundsByIdBooking } from '@/hooks/refunds.hook';
 import { redirect } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,12 +11,13 @@ import {
   convertCarImageUrl,
   convertTravelImageUrl,
 } from '@/helpers/images-url';
-import { Button } from '@/components/ui/button';
-import { RotateCcw, X, CreditCard, XCircle } from 'lucide-react';
 import { BookingActions } from './_components/booking-action';
 import { PaymentAction } from './_components/payment-action';
 import { AdjustmentStatus, BookingAdjustment } from '@/interfaces';
 import { RequestType } from '@/interfaces';
+import { RefundStepper } from './_components/refund-stepper';
+import { RefundFormDialog } from './_components/refund-form-dialog';
+import { RefundStatus } from '@/interfaces/refunds.interface';
 
 export default async function HistoryOrderDetailPage({
   params,
@@ -34,6 +36,25 @@ export default async function HistoryOrderDetailPage({
   }
 
   const booking = response.data;
+
+  // Fetch refund data if there's a cancellation adjustment that's approved
+  let refundData = null;
+  const hasCancellationAdjustment = booking.booking_adjustments.some(
+    (adjustment: BookingAdjustment) =>
+      adjustment.request_type === RequestType.CANCELLATION &&
+      adjustment.status === AdjustmentStatus.APPROVED
+  );
+
+  if (hasCancellationAdjustment) {
+    try {
+      const refundResponse = await useGetRefundsByIdBooking(Number(booking_id));
+      if ('data' in refundResponse && refundResponse.data) {
+        refundData = refundResponse.data;
+      }
+    } catch (error) {
+      console.error('Error fetching refund details:', error);
+    }
+  }
 
   // Fetch package or car details based on the booking
   let packageData = null;
@@ -138,7 +159,7 @@ export default async function HistoryOrderDetailPage({
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-20 max-w-4xl">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Order Details</h1>
         <p className="text-gray-600">Booking ID: #{booking.id}</p>
@@ -232,6 +253,9 @@ export default async function HistoryOrderDetailPage({
                   (adjustment: BookingAdjustment) =>
                     adjustment.request_type === RequestType.RESCHEDULE
                 )}
+                isCarRental={!booking.package_id}
+                currentStartDate={booking.start_date}
+                currentEndDate={booking.end_date}
               />
             </div>
           </CardContent>
@@ -281,49 +305,79 @@ export default async function HistoryOrderDetailPage({
         </Card>
       </div>
 
-      {/* Booking Adjustment */}
+      {/* Booking Adjustment Details */}
       {booking.booking_adjustments.length > 0 && (
         <Card className="mt-6">
           <CardHeader>
-            <CardTitle>Booking Adjustment</CardTitle>
+            <CardTitle>Booking Adjustment & Refund Information</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {booking.booking_adjustments.map((adjustment) => (
-                <div key={adjustment.id} className="p-3 bg-gray-50 rounded-lg">
-                  <div className="flex justify-between items-center mb-2">
-                    <div className="text-sm text-gray-600 space-y-1">
-                      <p>
-                        Request Type:{' '}
-                        {adjustment.request_type === RequestType.CANCELLATION
-                          ? 'Cancellation'
-                          : 'Reschedule'}
-                      </p>
+            <div className="space-y-6">
+              {/* Booking Adjustments */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">
+                  Adjustment Requests
+                </h3>
+                {booking.booking_adjustments.map((adjustment) => (
+                  <div
+                    key={adjustment.id}
+                    className="p-3 bg-gray-50 rounded-lg"
+                  >
+                    <div className="flex justify-between items-center mb-2">
+                      <div className="text-sm text-gray-600 space-y-1">
+                        <p>
+                          Request Type:{' '}
+                          {adjustment.request_type === RequestType.CANCELLATION
+                            ? 'Cancellation'
+                            : 'Reschedule'}
+                        </p>
+                      </div>
+                      <Badge
+                        className={getStatusAdjustmentBadgeClass(
+                          adjustment.status
+                        )}
+                      >
+                        {adjustment.status}
+                      </Badge>
                     </div>
-                    <Badge
-                      className={getStatusAdjustmentBadgeClass(
-                        adjustment.status
-                      )}
-                    >
-                      {adjustment.status}
-                    </Badge>
-                  </div>
-                  <div className="text-sm text-gray-600 space-y-1">
-                    <p>Reason: {adjustment.reason}</p>
-                  </div>
-                  {adjustment.status === RequestType.CANCELLATION && (
                     <div className="text-sm text-gray-600 space-y-1">
-                      <p>
-                        New Start Date:{' '}
-                        {formatDateTime(adjustment.new_start_date)}
-                      </p>
-                      <p>
-                        New End Date: {formatDateTime(adjustment.new_end_date)}
-                      </p>
+                      <p>Reason: {adjustment.reason}</p>
+                    </div>
+                    {adjustment.request_type === RequestType.RESCHEDULE && (
+                      <div className="text-sm text-gray-600 space-y-1">
+                        <p>
+                          New Start Date:{' '}
+                          {formatDateTime(adjustment.new_start_date)}
+                        </p>
+                        <p>
+                          New End Date:{' '}
+                          {formatDateTime(adjustment.new_end_date)}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Refund Information */}
+              {refundData && (
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                    Refund Details
+                  </h3>
+                  <RefundStepper refund={refundData} bookingId={booking_id} />
+
+                  {/* Show refund form button if status is WAITING_FORM */}
+                  {refundData.status === RefundStatus.WAITING_FORM && (
+                    <div className="mt-4">
+                      <RefundFormDialog
+                        bookingId={booking_id}
+                        refund={refundData}
+                      />
                     </div>
                   )}
                 </div>
-              ))}
+              )}
             </div>
           </CardContent>
         </Card>

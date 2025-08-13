@@ -16,6 +16,7 @@ import {
   Car,
   TreePalm,
   IdCardLanyardIcon,
+  NotebookIcon,
 } from 'lucide-react';
 import { HistoryPagination } from './history-pagination';
 import { BookingActions } from './booking-actions';
@@ -371,10 +372,11 @@ export function BookingList({ currentPage, limit }: BookingListProps) {
 
                     {/* Additional Notes - Only if exists */}
                     {booking.additional_notes && (
-                      <div className="mt-3 md:mt-2 mb-4 md:mb-0">
-                        <p className="text-sm md:text-xs text-muted-foreground line-clamp-2">
+                      <div className="flex items-center gap-3 md:gap-2 justify-start md:justify-start">
+                        <NotebookIcon className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
+                        <span className="text-sm md:text-sm">
                           {booking.additional_notes}
-                        </p>
+                        </span>
                       </div>
                     )}
                   </div>
@@ -409,6 +411,9 @@ export function BookingList({ currentPage, limit }: BookingListProps) {
                         payment_gateway_id={
                           booking.payments[0].payment_gateway_id
                         }
+                        isCarRental={!booking.package_id}
+                        currentStartDate={booking.start_date}
+                        currentEndDate={booking.end_date}
                       />
                     </div>
                   </div>

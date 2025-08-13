@@ -6,12 +6,16 @@ import { useCancelBooking } from '@/hooks';
 import { RotateCcw, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { CancellationDialog } from '../../_components/cancellation-dialog';
+import { RescheduleDialog } from '../../_components/reschedule-dialog';
 
 interface BookingActionsProps {
   bookingId: number;
   status: string;
   isRequestingCancel: boolean;
   isRequestingReschedule: boolean;
+  isCarRental: boolean;
+  currentStartDate: string;
+  currentEndDate: string;
 }
 
 export function BookingActions({
@@ -19,8 +23,12 @@ export function BookingActions({
   status,
   isRequestingCancel,
   isRequestingReschedule,
+  isCarRental,
+  currentStartDate,
+  currentEndDate,
 }: BookingActionsProps) {
   const [showCancellationDialog, setShowCancellationDialog] = useState(false);
+  const [showRescheduleDialog, setShowRescheduleDialog] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
 
   const canRescheduleOrCancel = (status: string) => {
@@ -35,8 +43,7 @@ export function BookingActions({
   const handleReschedule = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // TODO: Implement reschedule functionality
-    alert(`Reschedule booking #${bookingId}`);
+    setShowRescheduleDialog(true);
   };
 
   const handleCancelClick = (e: React.MouseEvent) => {
@@ -74,7 +81,7 @@ export function BookingActions({
           <Button
             variant="outline"
             size="sm"
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 cursor-pointer"
             onClick={handleReschedule}
             disabled={
               isRequestingReschedule || isRequestingCancel || isCancelling
@@ -86,7 +93,7 @@ export function BookingActions({
           <Button
             variant="destructive"
             size="sm"
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 cursor-pointer"
             onClick={handleCancelClick}
             disabled={
               isRequestingCancel || isRequestingReschedule || isCancelling
@@ -105,6 +112,14 @@ export function BookingActions({
           status={status}
           isLoading={isCancelling}
         />
+        <RescheduleDialog
+          isOpen={showRescheduleDialog}
+          onClose={() => setShowRescheduleDialog(false)}
+          bookingId={bookingId}
+          isCarRental={isCarRental}
+          currentStartDate={currentStartDate}
+          currentEndDate={currentEndDate}
+        />
       </>
     );
   }
@@ -117,7 +132,7 @@ export function BookingActions({
           <Button
             variant="destructive"
             size="sm"
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 cursor-pointer"
             onClick={handleCancelClick}
             disabled={
               isRequestingCancel || isRequestingReschedule || isCancelling

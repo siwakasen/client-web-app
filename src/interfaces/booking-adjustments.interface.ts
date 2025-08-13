@@ -1,7 +1,7 @@
 import { Booking } from "./booking.interface";
 
 export interface CancelBookingResponse {
-    data: Booking;
+    data: Booking | BookingAdjustment;
     message: string;
 }
 export interface BookingAdjustment {
@@ -23,7 +23,13 @@ export interface BookingAdjustment {
   export enum AdjustmentStatus {
     PENDING = 'PENDING',
     WAITING_PAYMENT = 'WAITING_PAYMENT',
+    WAITING_REASSIGNMENT = 'WAITING_REASSIGNMENT',
     APPROVED = 'APPROVED',
     REJECTED = 'REJECTED',
     EXPIRED = 'EXPIRED'
+  }
+
+  export interface RescheduleBookingResponse {
+    data: BookingAdjustment;
+    message: string;
   }
