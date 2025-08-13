@@ -4,3 +4,4 @@ export * from "./booking.interface";
 export * from "./rent-car.interface";
 export * from "./payment.interface";
 export * from "./common.interface";
+export * from "./booking-adjustments.interface";

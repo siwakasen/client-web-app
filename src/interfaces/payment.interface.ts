@@ -14,3 +14,14 @@ export interface PaymentResponse {
   data: Payment;
   message: string;
 }
+
+export enum PaymentStatus {
+  PENDING = 'PENDING',
+  SUCCESS = 'SUCCESS',
+  FAILED = 'FAILED'
+}
+
+export enum PaymentMethod {
+  MIDTRANS = 'MIDTRANS',
+  PAYPAL = 'PAYPAL',
+}

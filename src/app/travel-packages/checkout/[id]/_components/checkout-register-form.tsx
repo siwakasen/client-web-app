@@ -1,43 +1,43 @@
-"use client";
-import { TravelPackages } from "@/interfaces/travel-packages.interface";
-import { combineDateAndTime, convertISOToCurrentTimezone } from "@/lib/utils";
-import { BookingRegisterFormSchema } from "@/lib/validation";
-import { zodResolver } from "@hookform/resolvers/zod";
+'use client';
+import { TravelPackages } from '@/interfaces/travel-packages.interface';
+import { combineDateAndTime, convertISOToCurrentTimezone } from '@/lib/utils';
+import { BookingRegisterFormSchema } from '@/lib/validation';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   ChevronDown,
   ChevronDownIcon,
   Eye,
   EyeOff,
   Loader2,
-} from "lucide-react";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Form, FormControl } from "@/components/ui/form";
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Form, FormControl } from '@/components/ui/form';
 import {
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { OrderSummary } from "./order-summary";
-import { PhoneInput } from "@/components/shared/phone-input/phone-input";
+} from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { OrderSummary } from './order-summary';
+import { PhoneInput } from '@/components/shared/phone-input/phone-input';
 import {
   CountryDropdown,
   Country,
-} from "@/components/shared/country-input/country-dropdown";
-import { toast } from "sonner";
-import { useCreateBookingWithRegister } from "@/hooks";
+} from '@/components/shared/country-input/country-dropdown';
+import { toast } from 'sonner';
+import { useCreateBookingWithRegister } from '@/hooks';
 
 interface CheckoutRegisterFormProps {
   travelPackage: TravelPackages;
@@ -54,34 +54,34 @@ export function CheckoutRegisterForm({
       package_id: travelPackage.id,
       with_driver: false,
       number_of_persons: 1,
-      start_date: "",
+      start_date: '',
       end_date: new Date().toISOString(),
-      payment_method: "PAYPAL",
-      pickup_location: "",
-      pickup_time: "",
-      additional_notes: "",
-      name: "",
-      email: "",
-      password: "",
-      confirm_password: "",
-      phone_number: "",
-      country_origin: "",
+      payment_method: 'PAYPAL',
+      pickup_location: '',
+      pickup_time: '',
+      additional_notes: '',
+      name: '',
+      email: '',
+      password: '',
+      confirm_password: '',
+      phone_number: '',
+      country_origin: '',
     },
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   const [openDate, setOpenDate] = useState(false);
 
-  const startDate = form.watch("start_date");
-  const pickupTime = form.watch("pickup_time");
+  const startDate = form.watch('start_date');
+  const pickupTime = form.watch('pickup_time');
 
   useEffect(() => {
     if (startDate) {
       const combined = combineDateAndTime(startDate, pickupTime);
       if (combined !== startDate) {
-        form.setValue("start_date", combined);
+        form.setValue('start_date', combined);
       }
-      form.setValue("end_date", combined);
+      form.setValue('end_date', combined);
     }
   }, [startDate, pickupTime, form]);
 
@@ -94,10 +94,10 @@ export function CheckoutRegisterForm({
         end_date: convertedDate,
       };
       const response = await useCreateBookingWithRegister(formData);
-      if ("errors" in response) {
+      if ('errors' in response) {
         switch (true) {
           case !!response.errors?.message:
-            console.log("Booking error:", response);
+            console.log('Booking error:', response);
             toast.error(response.errors.message);
             break;
         }
@@ -174,7 +174,7 @@ export function CheckoutRegisterForm({
                         <FormControl>
                           <div className="relative">
                             <Input
-                              type={showPassword ? "text" : "password"}
+                              type={showPassword ? 'text' : 'password'}
                               placeholder="Enter Password"
                               className="w-full pr-10"
                               {...field}
@@ -207,7 +207,7 @@ export function CheckoutRegisterForm({
                         <FormControl>
                           <div className="relative">
                             <Input
-                              type={showConfirmPassword ? "text" : "password"}
+                              type={showConfirmPassword ? 'text' : 'password'}
                               placeholder="Confirm Password"
                               className="w-full pr-10"
                               {...field}
@@ -301,7 +301,7 @@ export function CheckoutRegisterForm({
                               >
                                 {field.value
                                   ? new Date(field.value).toLocaleDateString()
-                                  : "Select date"}
+                                  : 'Select date'}
                                 <ChevronDownIcon />
                               </Button>
                             </PopoverTrigger>
@@ -324,7 +324,7 @@ export function CheckoutRegisterForm({
                                 }}
                                 onSelect={(date) => {
                                   field.onChange(
-                                    date ? date.toISOString() : ""
+                                    date ? date.toISOString() : ''
                                   );
                                   setOpenDate(false);
                                 }}
@@ -461,9 +461,9 @@ export function CheckoutRegisterForm({
                         {/* PayPal Option */}
                         <div
                           className={`border rounded-lg ${
-                            field.value === "PAYPAL"
-                              ? "border-blue-500"
-                              : "border-gray-200"
+                            field.value === 'PAYPAL'
+                              ? 'border-blue-500'
+                              : 'border-gray-200'
                           }`}
                         >
                           <div className="flex items-center space-x-3 p-4 ">
@@ -477,8 +477,11 @@ export function CheckoutRegisterForm({
                             >
                               <div className="flex items-center gap-3 justify-between ">
                                 <span className="font-medium text-lg">
-                                PayPal <span className="text-xs text-slate-500">(Recommended for international payments)</span>
-
+                                  PayPal{' '}
+                                  <span className="text-xs text-slate-500">
+                                    (Recommended for international and faster
+                                    process.)
+                                  </span>
                                 </span>
                                 <div className="bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold">
                                   PayPal
@@ -486,7 +489,7 @@ export function CheckoutRegisterForm({
                               </div>
                             </label>
                           </div>
-                          {field.value === "PAYPAL" && (
+                          {field.value === 'PAYPAL' && (
                             <div className="p-4 bg-gray-50  rounded-lg">
                               <div className="flex justify-center mb-4">
                                 <div className="w-24 h-16 bg-white border rounded flex items-center justify-center">
@@ -506,9 +509,9 @@ export function CheckoutRegisterForm({
                         {/* Midtrans Option */}
                         <div
                           className={`border rounded-lg ${
-                            field.value === "MIDTRANS"
-                              ? "border-blue-500"
-                              : "border-gray-200"
+                            field.value === 'MIDTRANS'
+                              ? 'border-blue-500'
+                              : 'border-gray-200'
                           }`}
                         >
                           <div className="flex items-center space-x-3 p-4 ">
@@ -544,7 +547,7 @@ export function CheckoutRegisterForm({
                               </div>
                             </label>
                           </div>
-                          {field.value === "MIDTRANS" && (
+                          {field.value === 'MIDTRANS' && (
                             <div className="p-4 bg-gray-50 rounded-lg">
                               <div className="flex justify-center mb-4">
                                 <div className="w-32 h-20 bg-white border rounded flex items-center justify-center relative">
@@ -589,7 +592,7 @@ export function CheckoutRegisterForm({
             <div className="md:sticky md:top-24 h-fit">
               <OrderSummary
                 packageData={travelPackage}
-                numberOfPersons={form.watch("number_of_persons") || 1}
+                numberOfPersons={form.watch('number_of_persons') || 1}
               />
               {/* Pay Now Button */}
               <Button
@@ -601,7 +604,7 @@ export function CheckoutRegisterForm({
                 {form.formState.isSubmitting ? (
                   <Loader2 className="animate-spin" />
                 ) : (
-                  "Create Account & Pay"
+                  'Create Account & Pay'
                 )}
               </Button>
             </div>

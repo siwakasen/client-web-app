@@ -12,7 +12,7 @@ export async function fetchTravelPackages(
 ): Promise<TravelPackagesResponse> {
   try {
     const api = await createApiInstance(
-      process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API
+      process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API_URL
     );
     const response = await api.get(
       `/travel-packages?limit=${pagination.limit}&page=${
@@ -32,7 +32,7 @@ export async function fetchTravelPackagesDetail(
   payload: TravelPackagesDetailRequest
 ): Promise<TravelPackagesDetailResponse> {
   const api = await createApiInstance(
-    process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API
+    process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API_URL
   );
   const response: AxiosResponse = await api.get(
     `/travel-packages/${payload.id}`
@@ -46,7 +46,7 @@ export async function fetchTravelPackagesDetailHistory(
   id: number,
 ): Promise<TravelPackagesDetailResponse> {
   const api = await createApiInstance(
-    process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API
+    process.env.NEXT_PUBLIC_TRAVEL_PACKAGES_API_URL
   );
   const response: AxiosResponse = await api.get(`/travel-packages/${id}/history`);
   return response.data;

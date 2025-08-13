@@ -1,24 +1,24 @@
-"use client";
-import { combineDateAndTime, convertISOToCurrentTimezone } from "@/lib/utils";
-import { useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Textarea } from "@/components/ui/textarea";
-import { ChevronDown, ChevronDownIcon, Loader2 } from "lucide-react";
-import { Customer, TravelPackages } from "@/interfaces";
+'use client';
+import { combineDateAndTime, convertISOToCurrentTimezone } from '@/lib/utils';
+import { useState, useEffect } from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Textarea } from '@/components/ui/textarea';
+import { ChevronDown, ChevronDownIcon, Loader2 } from 'lucide-react';
+import { Customer, TravelPackages } from '@/interfaces';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { OrderSummary } from "./order-summary";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { BookingFormSchema } from "@/lib/validation";
-import { z } from "zod";
-import { useCreateBooking } from "@/hooks";
+} from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { OrderSummary } from './order-summary';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { BookingFormSchema } from '@/lib/validation';
+import { z } from 'zod';
+import { useCreateBooking } from '@/hooks';
 import {
   Form,
   FormControl,
@@ -26,8 +26,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { toast } from "sonner";
+} from '@/components/ui/form';
+import { toast } from 'sonner';
 interface CheckoutFormProps {
   travelPackage: TravelPackages;
   customer: Customer;
@@ -40,27 +40,27 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
       package_id: travelPackage.id,
       with_driver: false,
       number_of_persons: 1,
-      start_date: "",
+      start_date: '',
       end_date: new Date().toISOString(),
-      payment_method: "PAYPAL",
-      pickup_location: "",
-      pickup_time: "",
-      additional_notes: "",
+      payment_method: 'PAYPAL',
+      pickup_location: '',
+      pickup_time: '',
+      additional_notes: '',
     },
   });
 
   const [openDate, setOpenDate] = useState(false);
 
-  const startDate = form.watch("start_date");
-  const pickupTime = form.watch("pickup_time");
+  const startDate = form.watch('start_date');
+  const pickupTime = form.watch('pickup_time');
 
   useEffect(() => {
     if (startDate) {
       const combined = combineDateAndTime(startDate, pickupTime);
       if (combined !== startDate) {
-        form.setValue("start_date", combined);
+        form.setValue('start_date', combined);
       }
-      form.setValue("end_date", combined);
+      form.setValue('end_date', combined);
     }
   }, [startDate, pickupTime, form]);
 
@@ -74,8 +74,8 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
       };
       const response = await useCreateBooking(formData);
 
-      if ("errors" in response) {
-        toast.error(response.errors.message || "An error occurred", {
+      if ('errors' in response) {
+        toast.error(response.errors.message || 'An error occurred', {
           description: response.status
             ? `Error code: ${response.status}`
             : undefined,
@@ -85,7 +85,7 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
       window.location.href = response.data.redirect_url;
     } catch (error: any) {
       console.log(error);
-      toast.error("An unexpected error occurred. Please try again.");
+      toast.error('An unexpected error occurred. Please try again.');
     }
   }
   return (
@@ -134,7 +134,7 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                               >
                                 {field.value
                                   ? new Date(field.value).toLocaleDateString()
-                                  : "Select date"}
+                                  : 'Select date'}
                                 <ChevronDownIcon />
                               </Button>
                             </PopoverTrigger>
@@ -157,7 +157,7 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                                 }}
                                 onSelect={(date) => {
                                   field.onChange(
-                                    date ? date.toISOString() : ""
+                                    date ? date.toISOString() : ''
                                   );
                                   setOpenDate(false);
                                 }}
@@ -294,9 +294,9 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                         {/* PayPal Option */}
                         <div
                           className={`border rounded-lg ${
-                            field.value === "PAYPAL"
-                              ? "border-blue-500"
-                              : "border-gray-200"
+                            field.value === 'PAYPAL'
+                              ? 'border-blue-500'
+                              : 'border-gray-200'
                           }`}
                         >
                           <div className="flex items-center space-x-3 p-4 ">
@@ -310,8 +310,11 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                             >
                               <div className="flex items-center gap-3 justify-between ">
                                 <span className="font-medium text-lg">
-                                PayPal <span className="text-xs text-gray-500">(Recommended for international payments)</span>
-
+                                  PayPal{' '}
+                                  <span className="text-xs text-gray-500">
+                                    (Recommended for international and faster
+                                    process.)
+                                  </span>
                                 </span>
                                 <div className="bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold">
                                   PayPal
@@ -319,7 +322,7 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                               </div>
                             </label>
                           </div>
-                          {field.value === "PAYPAL" && (
+                          {field.value === 'PAYPAL' && (
                             <div className="p-4 bg-gray-50  rounded-lg">
                               <div className="flex justify-center mb-4">
                                 <div className="w-24 h-16 bg-white border rounded flex items-center justify-center">
@@ -339,9 +342,9 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                         {/* Midtrans Option */}
                         <div
                           className={`border rounded-lg ${
-                            field.value === "MIDTRANS"
-                              ? "border-blue-500"
-                              : "border-gray-200"
+                            field.value === 'MIDTRANS'
+                              ? 'border-blue-500'
+                              : 'border-gray-200'
                           }`}
                         >
                           <div className="flex items-center space-x-3 p-4 ">
@@ -377,7 +380,7 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                               </div>
                             </label>
                           </div>
-                          {field.value === "MIDTRANS" && (
+                          {field.value === 'MIDTRANS' && (
                             <div className="p-4 bg-gray-50 rounded-lg">
                               <div className="flex justify-center mb-4">
                                 <div className="w-32 h-20 bg-white border rounded flex items-center justify-center relative">
@@ -422,7 +425,7 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
             <div className="md:sticky md:top-24 h-fit">
               <OrderSummary
                 packageData={travelPackage}
-                numberOfPersons={form.watch("number_of_persons") || 1}
+                numberOfPersons={form.watch('number_of_persons') || 1}
               />
               {/* Pay Now Button */}
               <Button
@@ -434,7 +437,7 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                 {form.formState.isSubmitting ? (
                   <Loader2 className="animate-spin" />
                 ) : (
-                  "Pay now"
+                  'Pay now'
                 )}
               </Button>
             </div>

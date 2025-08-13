@@ -1,46 +1,46 @@
-"use client";
-import { Car } from "@/interfaces/rent-car.interface";
-import { combineDateAndTime, convertISOToCurrentTimezone } from "@/lib/utils";
-import { BookingRegisterFormSchema } from "@/lib/validation";
-import { zodResolver } from "@hookform/resolvers/zod";
+'use client';
+import { Car } from '@/interfaces/rent-car.interface';
+import { combineDateAndTime, convertISOToCurrentTimezone } from '@/lib/utils';
+import { BookingRegisterFormSchema } from '@/lib/validation';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   ChevronDown,
   ChevronDownIcon,
   Eye,
   EyeOff,
   Loader2,
-} from "lucide-react";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Form, FormControl } from "@/components/ui/form";
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Form, FormControl } from '@/components/ui/form';
 import {
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { OrderSummary } from "@/app/rent-cars/checkout/[id]/_components/order-summary";
-import { PhoneInput } from "@/components/shared/phone-input/phone-input";
+} from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { OrderSummary } from '@/app/rent-cars/checkout/[id]/_components/order-summary';
+import { PhoneInput } from '@/components/shared/phone-input/phone-input';
 import {
   CountryDropdown,
   Country,
-} from "@/components/shared/country-input/country-dropdown";
-import { toast } from "sonner";
-import { useCreateBookingWithRegister } from "@/hooks";
-import { Switch } from "@/components/ui/switch";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { Upload, X, FileImage } from "lucide-react";
+} from '@/components/shared/country-input/country-dropdown';
+import { toast } from 'sonner';
+import { useCreateBookingWithRegister } from '@/hooks';
+import { Switch } from '@/components/ui/switch';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { Upload, X, FileImage } from 'lucide-react';
 
 interface CheckoutRegisterFormProps {
   car: Car;
@@ -56,7 +56,7 @@ export function CheckoutRegisterForm({
 }: CheckoutRegisterFormProps) {
   const router = useRouter();
   const pathname = usePathname();
-  
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const form = useForm<z.infer<typeof BookingRegisterFormSchema>>({
@@ -64,21 +64,25 @@ export function CheckoutRegisterForm({
     defaultValues: {
       car_id: car.id,
       with_driver: false,
-      start_date: searchParams.start_date ? new Date(searchParams.start_date).toISOString() : "",
-      end_date: searchParams.end_date ? new Date(searchParams.end_date).toISOString() : "",
-      payment_method: "PAYPAL",
-      pickup_location: "",
-      pickup_time: "",
-      additional_notes: "",
-      name: "",
-      email: "",
-      password: "",
-      confirm_password: "",
-      phone_number: "",
-      country_origin: "",
+      start_date: searchParams.start_date
+        ? new Date(searchParams.start_date).toISOString()
+        : '',
+      end_date: searchParams.end_date
+        ? new Date(searchParams.end_date).toISOString()
+        : '',
+      payment_method: 'PAYPAL',
+      pickup_location: '',
+      pickup_time: '',
+      additional_notes: '',
+      name: '',
+      email: '',
+      password: '',
+      confirm_password: '',
+      phone_number: '',
+      country_origin: '',
       identity_file: [],
     },
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   const [openStartDate, setOpenStartDate] = useState(false);
@@ -89,18 +93,26 @@ export function CheckoutRegisterForm({
   const updateURLParams = (startDate: string, endDate: string) => {
     const newSearchParams = new URLSearchParams();
     if (startDate) {
-      newSearchParams.set('start_date', new Date(startDate).toISOString().split('T')[0]);
+      newSearchParams.set(
+        'start_date',
+        new Date(startDate).toISOString().split('T')[0]
+      );
     }
     if (endDate) {
-      newSearchParams.set('end_date', new Date(endDate).toISOString().split('T')[0]);
+      newSearchParams.set(
+        'end_date',
+        new Date(endDate).toISOString().split('T')[0]
+      );
     }
-    router.replace(`${pathname}?${newSearchParams.toString()}`, { scroll: false });
+    router.replace(`${pathname}?${newSearchParams.toString()}`, {
+      scroll: false,
+    });
   };
 
-  const startDate = form.watch("start_date");
-  const endDate = form.watch("end_date");
-  const pickupTime = form.watch("pickup_time");
-  const withDriver = form.watch("with_driver");
+  const startDate = form.watch('start_date');
+  const endDate = form.watch('end_date');
+  const pickupTime = form.watch('pickup_time');
+  const withDriver = form.watch('with_driver');
 
   // Calculate rental duration in days
   const calculateDays = () => {
@@ -118,11 +130,11 @@ export function CheckoutRegisterForm({
     if (startDate && pickupTime && endDate) {
       const combinedStartDate = combineDateAndTime(startDate, pickupTime);
       if (combinedStartDate !== startDate) {
-        form.setValue("start_date", combinedStartDate);
+        form.setValue('start_date', combinedStartDate);
       }
       const combinedEndDate = combineDateAndTime(endDate, pickupTime);
       if (combinedEndDate !== endDate) {
-        form.setValue("end_date", combinedEndDate);
+        form.setValue('end_date', combinedEndDate);
       }
     }
   }, [startDate, pickupTime, endDate, form]);
@@ -130,52 +142,51 @@ export function CheckoutRegisterForm({
   // File upload handlers
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
-    const validFiles = files.filter(file => {
+    const validFiles = files.filter((file) => {
       const isImage = file.type.startsWith('image/');
       const isValidSize = file.size <= 30 * 1024 * 1024; // 30MB limit
       return isImage && isValidSize;
     });
 
     if (validFiles.length !== files.length) {
-      toast.error("Please select only image files under 30MB");
+      toast.error('Please select only image files under 30MB');
       return;
     }
 
     if (selectedFiles.length + validFiles.length > 2) {
-      toast.error("Maximum 2 files allowed");
+      toast.error('Maximum 2 files allowed');
       return;
     }
 
     const newFiles = [...selectedFiles, ...validFiles].slice(0, 2);
     setSelectedFiles(newFiles);
-    
+
     // Update form with files
-    form.setValue("identity_file", newFiles);
+    form.setValue('identity_file', newFiles);
   };
 
   const removeFile = (index: number) => {
     const newFiles = selectedFiles.filter((_, i) => i !== index);
     setSelectedFiles(newFiles);
-    form.setValue("identity_file", newFiles);
+    form.setValue('identity_file', newFiles);
   };
 
   async function onSubmit(values: z.infer<typeof BookingRegisterFormSchema>) {
     try {
-
       const convertedStartDate = convertISOToCurrentTimezone(values.start_date);
       const convertedEndDate = convertISOToCurrentTimezone(values.end_date!);
-      
+
       const formData = {
         ...values,
         start_date: convertedStartDate,
         end_date: convertedEndDate,
       };
-      
+
       const response = await useCreateBookingWithRegister(formData);
-      if ("errors" in response) {
+      if ('errors' in response) {
         switch (true) {
           case !!response.errors?.message:
-            console.log("Booking error:", response);
+            console.log('Booking error:', response);
             toast.error(response.errors.message);
             break;
         }
@@ -252,7 +263,7 @@ export function CheckoutRegisterForm({
                         <FormControl>
                           <div className="relative">
                             <Input
-                              type={showPassword ? "text" : "password"}
+                              type={showPassword ? 'text' : 'password'}
                               placeholder="Enter Password"
                               className="w-full pr-10"
                               {...field}
@@ -285,7 +296,7 @@ export function CheckoutRegisterForm({
                         <FormControl>
                           <div className="relative">
                             <Input
-                              type={showConfirmPassword ? "text" : "password"}
+                              type={showConfirmPassword ? 'text' : 'password'}
                               placeholder="Confirm Password"
                               className="w-full pr-10"
                               {...field}
@@ -358,34 +369,53 @@ export function CheckoutRegisterForm({
                   <h2 className="text-lg font-medium">Identity Verification</h2>
                   <ChevronDown className="h-4 w-4 text-gray-400" />
                 </div>
-                
+
                 <div className="space-y-4">
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <div className="flex items-start gap-3">
                       <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <svg
+                          className="w-5 h-5 text-blue-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-blue-800">Identity Required</p>
+                        <p className="text-sm font-medium text-blue-800">
+                          Identity Required
+                        </p>
                         <p className="text-xs text-blue-600 mt-1">
-                          Upload 2 clear photos of your identity (front and back). Your account will be created and files will be uploaded during registration.
+                          Upload 2 clear photos of your identity (front and
+                          back). Your account will be created and files will be
+                          uploaded during registration.
                         </p>
                       </div>
                     </div>
                   </div>
 
                   {/* File Upload Area */}
-                  <div className={`border-2 border-dashed rounded-lg p-6 ${
-                    form.formState.errors.identity_file
-                      ? "border-red-300 bg-red-50" 
-                      : "border-gray-300"
-                  }`}>
+                  <div
+                    className={`border-2 border-dashed rounded-lg p-6 ${
+                      form.formState.errors.identity_file
+                        ? 'border-red-300 bg-red-50'
+                        : 'border-gray-300'
+                    }`}
+                  >
                     <div className="text-center">
                       <FileImage className="mx-auto h-12 w-12 text-gray-400" />
                       <div className="mt-4">
-                        <label htmlFor="file-upload-register" className="cursor-pointer">
+                        <label
+                          htmlFor="file-upload-register"
+                          className="cursor-pointer"
+                        >
                           <span className="mt-2 block text-sm font-medium text-gray-900">
                             Upload Identity Files
                           </span>
@@ -395,7 +425,7 @@ export function CheckoutRegisterForm({
                         </label>
                         <input
                           id="file-upload-register"
-                          type="file" 
+                          type="file"
                           className="sr-only"
                           multiple
                           accept="image/*"
@@ -407,9 +437,17 @@ export function CheckoutRegisterForm({
                         <Button
                           type="button"
                           variant="outline"
-                          onClick={() => document.getElementById('file-upload-register')?.click()}
+                          onClick={() =>
+                            document
+                              .getElementById('file-upload-register')
+                              ?.click()
+                          }
                           disabled={selectedFiles.length >= 2}
-                          className={form.formState.errors.identity_file ? "border-red-300 text-red-600 hover:border-red-400" : ""}
+                          className={
+                            form.formState.errors.identity_file
+                              ? 'border-red-300 text-red-600 hover:border-red-400'
+                              : ''
+                          }
                         >
                           <Upload className="w-4 h-4 mr-2" />
                           Select Images
@@ -430,7 +468,10 @@ export function CheckoutRegisterForm({
                     <div className="space-y-2">
                       <h4 className="text-sm font-medium">Selected Files:</h4>
                       {selectedFiles.map((file, index) => (
-                        <div key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                        <div
+                          key={index}
+                          className="flex items-center justify-between bg-gray-50 p-3 rounded-lg"
+                        >
                           <div className="flex items-center gap-3">
                             <FileImage className="w-5 h-5 text-gray-500" />
                             <div>
@@ -456,10 +497,23 @@ export function CheckoutRegisterForm({
                   {selectedFiles.length === 2 && (
                     <div className="bg-green-50 border border-green-200 rounded-lg p-3">
                       <div className="flex items-center gap-2">
-                        <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        <svg
+                          className="w-4 h-4 text-green-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
                         </svg>
-                        <p className="text-sm text-green-800">Ready to proceed! Your identity will be uploaded after registration.</p>
+                        <p className="text-sm text-green-800">
+                          Ready to proceed! Your identity will be uploaded after
+                          registration.
+                        </p>
                       </div>
                     </div>
                   )}
@@ -483,7 +537,10 @@ export function CheckoutRegisterForm({
                           <FormLabel htmlFor="start-date-picker">
                             Start Date
                           </FormLabel>
-                          <Popover open={openStartDate} onOpenChange={setOpenStartDate}>
+                          <Popover
+                            open={openStartDate}
+                            onOpenChange={setOpenStartDate}
+                          >
                             <PopoverTrigger asChild>
                               <Button
                                 variant="outline"
@@ -493,7 +550,7 @@ export function CheckoutRegisterForm({
                               >
                                 {field.value
                                   ? new Date(field.value).toLocaleDateString()
-                                  : "Select date"}
+                                  : 'Select date'}
                                 <ChevronDownIcon />
                               </Button>
                             </PopoverTrigger>
@@ -515,14 +572,20 @@ export function CheckoutRegisterForm({
                                   return date <= today;
                                 }}
                                 onSelect={(date) => {
-                                  const newStartDate = date ? date.toISOString() : "";
+                                  const newStartDate = date
+                                    ? date.toISOString()
+                                    : '';
                                   field.onChange(newStartDate);
                                   setOpenStartDate(false);
-                                  
+
                                   // Update URL parameters
-                                  const currentEndDate = form.getValues("end_date");
+                                  const currentEndDate =
+                                    form.getValues('end_date');
                                   if (newStartDate && currentEndDate) {
-                                    updateURLParams(newStartDate, currentEndDate);
+                                    updateURLParams(
+                                      newStartDate,
+                                      currentEndDate
+                                    );
                                   }
                                 }}
                               />
@@ -532,7 +595,7 @@ export function CheckoutRegisterForm({
                         </FormItem>
                       )}
                     />
-                    
+
                     {/* End Date */}
                     <FormField
                       control={form.control}
@@ -542,7 +605,10 @@ export function CheckoutRegisterForm({
                           <FormLabel htmlFor="end-date-picker">
                             End Date
                           </FormLabel>
-                          <Popover open={openEndDate} onOpenChange={setOpenEndDate}>
+                          <Popover
+                            open={openEndDate}
+                            onOpenChange={setOpenEndDate}
+                          >
                             <PopoverTrigger asChild>
                               <Button
                                 variant="outline"
@@ -552,7 +618,7 @@ export function CheckoutRegisterForm({
                               >
                                 {field.value
                                   ? new Date(field.value).toLocaleDateString()
-                                  : "Select date"}
+                                  : 'Select date'}
                                 <ChevronDownIcon />
                               </Button>
                             </PopoverTrigger>
@@ -571,18 +637,26 @@ export function CheckoutRegisterForm({
                                 disabled={(date) => {
                                   const today = new Date();
                                   today.setHours(0, 0, 0, 0);
-                                  const startDateObj = startDate ? new Date(startDate) : today;
+                                  const startDateObj = startDate
+                                    ? new Date(startDate)
+                                    : today;
                                   return date <= today || date <= startDateObj;
                                 }}
                                 onSelect={(date) => {
-                                  const newEndDate = date ? date.toISOString() : "";
+                                  const newEndDate = date
+                                    ? date.toISOString()
+                                    : '';
                                   field.onChange(newEndDate);
                                   setOpenEndDate(false);
-                                  
+
                                   // Update URL parameters
-                                  const currentStartDate = form.getValues("start_date");
+                                  const currentStartDate =
+                                    form.getValues('start_date');
                                   if (currentStartDate && newEndDate) {
-                                    updateURLParams(currentStartDate, newEndDate);
+                                    updateURLParams(
+                                      currentStartDate,
+                                      newEndDate
+                                    );
                                   }
                                 }}
                               />
@@ -593,7 +667,7 @@ export function CheckoutRegisterForm({
                       )}
                     />
                   </div>
-                  
+
                   {/* Pickup Time */}
                   <FormField
                     control={form.control}
@@ -616,7 +690,7 @@ export function CheckoutRegisterForm({
                       </FormItem>
                     )}
                   />
-                  
+
                   {/* With Driver Toggle */}
                   <FormField
                     control={form.control}
@@ -640,7 +714,7 @@ export function CheckoutRegisterForm({
                       </FormItem>
                     )}
                   />
-                  
+
                   {/* Pickup Location */}
                   <FormField
                     control={form.control}
@@ -716,9 +790,9 @@ export function CheckoutRegisterForm({
                         {/* PayPal Option */}
                         <div
                           className={`border rounded-lg ${
-                            field.value === "PAYPAL"
-                              ? "border-blue-500"
-                              : "border-gray-200"
+                            field.value === 'PAYPAL'
+                              ? 'border-blue-500'
+                              : 'border-gray-200'
                           }`}
                         >
                           <div className="flex items-center space-x-3 p-4 ">
@@ -732,8 +806,11 @@ export function CheckoutRegisterForm({
                             >
                               <div className="flex items-center gap-3 justify-between ">
                                 <span className="font-medium text-lg">
-                                PayPal <span className="text-xs text-gray-500">(Recommended for international payments)</span>
-
+                                  PayPal{' '}
+                                  <span className="text-xs text-gray-500">
+                                    (Recommended for international and faster
+                                    process.)
+                                  </span>
                                 </span>
                                 <div className="bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold">
                                   PayPal
@@ -741,7 +818,7 @@ export function CheckoutRegisterForm({
                               </div>
                             </label>
                           </div>
-                          {field.value === "PAYPAL" && (
+                          {field.value === 'PAYPAL' && (
                             <div className="p-4 bg-gray-50  rounded-lg">
                               <div className="flex justify-center mb-4">
                                 <div className="w-24 h-16 bg-white border rounded flex items-center justify-center">
@@ -761,9 +838,9 @@ export function CheckoutRegisterForm({
                         {/* Midtrans Option */}
                         <div
                           className={`border rounded-lg ${
-                            field.value === "MIDTRANS"
-                              ? "border-blue-500"
-                              : "border-gray-200"
+                            field.value === 'MIDTRANS'
+                              ? 'border-blue-500'
+                              : 'border-gray-200'
                           }`}
                         >
                           <div className="flex items-center space-x-3 p-4 ">
@@ -799,7 +876,7 @@ export function CheckoutRegisterForm({
                               </div>
                             </label>
                           </div>
-                          {field.value === "MIDTRANS" && (
+                          {field.value === 'MIDTRANS' && (
                             <div className="p-4 bg-gray-50 rounded-lg">
                               <div className="flex justify-center mb-4">
                                 <div className="w-32 h-20 bg-white border rounded flex items-center justify-center relative">
@@ -857,7 +934,7 @@ export function CheckoutRegisterForm({
                 {form.formState.isSubmitting ? (
                   <Loader2 className="animate-spin" />
                 ) : (
-                  "Create Account & Pay"
+                  'Create Account & Pay'
                 )}
               </Button>
             </div>

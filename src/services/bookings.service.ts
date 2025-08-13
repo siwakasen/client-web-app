@@ -3,6 +3,7 @@ import {
   BookingWithRegisterResponse,
   BookingRequest,
   BookingResponse,
+  BookingHistoryResponse,
 } from "@/interfaces";
 import { createApiInstance } from "./api";
 
@@ -35,7 +36,7 @@ export const getBookingById = async (order_id: string, headers: Record<string, s
   return response.data;
 }
 
-export const getBookingHistory = async (headers: Record<string, string>, token: string, page: number, limit: number) => {
+export const getBookingHistory = async (headers: Record<string, string>, token: string, page: number, limit: number) : Promise<BookingHistoryResponse> => {
   const api = await createApiInstance(process.env.NEXT_PUBLIC_BOOKINGS_API_URL, headers, token);
   const response = await api.get("/bookings", {
     params: {
@@ -49,3 +50,4 @@ export const getBookingHistory = async (headers: Record<string, string>, token: 
   });
   return response.data;
 }
+

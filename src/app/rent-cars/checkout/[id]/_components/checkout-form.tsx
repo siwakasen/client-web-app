@@ -1,24 +1,24 @@
-"use client";
-import { combineDateAndTime, convertISOToCurrentTimezone } from "@/lib/utils";
-import { useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Textarea } from "@/components/ui/textarea";
-import { ChevronDown, ChevronDownIcon, Loader2 } from "lucide-react";
-import { Customer, Car } from "@/interfaces";
+'use client';
+import { combineDateAndTime, convertISOToCurrentTimezone } from '@/lib/utils';
+import { useState, useEffect } from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Textarea } from '@/components/ui/textarea';
+import { ChevronDown, ChevronDownIcon, Loader2 } from 'lucide-react';
+import { Customer, Car } from '@/interfaces';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { OrderSummary } from "@/app/rent-cars/checkout/[id]/_components/order-summary";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { BookingFormSchema } from "@/lib/validation";
-import { z } from "zod";
-import { useCreateBooking } from "@/hooks";
+} from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { OrderSummary } from '@/app/rent-cars/checkout/[id]/_components/order-summary';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { BookingFormSchema } from '@/lib/validation';
+import { z } from 'zod';
+import { useCreateBooking } from '@/hooks';
 import {
   Form,
   FormControl,
@@ -26,12 +26,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { toast } from "sonner";
-import { Switch } from "@/components/ui/switch";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useUploadIdentityFile } from "@/hooks";
-import { Upload, X, FileImage } from "lucide-react";
+} from '@/components/ui/form';
+import { toast } from 'sonner';
+import { Switch } from '@/components/ui/switch';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { useUploadIdentityFile } from '@/hooks';
+import { Upload, X, FileImage } from 'lucide-react';
 
 interface CheckoutFormProps {
   car: Car;
@@ -42,21 +42,29 @@ interface CheckoutFormProps {
   };
 }
 
-export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps) {
+export function CheckoutForm({
+  car,
+  customer,
+  searchParams,
+}: CheckoutFormProps) {
   const router = useRouter();
   const pathname = usePathname();
-  
+
   const form = useForm<z.infer<typeof BookingFormSchema>>({
     resolver: zodResolver(BookingFormSchema),
     defaultValues: {
       car_id: car.id,
       with_driver: false,
-      start_date: searchParams.start_date ? new Date(searchParams.start_date).toISOString() : "",
-      end_date: searchParams.end_date ? new Date(searchParams.end_date).toISOString() : "",
-      payment_method: "PAYPAL",
-      pickup_location: "",
-      pickup_time: "",
-      additional_notes: "",
+      start_date: searchParams.start_date
+        ? new Date(searchParams.start_date).toISOString()
+        : '',
+      end_date: searchParams.end_date
+        ? new Date(searchParams.end_date).toISOString()
+        : '',
+      payment_method: 'PAYPAL',
+      pickup_location: '',
+      pickup_time: '',
+      additional_notes: '',
     },
   });
 
@@ -72,18 +80,26 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
   const updateURLParams = (startDate: string, endDate: string) => {
     const newSearchParams = new URLSearchParams();
     if (startDate) {
-      newSearchParams.set('start_date', new Date(startDate).toISOString().split('T')[0]);
+      newSearchParams.set(
+        'start_date',
+        new Date(startDate).toISOString().split('T')[0]
+      );
     }
     if (endDate) {
-      newSearchParams.set('end_date', new Date(endDate).toISOString().split('T')[0]);
+      newSearchParams.set(
+        'end_date',
+        new Date(endDate).toISOString().split('T')[0]
+      );
     }
-    router.replace(`${pathname}?${newSearchParams.toString()}`, { scroll: false });
+    router.replace(`${pathname}?${newSearchParams.toString()}`, {
+      scroll: false,
+    });
   };
 
-  const startDate = form.watch("start_date");
-  const endDate = form.watch("end_date");
-  const pickupTime = form.watch("pickup_time");
-  const withDriver = form.watch("with_driver");
+  const startDate = form.watch('start_date');
+  const endDate = form.watch('end_date');
+  const pickupTime = form.watch('pickup_time');
+  const withDriver = form.watch('with_driver');
 
   // Calculate rental duration in days
   const calculateDays = () => {
@@ -101,11 +117,11 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
     if (startDate && pickupTime && endDate) {
       const combinedStartDate = combineDateAndTime(startDate, pickupTime);
       if (combinedStartDate !== startDate) {
-        form.setValue("start_date", combinedStartDate);
+        form.setValue('start_date', combinedStartDate);
       }
       const combinedEndDate = combineDateAndTime(endDate, pickupTime);
       if (combinedEndDate !== endDate) {
-        form.setValue("end_date", combinedEndDate);
+        form.setValue('end_date', combinedEndDate);
       }
     }
   }, [startDate, pickupTime, endDate, form]);
@@ -113,50 +129,50 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
   // File upload handlers
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
-    const validFiles = files.filter(file => {
+    const validFiles = files.filter((file) => {
       const isImage = file.type.startsWith('image/');
       const isValidSize = file.size <= 30 * 1024 * 1024; // 30MB limit
       return isImage && isValidSize;
     });
 
     if (validFiles.length !== files.length) {
-      toast.error("Please select only image files under 30MB");
+      toast.error('Please select only image files under 30MB');
       return;
     }
 
     if (selectedFiles.length + validFiles.length > 2) {
-      toast.error("Maximum 2 files allowed");
+      toast.error('Maximum 2 files allowed');
       return;
     }
 
-    setSelectedFiles(prev => [...prev, ...validFiles].slice(0, 2));
+    setSelectedFiles((prev) => [...prev, ...validFiles].slice(0, 2));
   };
 
   const removeFile = (index: number) => {
-    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const uploadIdentityFiles = async () => {
     if (selectedFiles.length !== 2) {
-      toast.error("Please select exactly 2 identity files");
+      toast.error('Please select exactly 2 identity files');
       return false;
     }
 
     setIsUploadingFiles(true);
     try {
       const result = await useUploadIdentityFile(selectedFiles);
-      
-      if ("errors" in result) {
-        toast.error(result.errors.message || "Failed to upload identity files");
+
+      if ('errors' in result) {
+        toast.error(result.errors.message || 'Failed to upload identity files');
         return false;
       }
-      
-      toast.success("Identity files uploaded successfully");
+
+      toast.success('Identity files uploaded successfully');
       setHasUploadedIdentity(true);
       setSelectedFiles([]);
       return true;
     } catch (error: any) {
-      toast.error("Failed to upload identity files");
+      toast.error('Failed to upload identity files');
       return false;
     } finally {
       setIsUploadingFiles(false);
@@ -167,23 +183,23 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
     try {
       // Check if identity files are required and uploaded
       if (!hasUploadedIdentity) {
-        toast.error("Please upload your identity files before proceeding");
+        toast.error('Please upload your identity files before proceeding');
         return;
       }
 
       const convertedStartDate = convertISOToCurrentTimezone(values.start_date);
       const convertedEndDate = convertISOToCurrentTimezone(values.end_date!);
-      
+
       const formData = {
         ...values,
         start_date: convertedStartDate,
         end_date: convertedEndDate,
       };
-      
+
       const response = await useCreateBooking(formData);
 
-      if ("errors" in response) {
-        toast.error(response.errors.message || "An error occurred", {
+      if ('errors' in response) {
+        toast.error(response.errors.message || 'An error occurred', {
           description: response.status
             ? `Error code: ${response.status}`
             : undefined,
@@ -193,7 +209,7 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
       window.location.href = response.data.redirect_url;
     } catch (error: any) {
       console.log(error);
-      toast.error("An unexpected error occurred. Please try again.");
+      toast.error('An unexpected error occurred. Please try again.');
     }
   }
 
@@ -222,18 +238,33 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                   <h2 className="text-lg font-medium">Identity Verification</h2>
                   <ChevronDown className="h-4 w-4 text-gray-400" />
                 </div>
-                
+
                 {hasUploadedIdentity ? (
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                        <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        <svg
+                          className="w-5 h-5 text-green-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-green-800">Identity Verified</p>
-                        <p className="text-xs text-green-600">Your identity documents have been uploaded and verified.</p>
+                        <p className="text-sm font-medium text-green-800">
+                          Identity Verified
+                        </p>
+                        <p className="text-xs text-green-600">
+                          Your identity documents have been uploaded and
+                          verified.
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -242,14 +273,27 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                       <div className="flex items-start gap-3">
                         <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <svg className="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.664-.833-2.464 0L3.35 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                          <svg
+                            className="w-5 h-5 text-yellow-600"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.664-.833-2.464 0L3.35 16.5c-.77.833.192 2.5 1.732 2.5z"
+                            />
                           </svg>
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-yellow-800">Identity Files Required</p>
+                          <p className="text-sm font-medium text-yellow-800">
+                            Identity Files Required
+                          </p>
                           <p className="text-xs text-yellow-600 mt-1">
-                            Please upload 2 clear photos of your identity to proceed with car rental.
+                            Please upload 2 clear photos of your identity to
+                            proceed with car rental.
                           </p>
                         </div>
                       </div>
@@ -260,7 +304,10 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                       <div className="text-center">
                         <FileImage className="mx-auto h-12 w-12 text-gray-400" />
                         <div className="mt-4">
-                          <label htmlFor="file-upload" className="cursor-pointer">
+                          <label
+                            htmlFor="file-upload"
+                            className="cursor-pointer"
+                          >
                             <span className="mt-2 block text-sm font-medium text-gray-900">
                               Upload Identity Files
                             </span>
@@ -282,7 +329,9 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                           <Button
                             type="button"
                             variant="outline"
-                            onClick={() => document.getElementById('file-upload')?.click()}
+                            onClick={() =>
+                              document.getElementById('file-upload')?.click()
+                            }
                             disabled={selectedFiles.length >= 2}
                           >
                             <Upload className="w-4 h-4 mr-2" />
@@ -297,11 +346,16 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                       <div className="space-y-2">
                         <h4 className="text-sm font-medium">Selected Files:</h4>
                         {selectedFiles.map((file, index) => (
-                          <div key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                          <div
+                            key={index}
+                            className="flex items-center justify-between bg-gray-50 p-3 rounded-lg"
+                          >
                             <div className="flex items-center gap-3">
                               <FileImage className="w-5 h-5 text-gray-500" />
                               <div>
-                                <p className="text-sm font-medium">{file.name}</p>
+                                <p className="text-sm font-medium">
+                                  {file.name}
+                                </p>
                                 <p className="text-xs text-gray-500">
                                   {(file.size / 1024 / 1024).toFixed(2)} MB
                                 </p>
@@ -336,7 +390,7 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                         ) : (
                           <>
                             <Upload className="w-4 h-4 mr-2" />
-                              Upload Identity
+                            Upload Identity
                           </>
                         )}
                       </Button>
@@ -362,7 +416,10 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                           <FormLabel htmlFor="start-date-picker">
                             Start Date
                           </FormLabel>
-                          <Popover open={openStartDate} onOpenChange={setOpenStartDate}>
+                          <Popover
+                            open={openStartDate}
+                            onOpenChange={setOpenStartDate}
+                          >
                             <PopoverTrigger asChild>
                               <Button
                                 variant="outline"
@@ -372,7 +429,7 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                               >
                                 {field.value
                                   ? new Date(field.value).toLocaleDateString()
-                                  : "Select date"}
+                                  : 'Select date'}
                                 <ChevronDownIcon />
                               </Button>
                             </PopoverTrigger>
@@ -394,14 +451,20 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                                   return date <= today;
                                 }}
                                 onSelect={(date) => {
-                                  const newStartDate = date ? date.toISOString() : "";
+                                  const newStartDate = date
+                                    ? date.toISOString()
+                                    : '';
                                   field.onChange(newStartDate);
                                   setOpenStartDate(false);
-                                  
+
                                   // Update URL parameters
-                                  const currentEndDate = form.getValues("end_date");
+                                  const currentEndDate =
+                                    form.getValues('end_date');
                                   if (newStartDate && currentEndDate) {
-                                    updateURLParams(newStartDate, currentEndDate);
+                                    updateURLParams(
+                                      newStartDate,
+                                      currentEndDate
+                                    );
                                   }
                                 }}
                               />
@@ -411,7 +474,7 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                         </FormItem>
                       )}
                     />
-                    
+
                     {/* End Date */}
                     <FormField
                       control={form.control}
@@ -421,7 +484,10 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                           <FormLabel htmlFor="end-date-picker">
                             End Date
                           </FormLabel>
-                          <Popover open={openEndDate} onOpenChange={setOpenEndDate}>
+                          <Popover
+                            open={openEndDate}
+                            onOpenChange={setOpenEndDate}
+                          >
                             <PopoverTrigger asChild>
                               <Button
                                 variant="outline"
@@ -431,7 +497,7 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                               >
                                 {field.value
                                   ? new Date(field.value).toLocaleDateString()
-                                  : "Select date"}
+                                  : 'Select date'}
                                 <ChevronDownIcon />
                               </Button>
                             </PopoverTrigger>
@@ -450,18 +516,26 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                                 disabled={(date) => {
                                   const today = new Date();
                                   today.setHours(0, 0, 0, 0);
-                                  const startDateObj = startDate ? new Date(startDate) : today;
+                                  const startDateObj = startDate
+                                    ? new Date(startDate)
+                                    : today;
                                   return date <= today || date <= startDateObj;
                                 }}
                                 onSelect={(date) => {
-                                  const newEndDate = date ? date.toISOString() : "";
+                                  const newEndDate = date
+                                    ? date.toISOString()
+                                    : '';
                                   field.onChange(newEndDate);
                                   setOpenEndDate(false);
-                                  
+
                                   // Update URL parameters
-                                  const currentStartDate = form.getValues("start_date");
+                                  const currentStartDate =
+                                    form.getValues('start_date');
                                   if (currentStartDate && newEndDate) {
-                                    updateURLParams(currentStartDate, newEndDate);
+                                    updateURLParams(
+                                      currentStartDate,
+                                      newEndDate
+                                    );
                                   }
                                 }}
                               />
@@ -472,7 +546,7 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                       )}
                     />
                   </div>
-                  
+
                   {/* Pickup Time */}
                   <FormField
                     control={form.control}
@@ -495,7 +569,7 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                       </FormItem>
                     )}
                   />
-                  
+
                   {/* With Driver Toggle */}
                   <FormField
                     control={form.control}
@@ -519,7 +593,7 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                       </FormItem>
                     )}
                   />
-                  
+
                   {/* Pickup Location */}
                   <FormField
                     control={form.control}
@@ -595,23 +669,27 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                         {/* PayPal Option */}
                         <div
                           className={`border rounded-lg ${
-                            field.value === "PAYPAL"
-                              ? "border-blue-500"
-                              : "border-gray-200"
+                            field.value === 'PAYPAL'
+                              ? 'border-blue-500'
+                              : 'border-gray-200'
                           }`}
                         >
                           <div className="flex items-center space-x-3 p-4 ">
                             <RadioGroupItem
                               value="PAYPAL"
                               id="paypal-payment"
-                            /> 
+                            />
                             <label
                               htmlFor="paypal-payment"
                               className="cursor-pointer w-full"
                             >
                               <div className="flex items-center gap-3 justify-between ">
                                 <span className="font-medium text-lg">
-                                  PayPal <span className="text-xs text-gray-500">(Recommended for international payments)</span>
+                                  PayPal{' '}
+                                  <span className="text-xs text-gray-500">
+                                    (Recommended for international and faster
+                                    process.)
+                                  </span>
                                 </span>
                                 <div className="bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold">
                                   PayPal
@@ -619,7 +697,7 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                               </div>
                             </label>
                           </div>
-                          {field.value === "PAYPAL" && (
+                          {field.value === 'PAYPAL' && (
                             <div className="p-4 bg-gray-50  rounded-lg">
                               <div className="flex justify-center mb-4">
                                 <div className="w-24 h-16 bg-white border rounded flex items-center justify-center">
@@ -639,9 +717,9 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                         {/* Midtrans Option */}
                         <div
                           className={`border rounded-lg ${
-                            field.value === "MIDTRANS"
-                              ? "border-blue-500"
-                              : "border-gray-200"
+                            field.value === 'MIDTRANS'
+                              ? 'border-blue-500'
+                              : 'border-gray-200'
                           }`}
                         >
                           <div className="flex items-center space-x-3 p-4 ">
@@ -677,7 +755,7 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                               </div>
                             </label>
                           </div>
-                          {field.value === "MIDTRANS" && (
+                          {field.value === 'MIDTRANS' && (
                             <div className="p-4 bg-gray-50 rounded-lg">
                               <div className="flex justify-center mb-4">
                                 <div className="w-32 h-20 bg-white border rounded flex items-center justify-center relative">
@@ -735,9 +813,9 @@ export function CheckoutForm({ car, customer, searchParams }: CheckoutFormProps)
                 {form.formState.isSubmitting ? (
                   <Loader2 className="animate-spin" />
                 ) : !hasUploadedIdentity ? (
-                  "Upload Identity Files to Continue"
+                  'Upload Identity Files to Continue'
                 ) : (
-                  "Pay now"
+                  'Pay now'
                 )}
               </Button>
             </div>

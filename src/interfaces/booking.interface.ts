@@ -1,3 +1,4 @@
+import { BookingAdjustment } from "./booking-adjustments.interface";
 import { Meta } from "./common.interface";
 import { Payment } from "./payment.interface";
 
@@ -73,8 +74,11 @@ export interface Booking {
   created_at: string
   updated_at: string
   payments: Payment[]
+  booking_adjustments: BookingAdjustment[]
 }
 export interface BookingHistoryResponse {
   data: Booking[]
   meta: Meta
 }
+
+

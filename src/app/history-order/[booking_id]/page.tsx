@@ -1,12 +1,21 @@
-import { useGetBookingById, useGetTravelPackagesDetailHistory } from "@/hooks";
-import { useGetCarsDetailHistory } from "@/hooks/cars.hook";
-import { redirect } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { BookingStatus } from "@/constants/booking-status";
-import Image from "next/image";
-import { formatCurrency } from "@/lib/utils";
-import { convertCarImageUrl, convertTravelImageUrl } from "@/helpers/images-url";
+import { useGetBookingById, useGetTravelPackagesDetailHistory } from '@/hooks';
+import { useGetCarsDetailHistory } from '@/hooks/cars.hook';
+import { redirect } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { BookingStatus } from '@/constants/booking-status';
+import Image from 'next/image';
+import { formatCurrency } from '@/lib/utils';
+import {
+  convertCarImageUrl,
+  convertTravelImageUrl,
+} from '@/helpers/images-url';
+import { Button } from '@/components/ui/button';
+import { RotateCcw, X, CreditCard, XCircle } from 'lucide-react';
+import { BookingActions } from './_components/booking-action';
+import { PaymentAction } from './_components/payment-action';
+import { AdjustmentStatus, BookingAdjustment } from '@/interfaces';
+import { RequestType } from '@/interfaces';
 
 export default async function HistoryOrderDetailPage({
   params,
@@ -16,31 +25,33 @@ export default async function HistoryOrderDetailPage({
   const { booking_id } = await params;
 
   const response = await useGetBookingById(booking_id);
-  if('errors' in response) {
-    redirect("/history-order");
+  if ('errors' in response) {
+    redirect('/history-order');
   }
 
-  if(!('data' in response)) {
-    redirect("/history-order");
+  if (!('data' in response)) {
+    redirect('/history-order');
   }
 
   const booking = response.data;
-  
+
   // Fetch package or car details based on the booking
   let packageData = null;
   let carData = null;
-  
+
   if (booking.package_id) {
     try {
-      const packageResponse = await useGetTravelPackagesDetailHistory(booking.package_id);
+      const packageResponse = await useGetTravelPackagesDetailHistory(
+        booking.package_id
+      );
       if ('data' in packageResponse) {
         packageData = packageResponse.data;
       }
     } catch (error) {
-      console.error("Error fetching package details:", error);
+      console.error('Error fetching package details:', error);
     }
   }
-  
+
   if (booking.car_id) {
     try {
       const carResponse = await useGetCarsDetailHistory(booking.car_id);
@@ -48,30 +59,61 @@ export default async function HistoryOrderDetailPage({
         carData = carResponse.data;
       }
     } catch (error) {
-      console.error("Error fetching car details:", error);
+      console.error('Error fetching car details:', error);
     }
   }
 
-  const getStatusBadgeClass = (status: string) => {
-    switch (status?.toUpperCase()) {
-      case BookingStatus.CONFIRMED:
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      case BookingStatus.ONGOING:
-        return "bg-cyan-100 text-cyan-800 border-cyan-200";
-      case BookingStatus.COMPLETED:
-        return "bg-green-100 text-green-800 border-green-200";
-      case BookingStatus.CANCELLED:
-        return "bg-red-100 text-red-800 border-red-200";
-      case BookingStatus.WAITING_PAYMENT:
-        return "bg-orange-100 text-orange-800 border-orange-200";
-      case BookingStatus.WAITING_CONFIRMATION:
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case BookingStatus.NO_SHOW:
-        return "bg-gray-100 text-gray-800 border-gray-200";
-      case BookingStatus.PAYMENT_FAILED:
-        return "bg-red-100 text-red-800 border-red-200";
+  const getStatusAdjustmentBadgeClass = (status: string) => {
+    switch (status) {
+      case AdjustmentStatus.PENDING:
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case AdjustmentStatus.WAITING_PAYMENT:
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case AdjustmentStatus.APPROVED:
+        return 'bg-green-100 text-green-800 border-green-200';
+      case AdjustmentStatus.REJECTED:
+        return 'bg-red-100 text-red-800 border-red-200';
+      case AdjustmentStatus.EXPIRED:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
+  const getStatusBadgeClass = (status: string) => {
+    const upperStatus = status?.toUpperCase();
+
+    // Payment Status Colors
+    if (upperStatus === 'PENDING') {
+      return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    }
+    if (upperStatus === 'SUCCESS') {
+      return 'bg-green-100 text-green-800 border-green-200';
+    }
+    if (upperStatus === 'FAILED') {
+      return 'bg-red-100 text-red-800 border-red-200';
+    }
+
+    // Booking Status Colors
+    switch (upperStatus) {
+      case BookingStatus.CONFIRMED:
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      case BookingStatus.ONGOING:
+        return 'bg-cyan-100 text-cyan-800 border-cyan-200';
+      case BookingStatus.COMPLETED:
+        return 'bg-green-100 text-green-800 border-green-200';
+      case BookingStatus.CANCELLED:
+        return 'bg-red-100 text-red-800 border-red-200';
+      case BookingStatus.WAITING_PAYMENT:
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case BookingStatus.WAITING_CONFIRMATION:
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case BookingStatus.NO_SHOW:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+      case BookingStatus.PAYMENT_FAILED:
+        return 'bg-red-100 text-red-800 border-red-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
@@ -80,7 +122,7 @@ export default async function HistoryOrderDetailPage({
       weekday: 'long',
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
@@ -91,7 +133,7 @@ export default async function HistoryOrderDetailPage({
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
@@ -117,51 +159,80 @@ export default async function HistoryOrderDetailPage({
             <div className="grid gap-3">
               <div>
                 <span className="font-medium text-gray-700">Order Date:</span>
-                <p className="text-gray-900">{formatDateTime(booking.created_at)}</p>
+                <p className="text-gray-900">
+                  {formatDateTime(booking.created_at)}
+                </p>
               </div>
-              
+
               <div>
                 <span className="font-medium text-gray-700">Duration:</span>
                 <p className="text-gray-900">
-                  {formatDate(booking.start_date)} - {formatDate(booking.end_date)}
+                  {formatDate(booking.start_date)} -{' '}
+                  {formatDate(booking.end_date)}
                 </p>
               </div>
-              
+
               <div>
-                <span className="font-medium text-gray-700">Number of Persons:</span>
-                <p className="text-gray-900">{booking.number_of_persons} person(s)</p>
+                <span className="font-medium text-gray-700">
+                  Number of Persons:
+                </span>
+                <p className="text-gray-900">
+                  {booking.number_of_persons} person(s)
+                </p>
               </div>
-              
+
               <div>
-                <span className="font-medium text-gray-700">Pickup Location:</span>
+                <span className="font-medium text-gray-700">
+                  Pickup Location:
+                </span>
                 <p className="text-gray-900">{booking.pickup_location}</p>
               </div>
-              
+
               <div>
                 <span className="font-medium text-gray-700">Pickup Time:</span>
                 <p className="text-gray-900">{booking.pickup_time}</p>
               </div>
-              
+
               {booking.with_driver !== null && (
                 <div>
-                  <span className="font-medium text-gray-700">With Driver:</span>
-                  <p className="text-gray-900">{booking.with_driver ? 'Yes' : 'No'}</p>
+                  <span className="font-medium text-gray-700">
+                    With Driver:
+                  </span>
+                  <p className="text-gray-900">
+                    {booking.with_driver ? 'Yes' : 'No'}
+                  </p>
                 </div>
               )}
-              
+
               {booking.additional_notes && (
                 <div>
-                  <span className="font-medium text-gray-700">Additional Notes:</span>
+                  <span className="font-medium text-gray-700">
+                    Additional Notes:
+                  </span>
                   <p className="text-gray-900">{booking.additional_notes}</p>
                 </div>
               )}
-              
+
               <div className="pt-3 border-t">
                 <span className="font-medium text-gray-700">Total Price:</span>
                 <p className="text-2xl font-bold text-green-600">
                   {formatCurrency(booking.total_price)}
                 </p>
               </div>
+
+              {/* Booking Action Buttons */}
+              <BookingActions
+                bookingId={booking.id}
+                status={booking.status}
+                isRequestingCancel={booking.booking_adjustments.some(
+                  (adjustment: BookingAdjustment) =>
+                    adjustment.request_type === RequestType.CANCELLATION
+                )}
+                isRequestingReschedule={booking.booking_adjustments.some(
+                  (adjustment: BookingAdjustment) =>
+                    adjustment.request_type === RequestType.RESCHEDULE
+                )}
+              />
             </div>
           </CardContent>
         </Card>
@@ -185,9 +256,21 @@ export default async function HistoryOrderDetailPage({
                     <div className="text-sm text-gray-600 space-y-1">
                       <p>Method: {payment.payment_method}</p>
                       <p>Amount: {formatCurrency(payment.gross_amount)}</p>
-                      <p>Payment Date: {payment.payment_date ? formatDateTime(payment.payment_date) : 'N/A'}</p>
+                      <p>
+                        Payment Date:{' '}
+                        {payment.payment_date
+                          ? formatDateTime(payment.payment_date)
+                          : 'N/A'}
+                      </p>
                       <p>Created: {formatDateTime(payment.created_at)}</p>
                     </div>
+
+                    {/* Pay Now Button for Pending Payments */}
+                    <PaymentAction
+                      payment_status={payment.status}
+                      payment_method={payment.payment_method}
+                      payment_gateway_id={payment.payment_gateway_id}
+                    />
                   </div>
                 ))}
               </div>
@@ -197,6 +280,54 @@ export default async function HistoryOrderDetailPage({
           </CardContent>
         </Card>
       </div>
+
+      {/* Booking Adjustment */}
+      {booking.booking_adjustments.length > 0 && (
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle>Booking Adjustment</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {booking.booking_adjustments.map((adjustment) => (
+                <div key={adjustment.id} className="p-3 bg-gray-50 rounded-lg">
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="text-sm text-gray-600 space-y-1">
+                      <p>
+                        Request Type:{' '}
+                        {adjustment.request_type === RequestType.CANCELLATION
+                          ? 'Cancellation'
+                          : 'Reschedule'}
+                      </p>
+                    </div>
+                    <Badge
+                      className={getStatusAdjustmentBadgeClass(
+                        adjustment.status
+                      )}
+                    >
+                      {adjustment.status}
+                    </Badge>
+                  </div>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <p>Reason: {adjustment.reason}</p>
+                  </div>
+                  {adjustment.status === RequestType.CANCELLATION && (
+                    <div className="text-sm text-gray-600 space-y-1">
+                      <p>
+                        New Start Date:{' '}
+                        {formatDateTime(adjustment.new_start_date)}
+                      </p>
+                      <p>
+                        New End Date: {formatDateTime(adjustment.new_end_date)}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Package or Car Details */}
       {(packageData || carData) && (
@@ -211,11 +342,22 @@ export default async function HistoryOrderDetailPage({
               <div className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="text-xl font-semibold mb-3">{packageData.package_name}</h3>
+                    <h3 className="text-xl font-semibold mb-3">
+                      {packageData.package_name}
+                    </h3>
                     <div className="space-y-2">
-                      <p><span className="font-medium">Duration:</span> {packageData.duration} days</p>
-                      <p><span className="font-medium">Max Persons:</span> {packageData.max_persons}</p>
-                      <p><span className="font-medium">Price:</span> {formatCurrency(packageData.package_price)}</p>
+                      <p>
+                        <span className="font-medium">Duration:</span>{' '}
+                        {packageData.duration} days
+                      </p>
+                      <p>
+                        <span className="font-medium">Max Persons:</span>{' '}
+                        {packageData.max_persons}
+                      </p>
+                      <p>
+                        <span className="font-medium">Price:</span>{' '}
+                        {formatCurrency(packageData.package_price)}
+                      </p>
                     </div>
                   </div>
                   {packageData.images && packageData.images.length > 0 && (
@@ -229,23 +371,24 @@ export default async function HistoryOrderDetailPage({
                     </div>
                   )}
                 </div>
-                
+
                 <div>
                   <h4 className="font-medium mb-2">Description:</h4>
                   <p className="text-gray-700">{packageData.description}</p>
                 </div>
-                
-                {packageData.itineraries && packageData.itineraries.length > 0 && (
-                  <div>
-                    <h4 className="font-medium mb-2">Itinerary:</h4>
-                    <ul className="list-disc list-inside space-y-1 text-gray-700">
-                      {packageData.itineraries.map((item, index) => (
-                        <li key={index}>{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                
+
+                {packageData.itineraries &&
+                  packageData.itineraries.length > 0 && (
+                    <div>
+                      <h4 className="font-medium mb-2">Itinerary:</h4>
+                      <ul className="list-disc list-inside space-y-1 text-gray-700">
+                        {packageData.itineraries.map((item, index) => (
+                          <li key={index}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
                 {packageData.includes && packageData.includes.length > 0 && (
                   <div>
                     <h4 className="font-medium mb-2">Includes:</h4>
@@ -263,13 +406,30 @@ export default async function HistoryOrderDetailPage({
               <div className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="text-xl font-semibold mb-3">{carData.car_name}</h3>
+                    <h3 className="text-xl font-semibold mb-3">
+                      {carData.car_name}
+                    </h3>
                     <div className="space-y-2">
-                      <p><span className="font-medium">Color:</span> {carData.car_color}</p>
-                      <p><span className="font-medium">Police Number:</span> {carData.police_number}</p>
-                      <p><span className="font-medium">Transmission:</span> {carData.transmission}</p>
-                      <p><span className="font-medium">Max Persons:</span> {carData.max_persons}</p>
-                      <p><span className="font-medium">Price per Day:</span> {formatCurrency(carData.price_per_day)}</p>
+                      <p>
+                        <span className="font-medium">Color:</span>{' '}
+                        {carData.car_color}
+                      </p>
+                      <p>
+                        <span className="font-medium">Police Number:</span>{' '}
+                        {carData.police_number}
+                      </p>
+                      <p>
+                        <span className="font-medium">Transmission:</span>{' '}
+                        {carData.transmission}
+                      </p>
+                      <p>
+                        <span className="font-medium">Max Persons:</span>{' '}
+                        {carData.max_persons}
+                      </p>
+                      <p>
+                        <span className="font-medium">Price per Day:</span>{' '}
+                        {formatCurrency(carData.price_per_day)}
+                      </p>
                     </div>
                   </div>
                   {carData.car_image && (
@@ -283,12 +443,12 @@ export default async function HistoryOrderDetailPage({
                     </div>
                   )}
                 </div>
-                
+
                 <div>
                   <h4 className="font-medium mb-2">Description:</h4>
                   <p className="text-gray-700">{carData.description}</p>
                 </div>
-                
+
                 {carData.includes && carData.includes.length > 0 && (
                   <div>
                     <h4 className="font-medium mb-2">Includes:</h4>

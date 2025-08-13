@@ -3,51 +3,33 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useCancelBooking } from '@/hooks';
-import { RotateCcw, X, CreditCard } from 'lucide-react';
+import { RotateCcw, X } from 'lucide-react';
 import { toast } from 'sonner';
-import { CancellationDialog } from './cancellation-dialog';
+import { CancellationDialog } from '../../_components/cancellation-dialog';
 
 interface BookingActionsProps {
   bookingId: number;
   status: string;
-  refetch: () => void;
   isRequestingCancel: boolean;
   isRequestingReschedule: boolean;
-  payment_method: string;
-  payment_gateway_id: string;
 }
 
 export function BookingActions({
   bookingId,
   status,
-  refetch,
   isRequestingCancel,
   isRequestingReschedule,
-  payment_method,
-  payment_gateway_id,
 }: BookingActionsProps) {
   const [showCancellationDialog, setShowCancellationDialog] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
 
   const canRescheduleOrCancel = (status: string) => {
-    const upperStatus = status?.toUpperCase();
-    return (
-      upperStatus === 'WAITING_CONFIRMATION' || upperStatus === 'CONFIRMED'
-    );
+    return status === 'WAITING_CONFIRMATION' || status === 'CONFIRMED';
   };
 
   const canCancel = (status: string) => {
-    const upperStatus = status?.toUpperCase();
-    return (
-      upperStatus === 'WAITING_PAYMENT' ||
-      upperStatus === 'WAITING_CONFIRMATION' ||
-      upperStatus === 'CONFIRMED'
-    );
-  };
-
-  const canPay = (status: string) => {
-    const upperStatus = status?.toUpperCase();
-    return upperStatus === 'WAITING_PAYMENT';
+    console.log(status === 'WAITING_PAYMENT');
+    return status === 'WAITING_PAYMENT';
   };
 
   const handleReschedule = (e: React.MouseEvent) => {
@@ -74,7 +56,8 @@ export function BookingActions({
 
       if ('data' in response) {
         toast.success('Booking cancelled successfully');
-        refetch();
+        // Optionally redirect or refresh the page
+        window.location.reload();
       }
     } catch (error) {
       toast.error('Failed to cancel booking. Please try again.');
@@ -83,65 +66,16 @@ export function BookingActions({
     }
   };
 
-  const handlePayNow = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log(payment_method, payment_gateway_id);
-
-    if (payment_method === 'PAYPAL') {
-      window.location.href = `https://www.sandbox.paypal.com/checkoutnow?token=${payment_gateway_id}`;
-    } else if (payment_method === 'MIDTRANS') {
-      window.location.href = `https://app.sandbox.midtrans.com/snap/v4/redirection/${payment_gateway_id}`;
-    }
-  };
-
-  // Show Pay Now button for WAITING_PAYMENT
-  if (canPay(status)) {
-    console.log(payment_method, payment_gateway_id);
-    return (
-      <>
-        <div className="flex gap-2">
-          <Button
-            className="flex items-center gap-1 cursor-pointer bg-green-600 hover:bg-green-700"
-            onClick={handlePayNow}
-          >
-            <CreditCard className="h-4 w-4" />
-            Pay Now
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={handleCancelClick}
-            className="flex items-center gap-1 cursor-pointer"
-            disabled={isRequestingCancel || isCancelling}
-          >
-            <X className="h-4 w-4" />
-            Cancel
-          </Button>
-        </div>
-
-        <CancellationDialog
-          isOpen={showCancellationDialog}
-          onClose={() => setShowCancellationDialog(false)}
-          onConfirm={handleCancelConfirm}
-          bookingId={bookingId}
-          status={status}
-          isLoading={isCancelling}
-        />
-      </>
-    );
-  }
-
   // Show reschedule and cancel for WAITING_CONFIRMATION and CONFIRMED
   if (canRescheduleOrCancel(status)) {
     return (
       <>
-        <div className="flex gap-2">
+        <div className="pt-3 border-t flex gap-2">
           <Button
             variant="outline"
             size="sm"
+            className="flex items-center gap-1"
             onClick={handleReschedule}
-            className="flex items-center gap-1 cursor-pointer"
             disabled={
               isRequestingReschedule || isRequestingCancel || isCancelling
             }
@@ -152,8 +86,8 @@ export function BookingActions({
           <Button
             variant="destructive"
             size="sm"
+            className="flex items-center gap-1"
             onClick={handleCancelClick}
-            className="flex items-center gap-1 cursor-pointer"
             disabled={
               isRequestingCancel || isRequestingReschedule || isCancelling
             }
@@ -179,12 +113,12 @@ export function BookingActions({
   if (canCancel(status)) {
     return (
       <>
-        <div className="flex gap-2">
+        <div className="pt-3 border-t">
           <Button
             variant="destructive"
             size="sm"
+            className="flex items-center gap-1"
             onClick={handleCancelClick}
-            className="flex items-center gap-1 cursor-pointer"
             disabled={
               isRequestingCancel || isRequestingReschedule || isCancelling
             }
