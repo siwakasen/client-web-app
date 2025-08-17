@@ -1,5 +1,6 @@
 "use server";
 import {
+  Car,
   CarsAvailableRequest,
   CarsDetailResponse,
   CarsResponse,
@@ -40,21 +41,27 @@ export async function useGetAvailableCars(
 
 export async function useGetCarsDetail(
   id: number
-): Promise<CarsDetailResponse | { status: number; errors?: any }> {
+): Promise<CarsDetailResponse> {
   'use cache';
   try {
     return await fetchCarsDetail({ id });
   } catch (error: any) {
-    return ErrorResponse(error);
+    return ErrorResponse(error, {
+      data: {} as Car,
+      message: 'Error fetching car detail',
+    });
   }
 }
 export async function useGetCarsDetailHistory(
   id: number,
-): Promise<CarsDetailResponse | { status: number; errors?: any }> {
+): Promise<CarsDetailResponse> {
   'use cache';
   try {
     return await fetchCarsDetailHistory({ id });
   } catch (error: any) {
-    return ErrorResponse(error);
+    return ErrorResponse(error, {
+      data: {} as Car,
+      message: 'Error fetching car detail history',
+    });
   }
 }

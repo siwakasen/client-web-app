@@ -4,9 +4,7 @@ import { CheckoutForm } from "./_components/checkout-form";
 import { CheckoutRegisterForm } from "./_components/checkout-register-form";
 
 interface CheckoutPageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
   searchParams: Promise<{ start_date?: string; end_date?: string }>;
 }
 
