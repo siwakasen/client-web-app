@@ -7,6 +7,7 @@ import { createSession, getToken } from "@/lib/users-provider/cookies";
 import { BookingHistoryResponse, BookingResponse, BookingResponseById } from "@/interfaces";
 import { useUploadIdentityFile } from "./customer.hook";
 import { ErrorResponse } from "./common.hook";
+import { revalidateTag } from "next/cache";
 
 export async function useCreateBooking(
   formData: z.infer<typeof BookingFormSchema>
@@ -37,6 +38,7 @@ export async function useCreateBookingWithRegister(
   try {
     const response = await createBookingWithRegister(formData);
     await createSession(response.data.token);
+    revalidateTag('session');
     
     // Upload identity files after account creation if files are provided
     if (formData.identity_file && formData.identity_file.length > 0) {

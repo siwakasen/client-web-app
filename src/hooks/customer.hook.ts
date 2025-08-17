@@ -32,6 +32,7 @@ export async function useRegisterUser(
     const headers = await getHeaders();
     const response = await register(formData, headers);
     await createSession(response.data.token);
+    revalidateTag('session');
     return {
       message: response.data.message,
     };
