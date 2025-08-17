@@ -7,17 +7,26 @@ const nextConfig: NextConfig = {
         protocol: "http",
         hostname: "localhost",
       },
+      {
+        protocol: "https",
+        hostname: "**.vulpbox.com",
+      },
     ],
   },
   allowedDevOrigins: [
     "https://siwakasen.mole-mintaka.ts.net",
     "https://vulpies.tail66dfd8.ts.net",
+    "localhost:3001",
+    "localhost:3002",
+    "localhost:3003",
+    "localhost:3004",
     "localhost:3005",
+    "localhost:3006",
   ],
   experimental: {
     useCache: true,
     serverActions: {
-      bodySizeLimit: '30mb',
+      bodySizeLimit: '50mb',
     },
 
   },

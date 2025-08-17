@@ -21,7 +21,6 @@ import {
 import { HistoryPagination } from './history-pagination';
 import { BookingActions } from './booking-actions';
 import { Skeleton } from '@/components/ui/skeleton';
-import Link from 'next/link';
 import { Booking, BookingAdjustment, Meta, RequestType } from '@/interfaces';
 
 interface BookingListProps {
@@ -260,10 +259,10 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
   if (error) {
     return (
       <div className="text-center py-12">
-        <div className="text-destructive text-lg mb-2">
-          Error Loading History
+        <div className="text-outline text-lg mb-2">History Order Not Found</div>
+        <div className="text-muted-foreground">
+          Cannot find any history order
         </div>
-        <div className="text-muted-foreground">{error}</div>
         <button
           onClick={fetchBookings}
           className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"

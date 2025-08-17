@@ -6,10 +6,14 @@ import { BookingFormSchema, BookingRegisterFormSchema } from "@/lib/validation";
 import { createSession, getToken } from "@/lib/users-provider/cookies";
 import { BookingHistoryResponse, BookingResponse, BookingResponseById } from "@/interfaces";
 import { useUploadIdentityFile } from "./customer.hook";
+import { ErrorResponse } from "./common.hook";
 
 export async function useCreateBooking(
   formData: z.infer<typeof BookingFormSchema>
-) {
+) : Promise<BookingResponse | {
+  status: number;
+  errors: any;
+}> {
   try {
     const headers = await getHeaders();
     const token = await getToken();
@@ -20,16 +24,16 @@ export async function useCreateBooking(
     );
     return response;
   } catch (error: any) {
-    return {
-      status: error.response.status,
-      errors: error.response.data,
-    };
+    return ErrorResponse(error);
   }
 }
 
 export async function useCreateBookingWithRegister(
   formData: z.infer<typeof BookingRegisterFormSchema>
-) {
+) : Promise<BookingResponse | {
+  status: number;
+  errors: any;
+}> {
   try {
     const response = await createBookingWithRegister(formData);
     await createSession(response.data.token);
@@ -46,16 +50,12 @@ export async function useCreateBookingWithRegister(
     
     return response;
   } catch (error: any) {
-    console.warn("booking error:", error.response);
-    return {
-      status: error.response.status,
-      errors: error.response.data,
-    };
+    return ErrorResponse(error);
   }
 }
 export async function useGetBookingById(order_id: string): Promise<BookingResponseById | {
   status: number;
-  errors: any;
+  errors?: any;
 }> {
   try {
     const headers = await getHeaders();
@@ -63,10 +63,7 @@ export async function useGetBookingById(order_id: string): Promise<BookingRespon
     const response: BookingResponseById = await getBookingById(order_id, headers, token!);
     return response;
   } catch (error: any) {
-    return {
-      status: error.response.status,
-      errors: error.response.data,
-    };
+    return ErrorResponse(error);
   }
 }
 
@@ -80,9 +77,6 @@ export async function useGetBookingHistory(page: number, limit: number, status?:
     const response: BookingHistoryResponse = await getBookingHistory(headers, token!, page, limit, status);
     return response;
   } catch (error: any) {
-    return {
-      status: error.response.status,
-      errors: error.response.data,
-    }
+    return ErrorResponse(error);
   }
 }

@@ -1,11 +1,11 @@
-import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
-import ContentDivider from "../content-divider/ContentDivider";
-import { convertTravelImageUrl } from "@/helpers/images-url/travel-images";
-import Link from "next/link";
-import { TravelPackages } from "@/interfaces";
-import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { useGetTravelPackages } from "@/hooks";
+import Image from 'next/image';
+import { Card, CardContent } from '@/components/ui/card';
+import ContentDivider from '../content-divider/ContentDivider';
+import { convertTravelImageUrl } from '@/helpers/images-url/travel-images';
+import Link from 'next/link';
+import { TravelPackages } from '@/interfaces';
+import { SkeletonCard } from '@/components/shared/skeleton/skeleton-card';
+import { useGetTravelPackages } from '@/hooks';
 export default async function PopularPackage({
   headers,
 }: {
@@ -16,7 +16,7 @@ export default async function PopularPackage({
     const { data } = await useGetTravelPackages({
       limit: 2,
       page: 1,
-      search: "",
+      search: '',
     });
     packages = data;
   } catch (error) {}
@@ -34,7 +34,7 @@ export default async function PopularPackage({
   return (
     <section
       className={`bg-gray-50 pt-16 px-4 md:px-8 ${
-        packagesData.length > 0 ? "min-h-screen" : "min-h-fit"
+        packagesData.length > 0 ? 'min-h-screen' : 'min-h-fit'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,7 +58,7 @@ export default async function PopularPackage({
                 >
                   <CardContent
                     className={`p-0 w-full h-80 md:h-96 ${
-                      index === 0 ? "md:min-w-96" : "md:min-w-2xl"
+                      index === 0 ? 'md:min-w-96' : 'md:min-w-2xl'
                     }`}
                   >
                     <div className="relative h-full w-full">

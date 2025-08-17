@@ -1,8 +1,8 @@
-import { notFound, redirect, RedirectType } from "next/navigation";
-import { useCancelPaymentPaypal } from "@/hooks/payments.hook";
-import { XCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { notFound, redirect, RedirectType } from 'next/navigation';
+import { useCancelPaymentPaypal } from '@/hooks/payments.hook';
+import { XCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default async function PaymentsCancelPage({
   searchParams,
@@ -15,13 +15,13 @@ export default async function PaymentsCancelPage({
     notFound();
   }
 
-  const { statusCode } = await useCancelPaymentPaypal(token);
+  const { status } = await useCancelPaymentPaypal(token);
 
-  if (statusCode == 404) {
-    redirect("/", RedirectType.replace);
+  if (status == 404) {
+    redirect('/', RedirectType.replace);
   }
-  if (statusCode !== 201 && statusCode !== 200) {
-    console.warn("unknown status code", statusCode);
+  if (status !== 201 && status !== 200) {
+    console.warn('unknown status code', status);
   }
 
   return (

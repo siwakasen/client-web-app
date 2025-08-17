@@ -4,10 +4,11 @@ import { getHeaders } from "@/lib/users-provider";
 import { addRefundForm, getRefundsByIdBooking } from "@/services/refunds.service";
 import { getToken } from "@/lib/users-provider/cookies";
 import { RefundsResponse } from "@/interfaces/refunds.interface";
+import { ErrorResponse } from "./common.hook";
 
 export async function useGetRefundsByIdBooking(id: number) : Promise<RefundsResponse | {
   status: number;
-  errors: any;
+  errors?: any;
 }> {
   const headers = await getHeaders();
   const token = await getToken();
@@ -15,11 +16,7 @@ export async function useGetRefundsByIdBooking(id: number) : Promise<RefundsResp
     const response = await getRefundsByIdBooking(headers, token!, id);
     return response;
   } catch (error: any) {
-    console.error(error.response.data);
-    return {
-      status: error.response.status,
-      errors: error.response.data,
-    };
+    return ErrorResponse(error);
   }
 }
 
@@ -27,9 +24,9 @@ export async function useAddRefundForm(id: number, data: {
   bank_name?: string;
   account_number?: string;
   account_name: string;
-}) : Promise<{message: string} | {
+}) : Promise<{message?: string} | {
   status: number;
-  errors: any;
+  errors?: any;
 }> {
   const headers = await getHeaders();
   const token = await getToken();
@@ -37,10 +34,6 @@ export async function useAddRefundForm(id: number, data: {
     const response = await addRefundForm(headers, token!, id, data);
     return response;
   } catch (error: any) {
-    console.error(error.response.data);
-    return {
-      status: error.response.status,
-      errors: error.response.data,
-    };
+    return ErrorResponse(error);
   }
 }

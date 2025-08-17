@@ -1,8 +1,8 @@
-import { notFound, redirect, RedirectType } from "next/navigation";
-import { CheckCircle, XCircle, TimerIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { useCapturePaymentPaypal } from "@/hooks/payments.hook";
+import { notFound, redirect, RedirectType } from 'next/navigation';
+import { CheckCircle, XCircle, TimerIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { useCapturePaymentPaypal } from '@/hooks/payments.hook';
 
 export default async function PaymentSuccessPage({
   searchParams,
@@ -17,28 +17,28 @@ export default async function PaymentSuccessPage({
 
   let isSuccess = false;
   let isPending = false;
-  let message = "";
+  let message = '';
 
-  const { statusCode, message: resultMessage } = await useCapturePaymentPaypal(
+  const { status, message: resultMessage } = await useCapturePaymentPaypal(
     token
   );
 
-  if (statusCode === 200) {
+  if (status === 200) {
     isSuccess = true;
-    message = "Your payment has been successfull";
-  } else if (statusCode === 422) {
-    if (resultMessage === "ORDER_ALREADY_CAPTURED") {
+    message = 'Your payment has been successfull';
+  } else if (status === 422) {
+    if (resultMessage === 'ORDER_ALREADY_CAPTURED') {
       isSuccess = true;
-      message = "Your payment has been processed.";
-    } else if (resultMessage === "ORDER_NOT_APPROVED") {
+      message = 'Your payment has been processed.';
+    } else if (resultMessage === 'ORDER_NOT_APPROVED') {
       isPending = true;
       message =
-        "Your payment has not completed yet. Please click the button below to continue.";
+        'Your payment has not completed yet. Please click the button below to continue.';
     } else {
-      redirect("/", RedirectType.replace);
+      redirect('/', RedirectType.replace);
     }
   } else {
-    redirect("/", RedirectType.replace);
+    redirect('/', RedirectType.replace);
   }
 
   return (
@@ -58,25 +58,25 @@ export default async function PaymentSuccessPage({
         {/* Success Message */}
         <h1 className="text-2xl font-bold text-gray-900 mb-4">
           {isSuccess
-            ? "Payment Successful!"
+            ? 'Payment Successful!'
             : isPending
-            ? "Payment Pending!"
-            : "Payment Failed!"}
+            ? 'Payment Pending!'
+            : 'Payment Failed!'}
         </h1>
 
         {/* Show message if there's an error */}
         <div
           className={`mb-6 p-4 ${
-            isPending ? "bg-yellow-50" : isSuccess ? "bg-green-50" : "bg-red-50"
+            isPending ? 'bg-yellow-50' : isSuccess ? 'bg-green-50' : 'bg-red-50'
           } rounded-lg`}
         >
           <p
             className={`${
               isPending
-                ? "text-yellow-700"
+                ? 'text-yellow-700'
                 : isSuccess
-                ? "text-green-700"
-                : "text-red-700"
+                ? 'text-green-700'
+                : 'text-red-700'
             } text-sm`}
           >
             {message}
@@ -84,7 +84,7 @@ export default async function PaymentSuccessPage({
         </div>
         {/* Action Buttons */}
         <div className="space-y-3">
-          {(resultMessage == "ORDER_ALREADY_CAPTURED" || isSuccess) && (
+          {(resultMessage == 'ORDER_ALREADY_CAPTURED' || isSuccess) && (
             <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
               <Link href="/history-order">Check your bookings</Link>
             </Button>
@@ -99,7 +99,7 @@ export default async function PaymentSuccessPage({
             </Button>
           )}
 
-          {(resultMessage == "ORDER_ALREADY_CAPTURED" || isSuccess) && (
+          {(resultMessage == 'ORDER_ALREADY_CAPTURED' || isSuccess) && (
             <Button variant="outline" asChild className="w-full">
               <Link href="/travel-packages">Browse more packages</Link>
             </Button>
@@ -110,8 +110,8 @@ export default async function PaymentSuccessPage({
         <div className="mt-6 pt-6 border-t border-gray-200">
           <p className="text-xs text-gray-500">
             {isSuccess
-              ? "You will receive a confirmation email with all the details of your booking. If you have any questions, please contact our support team."
-              : "If you believe this is an error, please contact our support team for assistance."}
+              ? 'You will receive a confirmation email with all the details of your booking. If you have any questions, please contact our support team.'
+              : 'If you believe this is an error, please contact our support team for assistance.'}
           </p>
         </div>
       </div>

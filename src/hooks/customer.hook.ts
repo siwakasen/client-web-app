@@ -21,6 +21,10 @@ import {
 import { getHeaders } from "@/lib/users-provider";
 import { z } from "zod";
 import { redirect, RedirectType } from "next/navigation";
+import { ErrorResponse } from "./common.hook";
+import { revalidateTag, unstable_cache } from "next/cache";
+import { headers } from "next/headers";
+
 export async function useRegisterUser(
   formData: z.infer<typeof RegisterFormSchema>
 ) {
@@ -32,20 +36,19 @@ export async function useRegisterUser(
       message: response.data.message,
     };
   } catch (error: any) {
-    console.log(error.response.data);
-
-    return {
-      status: error.response.status,
-      errors: error.response.data,
-    };
+    return ErrorResponse(error);
   }
 }
 
 export async function useLoginUser(formData: z.infer<typeof LoginFormSchema>) {
+
   try {
     const headers = await getHeaders();
     const response = await login(formData, headers);
     await createSession(response.data.token);
+
+    revalidateTag('session');
+
     return {
       message: response.data.message || "Login successful!",
     };
@@ -58,10 +61,7 @@ export async function useLoginUser(formData: z.infer<typeof LoginFormSchema>) {
         },
       };
     }
-    return {
-      status: error.response.status,
-      errors: error.response.data,
-    };
+    return ErrorResponse(error);
   }
 }
 
@@ -76,11 +76,7 @@ export async function useForgetPasswordUser(
       message: message || "Email to reset password sent!",
     };
   } catch (error: any) {
-    console.log(error.response);
-    return {
-      status: error.response.status,
-      errors: error.response.data,
-    };
+    return ErrorResponse(error);
   }
 }
 
@@ -91,34 +87,34 @@ export async function useChangePasswordUser(
     const { message } = await changePassword(formData);
     return { message };
   } catch (error: any) {
-    return {
-      status: error.response.status,
-      errors: error.response.data,
-    };
+    return ErrorResponse(error);
   }
 }
 
 export async function useLogoutUser() {
   await deleteSession();
+  revalidateTag('session');
   return {
     message: "Logout successful!",
   };
 }
 
 export async function useGetCustomer() {
+  const headers = await getHeaders();
+  const token = (await getToken()) || "";
+  if (!token) {
+    return { isAuthenticated: false, customer: undefined };
+  }
+  
+  return getCachedCustomer(token, headers);
+}
+
+const getCachedCustomer = unstable_cache(async (token: string, headers: Record<string, string>) => {
   try {
-    const headers = await getHeaders();
-    const token = (await getToken()) || "";
-    if (!token) {
-      return { isAuthenticated: false, customer: undefined };
-    }
     const { data } = await getCustomer(token, headers);
     return { isAuthenticated: true, customer: data };
   } catch (error: any) {
-    console.warn(error);
     const message: string = error.message;
-    console.info(error.code);
-    console.log(error.response?.data);
     if (
       message.includes("Invalid token") ||
       error.code == "ERR_BAD_REQUEST" ||
@@ -130,14 +126,20 @@ export async function useGetCustomer() {
     }
     return { isAuthenticated: false, customer: undefined };
   }
-}
+}, ['session'], {
+  tags: ['session'],
+  revalidate: 60 * 60 * 24,
+});
 
-export async function useUploadIdentityFile(identityFile: File[]) {
+export async function useUploadIdentityFile(identityFile: File[]) : Promise<{message: string} | {
+  status: number;
+  errors: any;
+}> {
   try {
     const token = (await getToken()) || "";
     const response = await uploadIdentityFile(identityFile, token);
     return { message: response };
   } catch (error: any) {
-    return { status: error.response.status, errors: error.response.data };
+    return ErrorResponse(error);
   }
 }

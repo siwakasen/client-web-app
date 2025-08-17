@@ -35,7 +35,7 @@ export function RefundFormDialog({ bookingId, refund }: RefundFormDialogProps) {
     if ('errors' in response) {
       toast.error(response.errors.message);
       return;
-    } else {
+    } else if ('message' in response) {
       toast.success(response.message);
     }
 

@@ -29,7 +29,7 @@ export default async function PaymentCompletePage({
     } else {
       redirect('/', RedirectType.replace);
     }
-  } else {
+  } else if ('data' in response) {
     const payment = response.data;
     payment_gateway_id = payment.payment_gateway_id;
     if (

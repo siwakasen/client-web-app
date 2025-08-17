@@ -3,48 +3,43 @@
 import { getHeaders, getToken } from "@/lib/users-provider";
 import { cancelPaymentPaypal, capturePaymentPaypal, getPaymentByBookingId } from "@/services";
 import { PaymentResponse } from "@/interfaces";
+import { ErrorResponse } from "./common.hook";
 
 export async function useCapturePaymentPaypal(orderId: string): Promise<{
-  statusCode: number;
-  message: string;
+  status: number;
+  message?: string;
+  errors?: any;
 }> {
   try {
     const response = await capturePaymentPaypal(orderId);
     return {
-      statusCode: 200,
+      status: 200,
       message: response.data.message,
     };
   } catch (error: any) {
-    return {
-      statusCode: error.response.status,
-      message: error.response.data.message,
-    };
+    return ErrorResponse(error);
   }
 }
 
 export async function useCancelPaymentPaypal(orderId: string): Promise<{
-  statusCode: number;
-  message: string;
+  status: number;
+  message?: string;
+  errors?: any;
 }> {
   try {
     const response = await cancelPaymentPaypal(orderId);
-    console.log(response);
     return {
-      statusCode: 200,
+      status: 200,
       message: response.data.message,
     };
   } catch (error: any) {
-    console.log(error);
-    return {
-      statusCode: error.response.status,
-      message: error.response.data.message,
-    };
+    return ErrorResponse(error);
   }
 }
 
 export async function   useGetPaymentByBookingId(bookingId: number) : Promise<PaymentResponse | {
   status: number;
-  errors: any;
+  errors?: any;
 }> {
   try {
     const headers = await getHeaders();
@@ -52,9 +47,6 @@ export async function   useGetPaymentByBookingId(bookingId: number) : Promise<Pa
     const response = await getPaymentByBookingId(bookingId, token!, headers);
     return response;
   } catch (error: any) {
-    return {
-      status: error.response.status,
-      errors: error.response.data,
-    };
+    return ErrorResponse(error);
   }
 }
