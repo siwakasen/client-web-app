@@ -67,7 +67,7 @@ export async function useLoginUser(formData: z.infer<typeof LoginFormSchema>) {
 
 export async function useForgetPasswordUser(
   formData: z.infer<typeof ForgetPasswordFormSchema>
-) {
+): Promise<{ message?: string; status?: number; errors?: any }> {
   try {
     const headers = await getHeaders();
     const { message } = await forgetPassword(formData, headers);
