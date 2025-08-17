@@ -27,7 +27,7 @@ import { headers } from "next/headers";
 
 export async function useRegisterUser(
   formData: z.infer<typeof RegisterFormSchema>
-) {
+): Promise<{ message?: string; status?: number; errors?: any }> {
   try {
     const headers = await getHeaders();
     const response = await register(formData, headers);
