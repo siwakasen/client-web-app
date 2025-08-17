@@ -1,10 +1,10 @@
-import { CheckoutForm } from "./_components/checkout-form";
-import { useGetTravelPackagesDetail, useGetCustomer } from "@/hooks";
-import { CheckoutRegisterForm } from "./_components/checkout-register-form";
+import { CheckoutForm } from './_components/checkout-form';
+import { useGetTravelPackagesDetail, useGetCustomer } from '@/hooks';
+import { CheckoutRegisterForm } from './_components/checkout-register-form';
 interface CheckoutPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function CheckoutPage({ params }: CheckoutPageProps) {
