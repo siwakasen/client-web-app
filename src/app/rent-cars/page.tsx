@@ -1,17 +1,20 @@
-import MainContent from "./_components/main-content";
-import Image from "next/image";
-import Navbar from "@/components/shared/navbar/Navbar";
-import Footer from "@/components/shared/content/footer";
+import MainContent from './_components/main-content';
+import Image from 'next/image';
+import Navbar from '@/components/shared/navbar/Navbar';
+import Footer from '@/components/shared/content/footer';
 
-import { useGetCustomer } from "@/hooks";
+import { useGetCustomer } from '@/hooks';
 export default async function RentCarsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ start_date?: string; end_date?: string; search?: string }>;
+  searchParams: Promise<{
+    start_date?: string;
+    end_date?: string;
+    search?: string;
+  }>;
 }) {
   const { isAuthenticated, customer } = await useGetCustomer();
   const { start_date, end_date, search } = await searchParams;
-
 
   return (
     <div className="min-h-screen bg-gray-200">
@@ -37,7 +40,7 @@ export default async function RentCarsPage({
         </div>
       </section>
 
-      <MainContent 
+      <MainContent
         initialStartDate={start_date}
         initialEndDate={end_date}
         initialSearch={search}

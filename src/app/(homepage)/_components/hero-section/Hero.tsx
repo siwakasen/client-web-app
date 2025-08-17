@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from 'next/image';
 export default async function Hero() {
   return (
     <div className="w-screen h-screen relative">

@@ -1,5 +1,5 @@
-import React from "react";
-import { Star } from "lucide-react";
+import React from 'react';
+import { Star } from 'lucide-react';
 
 export default function Manager() {
   return (

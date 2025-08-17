@@ -1,28 +1,28 @@
-import ContentDivider from "../content-divider/ContentDivider";
-import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
+import ContentDivider from '../content-divider/ContentDivider';
+import { Card, CardContent } from '@/components/ui/card';
+import Image from 'next/image';
 
 export default async function WhyChooseUs() {
   const features = [
     {
-      number: "1",
-      title: "Enjoy a great journey tailored just for you",
-      description: "We provide the best experiences for our customers.",
+      number: '1',
+      title: 'Enjoy a great journey tailored just for you',
+      description: 'We provide the best experiences for our customers.',
     },
     {
-      number: "2",
-      title: "Affordable and reliable services",
-      description: "Experience the best quality at a reasonable price.",
+      number: '2',
+      title: 'Affordable and reliable services',
+      description: 'Experience the best quality at a reasonable price.',
     },
     {
-      number: "3",
-      title: "Trusted by thousands",
-      description: "Join the community of happy travelers.",
+      number: '3',
+      title: 'Trusted by thousands',
+      description: 'Join the community of happy travelers.',
     },
     {
-      number: "4",
-      title: "Wide range of options",
-      description: "From budget-friendly to luxurious travels.",
+      number: '4',
+      title: 'Wide range of options',
+      description: 'From budget-friendly to luxurious travels.',
     },
   ];
 

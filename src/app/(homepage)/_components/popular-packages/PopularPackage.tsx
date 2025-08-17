@@ -6,11 +6,7 @@ import Link from 'next/link';
 import { TravelPackages } from '@/interfaces';
 import { SkeletonCard } from '@/components/shared/skeleton/skeleton-card';
 import { useGetTravelPackages } from '@/hooks';
-export default async function PopularPackage({
-  headers,
-}: {
-  headers: Record<string, string>;
-}) {
+export default async function PopularPackage() {
   let packages: TravelPackages[] = [];
   try {
     const { data } = await useGetTravelPackages({

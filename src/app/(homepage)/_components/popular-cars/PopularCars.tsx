@@ -1,23 +1,19 @@
-import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
-import ContentDivider from "../content-divider/ContentDivider";
-import { convertCarImageUrl } from "@/helpers/images-url/car-images";
-import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { Car } from "@/interfaces";
-import Link from "next/link";
-import { useGetCars } from "@/hooks";
+import Image from 'next/image';
+import { Card, CardContent } from '@/components/ui/card';
+import ContentDivider from '../content-divider/ContentDivider';
+import { convertCarImageUrl } from '@/helpers/images-url/car-images';
+import { SkeletonCard } from '@/components/shared/skeleton/skeleton-card';
+import { Car } from '@/interfaces';
+import Link from 'next/link';
+import { useGetCars } from '@/hooks';
 
-export default async function PopularCars({
-  headers,
-}: {
-  headers: Record<string, string>;
-}) {
+export default async function PopularCars() {
   let cars: Car[] = [];
   try {
     const { data } = await useGetCars({
       limit: 2,
       page: 1,
-      search: "",
+      search: '',
     });
     cars = data;
   } catch (error) {
