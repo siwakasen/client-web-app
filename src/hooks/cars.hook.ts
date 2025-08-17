@@ -11,12 +11,22 @@ import { ErrorResponse } from "./common.hook";
 
 export async function useGetCars(
   payload: Pagination
-): Promise<CarsResponse | { status: number; errors?: any }> {
+): Promise<CarsResponse> {
   "use cache";
   try {
   return await fetchCars(payload);
 } catch (error: any) {
-  return ErrorResponse(error);
+  return ErrorResponse(error,{
+    data: [],
+    meta: {
+      totalItems: 0,
+      currentPage: 1,
+      totalPages: 0,
+      limit: 10,
+      hasNextPage: false,
+      hasPrevPage: false,
+    },
+  });
 }
 }
 export async function useGetAvailableCars(
