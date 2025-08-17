@@ -40,7 +40,7 @@ export async function useRegisterUser(
   }
 }
 
-export async function useLoginUser(formData: z.infer<typeof LoginFormSchema>) {
+export async function useLoginUser(formData: z.infer<typeof LoginFormSchema>): Promise<{ message?: string; status?: number; errors?: any }> {
 
   try {
     const headers = await getHeaders();
