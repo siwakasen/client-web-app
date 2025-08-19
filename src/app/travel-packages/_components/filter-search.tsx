@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { Input } from "@/components/ui/input";
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/select';
+import { Card } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 
 interface FilterSearchProps {
   maxPrice: string;
@@ -33,12 +33,12 @@ export function FilterSearch({
         <div className="space-y-4">
           <div>
             <Label htmlFor="max-price" className="mb-2">
-              Max Price
+              Max Price ($)
             </Label>
             <Input
               id="max-price"
               type="number"
-              placeholder="Enter max price"
+              placeholder="Enter your max budget"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
             />
@@ -51,7 +51,7 @@ export function FilterSearch({
             <Input
               id="max-group"
               type="number"
-              placeholder="Enter number of people"
+              placeholder="Enter number of your group"
               value={maxGroupSize}
               onChange={(e) => setMaxGroupSize(e.target.value)}
             />

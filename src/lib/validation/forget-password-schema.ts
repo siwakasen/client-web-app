@@ -12,7 +12,7 @@ export const ChangePasswordFormSchema = z
         message: "Password must contain at least one letter.",
       })
       .regex(/[0-9]/, { message: "Password must contain at least one number." })
-      .regex(/[!@#$%^&*]/, {
+      .regex(/[!@#$%^&*-+_=?.,]/, {
         message: "Password must contain at least one special character.",
       })
       .trim(),

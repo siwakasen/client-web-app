@@ -101,40 +101,48 @@ export default async function HistoryOrderDetailPage({
     }
   };
 
+  const formatStatusText = (status: string) => {
+    if (!status) return '';
+    return status
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
   const getStatusBadgeClass = (status: string) => {
     const upperStatus = status?.toUpperCase();
 
     // Payment Status Colors
     if (upperStatus === 'PENDING') {
-      return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      return 'bg-yellow-100 text-yellow-800 border-yellow-300 shadow-sm';
     }
     if (upperStatus === 'SUCCESS') {
-      return 'bg-green-100 text-green-800 border-green-200';
+      return 'bg-green-100 text-green-800 border-green-300 shadow-sm';
     }
     if (upperStatus === 'FAILED') {
-      return 'bg-red-100 text-red-800 border-red-200';
+      return 'bg-red-100 text-red-800 border-red-300 shadow-sm';
     }
 
     // Booking Status Colors
     switch (upperStatus) {
       case BookingStatus.CONFIRMED:
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-blue-100 text-blue-800 border-blue-300 shadow-sm';
       case BookingStatus.ONGOING:
-        return 'bg-cyan-100 text-cyan-800 border-cyan-200';
+        return 'bg-cyan-100 text-cyan-800 border-cyan-300 shadow-sm';
       case BookingStatus.COMPLETED:
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-green-100 text-green-800 border-green-300 shadow-sm';
       case BookingStatus.CANCELLED:
-        return 'bg-red-100 text-red-800 border-red-200';
+        return 'bg-red-100 text-red-800 border-red-300 shadow-sm';
       case BookingStatus.WAITING_PAYMENT:
-        return 'bg-orange-100 text-orange-800 border-orange-200';
+        return 'bg-orange-100 text-orange-800 border-orange-300 shadow-sm';
       case BookingStatus.WAITING_CONFIRMATION:
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        return 'bg-yellow-100 text-yellow-800 border-yellow-300 shadow-sm';
       case BookingStatus.NO_SHOW:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-gray-100 text-gray-800 border-gray-300 shadow-sm';
       case BookingStatus.PAYMENT_FAILED:
-        return 'bg-red-100 text-red-800 border-red-200';
+        return 'bg-red-100 text-red-800 border-red-300 shadow-sm';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-gray-100 text-gray-800 border-gray-300 shadow-sm';
     }
   };
 
@@ -172,7 +180,7 @@ export default async function HistoryOrderDetailPage({
             <CardTitle className="flex items-center justify-between">
               Booking Information
               <Badge className={getStatusBadgeClass(booking.status)}>
-                {booking.status}
+                {formatStatusText(booking.status)}
               </Badge>
             </CardTitle>
           </CardHeader>
@@ -274,7 +282,7 @@ export default async function HistoryOrderDetailPage({
                     <div className="flex justify-between items-center mb-2">
                       <span className="font-medium">Payment #{payment.id}</span>
                       <Badge className={getStatusBadgeClass(payment.status)}>
-                        {payment.status}
+                        {formatStatusText(payment.status)}
                       </Badge>
                     </div>
                     <div className="text-sm text-gray-600 space-y-1">
@@ -337,7 +345,7 @@ export default async function HistoryOrderDetailPage({
                           adjustment.status
                         )}
                       >
-                        {adjustment.status}
+                        {formatStatusText(adjustment.status)}
                       </Badge>
                     </div>
                     <div className="text-sm text-gray-600 space-y-1">

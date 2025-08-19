@@ -21,7 +21,13 @@ import {
 import { HistoryPagination } from './history-pagination';
 import { BookingActions } from './booking-actions';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Booking, BookingAdjustment, Meta, RequestType } from '@/interfaces';
+import {
+  AdjustmentStatus,
+  Booking,
+  BookingAdjustment,
+  Meta,
+  RequestType,
+} from '@/interfaces';
 
 interface BookingListProps {
   currentPage: number;
@@ -178,23 +184,23 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
   const getStatusBadgeClass = (status: string) => {
     switch (status?.toUpperCase()) {
       case BookingStatus.CONFIRMED:
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-blue-100 text-blue-800 border-blue-300 shadow-sm';
       case BookingStatus.ONGOING:
-        return 'bg-cyan-100 text-cyan-800 border-cyan-200';
+        return 'bg-cyan-100 text-cyan-800 border-cyan-300 shadow-sm';
       case BookingStatus.COMPLETED:
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-green-100 text-green-800 border-green-300 shadow-sm';
       case BookingStatus.CANCELLED:
-        return 'bg-red-100 text-red-800 border-red-200';
+        return 'bg-red-100 text-red-800 border-red-300 shadow-sm';
       case BookingStatus.WAITING_PAYMENT:
-        return 'bg-orange-100 text-orange-800 border-orange-200';
+        return 'bg-orange-100 text-orange-800 border-orange-300 shadow-sm';
       case BookingStatus.WAITING_CONFIRMATION:
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        return 'bg-yellow-100 text-yellow-800 border-yellow-300 shadow-sm';
       case BookingStatus.NO_SHOW:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-gray-100 text-gray-800 border-gray-300 shadow-sm';
       case BookingStatus.PAYMENT_FAILED:
-        return 'bg-red-100 text-red-800 border-red-200';
+        return 'bg-red-100 text-red-800 border-red-300 shadow-sm';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-gray-100 text-gray-800 border-gray-300 shadow-sm';
     }
   };
 
@@ -207,32 +213,34 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('id-ID', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'IDR',
+      currency: 'USD',
     }).format(amount);
   };
 
   const formatStatusText = (status: string) => {
-    switch (status?.toUpperCase()) {
-      case 'WAITING_PAYMENT':
-        return 'Waiting Payment';
-      case 'WAITING_CONFIRMATION':
-        return 'Waiting Confirmation';
-      case 'CONFIRMED':
-        return 'Confirmed';
-      case 'ONGOING':
-        return 'Ongoing';
-      case 'COMPLETED':
-        return 'Completed';
-      case 'CANCELLED':
-        return 'Cancelled';
-      case 'NO_SHOW':
-        return 'No Show';
-      case 'PAYMENT_FAILED':
-        return 'Payment Failed';
+    if (!status) return '';
+    return status
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
+  const getStatusAdjustmentBadgeClass = (status: string) => {
+    switch (status) {
+      case AdjustmentStatus.PENDING:
+        return 'bg-yellow-100 text-yellow-800 border-yellow-300 shadow-sm';
+      case AdjustmentStatus.WAITING_PAYMENT:
+        return 'bg-orange-100 text-orange-800 border-orange-300 shadow-sm';
+      case AdjustmentStatus.APPROVED:
+        return 'bg-green-100 text-green-800 border-green-300 shadow-sm';
+      case AdjustmentStatus.REJECTED:
+        return 'bg-red-100 text-red-800 border-red-300 shadow-sm';
+      case AdjustmentStatus.EXPIRED:
+        return 'bg-gray-100 text-gray-800 border-gray-300 shadow-sm';
       default:
-        return status?.charAt(0).toUpperCase() + status?.slice(1).toLowerCase();
+        return 'bg-gray-100 text-gray-800 border-gray-300 shadow-sm';
     }
   };
 
@@ -300,8 +308,8 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
                         <Badge
                           className={`px-3 py-1.5 text-sm flex items-center gap-1 ${
                             booking.package_id
-                              ? 'bg-green-100 text-green-800 border-green-200'
-                              : 'bg-blue-100 text-blue-800 border-blue-200'
+                              ? 'bg-green-100 text-green-800 border-green-300 shadow-sm'
+                              : 'bg-blue-100 text-blue-800 border-blue-300 shadow-sm'
                           }`}
                         >
                           {booking.package_id ? (
@@ -316,6 +324,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
                             </>
                           )}
                         </Badge>
+
                         <Badge
                           className={`${getStatusBadgeClass(
                             booking.status
@@ -358,7 +367,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
                         </div>
                       )}
 
-                      {booking.with_driver !== null && (
+                      {booking.with_driver !== null && booking.car_id && (
                         <div className="flex items-center gap-3 md:gap-2 justify-start md:justify-start">
                           <IdCardLanyardIcon className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
                           <span className="text-sm md:text-sm">
@@ -369,6 +378,28 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
                         </div>
                       )}
                     </div>
+
+                    {booking.booking_adjustments.length > 0 && (
+                      <div className="flex items-center gap-3 md:gap-2 justify-start md:justify-start text-xs">
+                        {booking.booking_adjustments.map((adjustment) => (
+                          <div key={adjustment.id}>
+                            {adjustment.request_type ===
+                            RequestType.RESCHEDULE ? (
+                              <span className="text-xs">Reschedule: </span>
+                            ) : (
+                              <span className="text-xs">Cancellation: </span>
+                            )}
+                            <Badge
+                              className={`${getStatusAdjustmentBadgeClass(
+                                adjustment.status
+                              )}  text-xs`}
+                            >
+                              {formatStatusText(adjustment.status)}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
                     {/* Additional Notes - Only if exists */}
                     {booking.additional_notes && (

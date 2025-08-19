@@ -38,7 +38,7 @@ export function RefundStepper({ refund, bookingId }: RefundStepperProps) {
 
     const currentIndex = statusOrder.indexOf(currentStatus);
     const stepIndex = statusOrder.indexOf(stepStatus);
-
+    if (stepIndex === 2) return 'completed';
     if (stepIndex < currentIndex) return 'completed';
     if (stepIndex === currentIndex) return 'current';
     return 'pending';

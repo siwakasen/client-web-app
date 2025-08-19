@@ -1,27 +1,31 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { CalendarIcon, X } from "lucide-react";
-import { format } from "date-fns";
-import { DateRange } from "react-day-picker";
+import * as React from 'react';
+import { CalendarIcon, X } from 'lucide-react';
+import { format } from 'date-fns';
+import { DateRange } from 'react-day-picker';
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/popover';
+import { Label } from '@/components/ui/label';
 
 interface DateRangePickerProps {
   startDate?: string;
   endDate?: string;
-  onDateRangeChange: (startDate: string | undefined, endDate: string | undefined) => void;
+  onDateRangeChange: (
+    startDate: string | undefined,
+    endDate: string | undefined
+  ) => void;
   onApply: () => void;
   onClear: () => void;
   className?: string;
+  label?: string;
 }
 
 export function DateRangePicker({
@@ -31,6 +35,7 @@ export function DateRangePicker({
   onApply,
   onClear,
   className,
+  label,
 }: DateRangePickerProps) {
   const [date, setDate] = React.useState<DateRange | undefined>(() => {
     if (startDate || endDate) {
@@ -46,10 +51,14 @@ export function DateRangePicker({
 
   const handleDateSelect = (selectedDate: DateRange | undefined) => {
     setDate(selectedDate);
-    
-    const start = selectedDate?.from ? format(selectedDate.from, "yyyy-MM-dd") : undefined;
-    const end = selectedDate?.to ? format(selectedDate.to, "yyyy-MM-dd") : undefined;
-    
+
+    const start = selectedDate?.from
+      ? format(selectedDate.from, 'yyyy-MM-dd')
+      : undefined;
+    const end = selectedDate?.to
+      ? format(selectedDate.to, 'yyyy-MM-dd')
+      : undefined;
+
     onDateRangeChange(start, end);
   };
 
@@ -67,25 +76,35 @@ export function DateRangePicker({
 
   const formatDateRange = () => {
     if (!date?.from) {
-      return "Pick a date range";
+      return 'Pick a date range';
     }
 
     if (date.from && !date.to) {
-      return format(date.from, "LLL dd, y");
+      return format(date.from, 'LLL dd, y');
     }
 
     if (date.from && date.to) {
-      return `${format(date.from, "LLL dd, y")} - ${format(date.to, "LLL dd, y")}`;
+      return `${format(date.from, 'LLL dd, y')} - ${format(
+        date.to,
+        'LLL dd, y'
+      )}`;
     }
 
-    return "Pick a date range";
+    return 'Pick a date range';
   };
 
   return (
-    <div className={cn("flex flex-col gap-4 p-4 border rounded-lg bg-background", className)}>
+    <div
+      className={cn(
+        'flex flex-col gap-4 p-4 border rounded-lg bg-background',
+        className
+      )}
+    >
       <div className="flex items-center gap-2">
         <CalendarIcon className="h-4 w-4" />
-        <Label className="text-sm font-medium">Filter by Date Range</Label>
+        <Label className="text-sm font-medium">
+          {label || 'Choose your date range'}
+        </Label>
       </div>
 
       <div className="grid gap-2">
@@ -93,10 +112,10 @@ export function DateRangePicker({
           <PopoverTrigger asChild>
             <Button
               id="date"
-              variant={"outline"}
+              variant={'outline'}
               className={cn(
-                "w-full justify-start text-left font-normal",
-                !date && "text-muted-foreground"
+                'w-full justify-start text-left font-normal',
+                !date && 'text-muted-foreground'
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
@@ -133,12 +152,10 @@ export function DateRangePicker({
       {date && (date.from || date.to) && (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <span>Selected range:</span>
-          <span className="font-medium">
-            {formatDateRange()}
-          </span>
+          <span className="font-medium">{formatDateRange()}</span>
         </div>
       )}
-      
+
       {/* Clear button */}
       <Button
         size="sm"

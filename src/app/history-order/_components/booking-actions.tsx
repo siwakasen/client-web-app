@@ -162,9 +162,7 @@ export function BookingActions({
             size="sm"
             onClick={handleCancelClick}
             className="flex items-center gap-1 cursor-pointer"
-            disabled={
-              isRequestingCancel || isRequestingReschedule || isCancelling
-            }
+            disabled={isRequestingCancel || isCancelling}
           >
             <X className="h-4 w-4" />
             Cancel
@@ -201,9 +199,7 @@ export function BookingActions({
             size="sm"
             onClick={handleCancelClick}
             className="flex items-center gap-1 cursor-pointer"
-            disabled={
-              isRequestingCancel || isRequestingReschedule || isCancelling
-            }
+            disabled={isRequestingCancel || isCancelling}
           >
             <X className="h-4 w-4" />
             Cancel

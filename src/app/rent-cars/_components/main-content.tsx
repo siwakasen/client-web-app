@@ -1,15 +1,15 @@
-"use client";
-import { Car, Meta } from "@/interfaces";
-import { useState, useMemo, useEffect } from "react";
-import { Search, Calendar } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { CarsCard } from "./cars-card";
-import { Pagination } from "../../../components/shared/content/pagination";
-import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { useGetAvailableCars } from "@/hooks";
-import { DateRangePicker } from "@/components/ui/date-range-picker";
-import { useRouter, useSearchParams } from "next/navigation";
+'use client';
+import { Car, Meta } from '@/interfaces';
+import { useState, useMemo, useEffect } from 'react';
+import { Search, Calendar } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { CarsCard } from './cars-card';
+import { Pagination } from '../../../components/shared/content/pagination';
+import { SkeletonCard } from '@/components/shared/skeleton/skeleton-card';
+import { useGetAvailableCars } from '@/hooks';
+import { DateRangePicker } from '@/components/ui/date-range-picker';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface MainContentProps {
   initialStartDate?: string;
@@ -24,9 +24,11 @@ export default function MainContent({
 }: MainContentProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
-  const [searchTerm, setSearchTerm] = useState(initialSearch || "");
-  const [startDate, setStartDate] = useState<string | undefined>(initialStartDate);
+
+  const [searchTerm, setSearchTerm] = useState(initialSearch || '');
+  const [startDate, setStartDate] = useState<string | undefined>(
+    initialStartDate
+  );
   const [endDate, setEndDate] = useState<string | undefined>(initialEndDate);
   const [currentPage, setCurrentPage] = useState(1);
   const [cars, setCars] = useState<Car[]>([]);
@@ -41,9 +43,13 @@ export default function MainContent({
   const [isLoading, setIsLoading] = useState(false);
 
   // Function to update URL parameters
-  const updateUrlParams = (params: { start_date?: string; end_date?: string; search?: string }) => {
+  const updateUrlParams = (params: {
+    start_date?: string;
+    end_date?: string;
+    search?: string;
+  }) => {
     const current = new URLSearchParams(Array.from(searchParams.entries()));
-    
+
     // Update or remove parameters
     Object.entries(params).forEach(([key, value]) => {
       if (value && value.trim() !== '') {
@@ -56,7 +62,7 @@ export default function MainContent({
     // Create new URL with updated params
     const search = current.toString();
     const query = search ? `?${search}` : '';
-    
+
     router.push(`/rent-cars${query}`, { scroll: false });
   };
 
@@ -65,7 +71,7 @@ export default function MainContent({
       setCars([]);
       return;
     }
-    
+
     try {
       setIsLoading(true);
       const { data, meta: newMeta } = await useGetAvailableCars({
@@ -83,7 +89,6 @@ export default function MainContent({
       setIsLoading(false);
     }
   };
-  
 
   const filteredCars = useMemo(() => {
     return cars;
@@ -91,14 +96,17 @@ export default function MainContent({
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleDateRangeChange = (start: string | undefined, end: string | undefined) => {
+  const handleDateRangeChange = (
+    start: string | undefined,
+    end: string | undefined
+  ) => {
     setStartDate(start);
     setEndDate(end);
     setCurrentPage(1);
-    
+
     // Update URL parameters
     updateUrlParams({
       start_date: start,
@@ -116,7 +124,7 @@ export default function MainContent({
     setEndDate(undefined);
     setCars([]);
     setCurrentPage(1);
-    
+
     // Clear URL parameters
     updateUrlParams({
       start_date: undefined,
@@ -127,7 +135,7 @@ export default function MainContent({
 
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
-    
+
     // Update URL parameters with search term
     updateUrlParams({
       start_date: startDate,
@@ -162,7 +170,7 @@ export default function MainContent({
               onDateRangeChange={handleDateRangeChange}
               onApply={handleApply}
               onClear={handleClear}
-              
+              label="Choose your rental dates"
               className="bg-white shadow-lg"
             />
           </div>
@@ -182,7 +190,7 @@ export default function MainContent({
                       value={searchTerm}
                       onChange={(e) => handleSearchChange(e.target.value)}
                       onKeyDown={(e) => {
-                        if (e.key === "Enter") {
+                        if (e.key === 'Enter') {
                           fetchData();
                         }
                       }}
@@ -209,7 +217,12 @@ export default function MainContent({
                   <>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {filteredCars.map((car) => (
-                        <CarsCard key={car.id} car={car} start_date={startDate} end_date={endDate} />
+                        <CarsCard
+                          key={car.id}
+                          car={car}
+                          start_date={startDate}
+                          end_date={endDate}
+                        />
                       ))}
                     </div>
                     {filteredCars.length === 0 && (
@@ -220,7 +233,8 @@ export default function MainContent({
                             No cars available
                           </h3>
                           <p className="text-gray-500">
-                            No cars are available for the selected dates. Please try different dates.
+                            No cars are available for the selected dates. Please
+                            try different dates.
                           </p>
                         </div>
                       </div>
@@ -247,7 +261,8 @@ export default function MainContent({
                   Select your rental dates
                 </h3>
                 <p className="text-gray-500">
-                  Please select both pick-up and drop-off dates to view available cars.
+                  Please select both pick-up and drop-off dates to view
+                  available cars.
                 </p>
               </div>
             </div>
