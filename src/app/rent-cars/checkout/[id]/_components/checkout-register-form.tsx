@@ -173,13 +173,8 @@ export function CheckoutRegisterForm({
 
   async function onSubmit(values: z.infer<typeof BookingRegisterFormSchema>) {
     try {
-      const convertedStartDate = convertISOToCurrentTimezone(values.start_date);
-      const convertedEndDate = convertISOToCurrentTimezone(values.end_date!);
-
       const formData = {
         ...values,
-        start_date: convertedStartDate,
-        end_date: convertedEndDate,
       };
 
       const response = await useCreateBookingWithRegister(formData);
@@ -445,7 +440,7 @@ export function CheckoutRegisterForm({
                           disabled={selectedFiles.length >= 2}
                           className={
                             form.formState.errors.identity_file
-                              ? 'border-red-300 text-red-600 hover:border-red-400'
+                              ? 'border-red-300 text-red-600 hover:border-red-400 cursor-pointer'
                               : ''
                           }
                         >
@@ -485,6 +480,7 @@ export function CheckoutRegisterForm({
                             type="button"
                             variant="ghost"
                             size="sm"
+                            className="cursor-pointer"
                             onClick={() => removeFile(index)}
                           >
                             <X className="w-4 h-4" />
@@ -545,7 +541,7 @@ export function CheckoutRegisterForm({
                               <Button
                                 variant="outline"
                                 id="start-date-picker"
-                                className="w-32 justify-between font-normal"
+                                className="w-32 justify-between font-normal cursor-pointer"
                                 type="button"
                               >
                                 {field.value
@@ -613,7 +609,7 @@ export function CheckoutRegisterForm({
                               <Button
                                 variant="outline"
                                 id="end-date-picker"
-                                className="w-32 justify-between font-normal"
+                                className="w-32 justify-between font-normal cursor-pointer"
                                 type="button"
                               >
                                 {field.value
@@ -928,10 +924,11 @@ export function CheckoutRegisterForm({
               <Button
                 type="submit"
                 disabled={form.formState.isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold mt-8 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold mt-8 disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
                 size="lg"
               >
-                {form.formState.isSubmitting ? (
+                {form.formState.isSubmitting ||
+                form.formState.isSubmitSuccessful ? (
                   <Loader2 className="animate-spin" />
                 ) : (
                   'Create Account & Pay'

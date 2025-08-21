@@ -29,7 +29,7 @@ import {
 } from '@/components/ui/form';
 import { toast } from 'sonner';
 import { Switch } from '@/components/ui/switch';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useUploadIdentityFile } from '@/hooks';
 import { Upload, X, FileImage } from 'lucide-react';
 
@@ -187,13 +187,8 @@ export function CheckoutForm({
         return;
       }
 
-      const convertedStartDate = convertISOToCurrentTimezone(values.start_date);
-      const convertedEndDate = convertISOToCurrentTimezone(values.end_date!);
-
       const formData = {
         ...values,
-        start_date: convertedStartDate,
-        end_date: convertedEndDate,
       };
 
       const response = await useCreateBooking(formData);
@@ -807,10 +802,11 @@ export function CheckoutForm({
               <Button
                 type="submit"
                 disabled={form.formState.isSubmitting || !hasUploadedIdentity}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold mt-8 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold mt-8 disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
                 size="lg"
               >
-                {form.formState.isSubmitting ? (
+                {form.formState.isSubmitting ||
+                form.formState.isSubmitSuccessful ? (
                   <Loader2 className="animate-spin" />
                 ) : !hasUploadedIdentity ? (
                   'Upload Identity Files to Continue'

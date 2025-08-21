@@ -1,6 +1,6 @@
 'use client';
 import { TravelPackages } from '@/interfaces/travel-packages.interface';
-import { combineDateAndTime, convertISOToCurrentTimezone } from '@/lib/utils';
+import { combineDateAndTime } from '@/lib/utils';
 import { BookingRegisterFormSchema } from '@/lib/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -55,7 +55,7 @@ export function CheckoutRegisterForm({
       with_driver: false,
       number_of_persons: 1,
       start_date: '',
-      end_date: new Date().toISOString(),
+      end_date: '',
       payment_method: 'PAYPAL',
       pickup_location: '',
       pickup_time: '',
@@ -87,11 +87,8 @@ export function CheckoutRegisterForm({
 
   async function onSubmit(values: z.infer<typeof BookingRegisterFormSchema>) {
     try {
-      const convertedDate = convertISOToCurrentTimezone(values.start_date);
       const formData = {
         ...values,
-        start_date: convertedDate,
-        end_date: convertedDate,
       };
       const response = await useCreateBookingWithRegister(formData);
       if ('errors' in response) {
@@ -296,7 +293,7 @@ export function CheckoutRegisterForm({
                               <Button
                                 variant="outline"
                                 id="date-picker"
-                                className="w-32 justify-between font-normal"
+                                className="w-32 justify-between font-normal cursor-pointer"
                                 type="button"
                               >
                                 {field.value
@@ -598,10 +595,11 @@ export function CheckoutRegisterForm({
               <Button
                 type="submit"
                 disabled={form.formState.isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold mt-8"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold mt-8 cursor-pointer"
                 size="lg"
               >
-                {form.formState.isSubmitting ? (
+                {form.formState.isSubmitting ||
+                form.formState.isSubmitSuccessful ? (
                   <Loader2 className="animate-spin" />
                 ) : (
                   'Create Account & Pay'

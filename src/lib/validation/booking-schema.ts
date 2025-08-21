@@ -7,7 +7,7 @@ export const BookingFormSchema = z
     with_driver: z.boolean().optional(),
     number_of_persons: z.number().optional(),
     start_date: z.string().datetime({ message: "Start Date must be provided" }),
-    end_date: z.string().datetime().optional(),
+    end_date: z.string().datetime(),
     payment_method: z.enum(["MIDTRANS", "PAYPAL"]),
     pickup_location: z
       .string()

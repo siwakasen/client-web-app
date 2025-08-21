@@ -1,5 +1,5 @@
 'use client';
-import { combineDateAndTime, convertISOToCurrentTimezone } from '@/lib/utils';
+import { combineDateAndTime } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -35,13 +35,21 @@ interface CheckoutFormProps {
 
 export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
   const form = useForm<z.infer<typeof BookingFormSchema>>({
-    resolver: zodResolver(BookingFormSchema),
+    resolver: async (data, context, options) => {
+      // you can debug your validation schema here
+      console.log('formData', data);
+      console.log(
+        'validation result',
+        await zodResolver(BookingFormSchema)(data, context, options)
+      );
+      return zodResolver(BookingFormSchema)(data, context, options);
+    },
     defaultValues: {
       package_id: travelPackage.id,
       with_driver: false,
       number_of_persons: 1,
       start_date: '',
-      end_date: new Date().toISOString(),
+      end_date: '',
       payment_method: 'PAYPAL',
       pickup_location: '',
       pickup_time: '',
@@ -66,11 +74,8 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
 
   async function onSubmit(values: z.infer<typeof BookingFormSchema>) {
     try {
-      const convertedDate = convertISOToCurrentTimezone(values.start_date);
       const formData = {
         ...values,
-        start_date: convertedDate,
-        end_date: convertedDate,
       };
       const response = await useCreateBooking(formData);
 
@@ -129,7 +134,7 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                               <Button
                                 variant="outline"
                                 id="date-picker"
-                                className="w-32 justify-between font-normal"
+                                className="w-32 justify-between font-normal cursor-pointer"
                                 type="button"
                               >
                                 {field.value
@@ -431,10 +436,11 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
               <Button
                 type="submit"
                 disabled={form.formState.isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold mt-8"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold mt-8 cursor-pointer"
                 size="lg"
               >
-                {form.formState.isSubmitting ? (
+                {form.formState.isSubmitting ||
+                form.formState.isSubmitSuccessful ? (
                   <Loader2 className="animate-spin" />
                 ) : (
                   'Pay now'

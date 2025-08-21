@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BookingStatus } from '@/constants/booking-status';
 import Image from 'next/image';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, convertISOToCurrentTimezone } from '@/lib/utils';
 import {
   convertCarImageUrl,
   convertTravelImageUrl,
@@ -189,7 +189,9 @@ export default async function HistoryOrderDetailPage({
               <div>
                 <span className="font-medium text-gray-700">Order Date:</span>
                 <p className="text-gray-900">
-                  {formatDateTime(booking.created_at)}
+                  {formatDateTime(
+                    convertISOToCurrentTimezone(booking.created_at)
+                  )}
                 </p>
               </div>
 
@@ -291,10 +293,11 @@ export default async function HistoryOrderDetailPage({
                       <p>
                         Payment Date:{' '}
                         {payment.payment_date
-                          ? formatDateTime(payment.payment_date)
+                          ? formatDateTime(
+                              convertISOToCurrentTimezone(payment.payment_date)
+                            )
                           : 'N/A'}
                       </p>
-                      <p>Created: {formatDateTime(payment.created_at)}</p>
                     </div>
 
                     {/* Pay Now Button for Pending Payments */}
