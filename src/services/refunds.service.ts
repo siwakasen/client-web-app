@@ -33,8 +33,6 @@ export const addRefundForm = async (
     token
   );
 
-  console.log(data);
-
   const response = await api.patch(`/refunds/save-form/${id}`, data);
   return response.data;
 };

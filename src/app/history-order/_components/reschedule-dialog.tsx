@@ -115,7 +115,6 @@ export function RescheduleDialog({
 
       if ('errors' in response) {
         toast.error('Failed to reschedule booking');
-        console.error('Reschedule error:', response.errors);
       } else {
         toast.success('Reschedule request submitted successfully');
         onClose();
@@ -123,7 +122,6 @@ export function RescheduleDialog({
       }
     } catch (error) {
       toast.error('An error occurred while rescheduling');
-      console.error('Reschedule error:', error);
     } finally {
       setIsSubmitting(false);
     }

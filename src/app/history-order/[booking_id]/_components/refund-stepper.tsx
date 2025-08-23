@@ -3,7 +3,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RefundStatus } from '@/interfaces/refunds.interface';
-import { formatCurrency } from '@/lib/utils';
+import { convertISOToCurrentTimezone, formatCurrency } from '@/lib/utils';
 
 interface RefundStepperProps {
   refund: any;
@@ -111,9 +111,13 @@ export function RefundStepper({ refund, bookingId }: RefundStepperProps) {
               <p className="text-gray-900">{refund.reason}</p>
             </div>
             <div>
-              <span className="font-medium text-gray-700">Created:</span>
+              <span className="font-medium text-gray-700">
+                Refund Request Date:
+              </span>
               <p className="text-gray-900">
-                {new Date(refund.created_at).toLocaleDateString()}
+                {new Date(
+                  convertISOToCurrentTimezone(refund.created_at)
+                ).toLocaleDateString()}
               </p>
             </div>
           </div>

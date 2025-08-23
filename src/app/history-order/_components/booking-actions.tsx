@@ -94,7 +94,6 @@ export function BookingActions({
   const handlePayNow = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(payment_method, payment_gateway_id);
 
     if (payment_method === 'PAYPAL') {
       window.location.href = `https://www.sandbox.paypal.com/checkoutnow?token=${payment_gateway_id}`;
@@ -105,7 +104,6 @@ export function BookingActions({
 
   // Show Pay Now button for WAITING_PAYMENT
   if (canPay(status)) {
-    console.log(payment_method, payment_gateway_id);
     return (
       <>
         <div className="flex gap-2">

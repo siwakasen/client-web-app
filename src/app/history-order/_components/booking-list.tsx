@@ -28,6 +28,7 @@ import {
   Meta,
   RequestType,
 } from '@/interfaces';
+import { convertISOToCurrentTimezone } from '@/lib/utils';
 
 interface BookingListProps {
   currentPage: number;
@@ -337,7 +338,10 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
                         {getBookingTitle(booking)}
                       </h3>
                       <p className="text-sm md:text-xs text-muted-foreground">
-                        Order #{booking.id} • {formatDate(booking.created_at)}
+                        Order #{booking.id} •{' '}
+                        {formatDate(
+                          convertISOToCurrentTimezone(booking.created_at)
+                        )}
                       </p>
                     </div>
 

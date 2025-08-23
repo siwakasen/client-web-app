@@ -30,7 +30,6 @@ export function RefundFormDialog({ bookingId, refund }: RefundFormDialogProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
     const response = await useAddRefundForm(refund.id, formData);
     if ('errors' in response) {
       toast.error(response.errors.message);
