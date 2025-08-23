@@ -195,19 +195,18 @@ export function CheckoutForm({
         start_date: convertedStartDate,
         end_date: convertedEndDate,
       };
-      console.log('formData', formData);
 
-      // const response = await useCreateBooking(formData);
+      const response = await useCreateBooking(formData);
 
-      // if ('errors' in response) {
-      //   toast.error(response.errors.message || 'An error occurred', {
-      //     description: response.status
-      //       ? `Error code: ${response.status}`
-      //       : undefined,
-      //   });
-      //   return;
-      // }
-      // window.location.href = response.data.redirect_url;
+      if ('errors' in response) {
+        toast.error(response.errors.message || 'An error occurred', {
+          description: response.status
+            ? `Error code: ${response.status}`
+            : undefined,
+        });
+        return;
+      }
+      window.location.href = response.data.redirect_url;
     } catch (error: any) {
       console.log(error);
       toast.error('An unexpected error occurred. Please try again.');

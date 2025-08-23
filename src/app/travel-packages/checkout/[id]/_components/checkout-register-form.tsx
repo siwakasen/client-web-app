@@ -93,19 +93,18 @@ export function CheckoutRegisterForm({
         start_date: convertedDate,
         end_date: convertedDate,
       };
-      console.log('formData', formData);
-      // const response = await useCreateBookingWithRegister(formData);
-      // if ('errors' in response) {
-      //   switch (true) {
-      //     case !!response.errors?.message:
-      //       console.log('Booking error:', response);
-      //       toast.error(response.errors.message);
-      //       break;
-      //   }
-      //   return;
-      // }
+      const response = await useCreateBookingWithRegister(formData);
+      if ('errors' in response) {
+        switch (true) {
+          case !!response.errors?.message:
+            console.log('Booking error:', response);
+            toast.error(response.errors.message);
+            break;
+        }
+        return;
+      }
 
-      // window.location.href = response.data.redirect_url;
+      window.location.href = response.data.redirect_url;
     } catch (error: any) {
       toast.error(error.message);
     }
