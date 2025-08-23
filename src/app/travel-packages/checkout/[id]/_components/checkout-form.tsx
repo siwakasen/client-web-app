@@ -1,5 +1,5 @@
 'use client';
-import { combineDateAndTime } from '@/lib/utils';
+import { combineDateAndTime, convertISOToCurrentTimezone } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -35,21 +35,13 @@ interface CheckoutFormProps {
 
 export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
   const form = useForm<z.infer<typeof BookingFormSchema>>({
-    resolver: async (data, context, options) => {
-      // you can debug your validation schema here
-      console.log('formData', data);
-      console.log(
-        'validation result',
-        await zodResolver(BookingFormSchema)(data, context, options)
-      );
-      return zodResolver(BookingFormSchema)(data, context, options);
-    },
+    resolver: zodResolver(BookingFormSchema),
     defaultValues: {
       package_id: travelPackage.id,
       with_driver: false,
       number_of_persons: 1,
       start_date: '',
-      end_date: '',
+      end_date: new Date().toISOString(),
       payment_method: 'PAYPAL',
       pickup_location: '',
       pickup_time: '',
@@ -74,8 +66,12 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
 
   async function onSubmit(values: z.infer<typeof BookingFormSchema>) {
     try {
+      const convertedDate = convertISOToCurrentTimezone(values.start_date);
+
       const formData = {
         ...values,
+        start_date: convertedDate,
+        end_date: convertedDate,
       };
       const response = await useCreateBooking(formData);
 
@@ -89,7 +85,6 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
       }
       window.location.href = response.data.redirect_url;
     } catch (error: any) {
-      console.log(error);
       toast.error('An unexpected error occurred. Please try again.');
     }
   }
@@ -203,9 +198,6 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                       <FormItem>
                         <FormLabel htmlFor="persons">
                           Number of Persons
-                          <span className="text-red-500 text-xl font-bold">
-                            *
-                          </span>
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -232,9 +224,6 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                       <FormItem>
                         <FormLabel htmlFor="pickup-location">
                           Pickup Location
-                          <span className="text-red-500 text-xl font-bold">
-                            *
-                          </span>
                         </FormLabel>
                         <FormControl>
                           <Textarea
@@ -279,12 +268,33 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
                 <p className="text-sm text-gray-600 mb-4">
                   All transactions are secured and encrypted.
                 </p>
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                  <p className="text-sm text-red-700">
-                    <span className="font-medium">Attention:</span> The final
-                    price will be displayed on the payment page and may vary
-                    based on currency conversion and applicable taxes.
-                  </p>
+                <div className="space-y-4 mb-4">
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg
+                          className="w-5 h-5 text-yellow-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-yellow-600">
+                          The final price will be displayed on the payment page
+                          and may vary based on currency conversion and
+                          applicable taxes.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <FormField
                   control={form.control}
@@ -435,7 +445,10 @@ export function CheckoutForm({ travelPackage, customer }: CheckoutFormProps) {
               {/* Pay Now Button */}
               <Button
                 type="submit"
-                disabled={form.formState.isSubmitting}
+                disabled={
+                  form.formState.isSubmitting ||
+                  form.formState.isSubmitSuccessful
+                }
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold mt-8 cursor-pointer"
                 size="lg"
               >

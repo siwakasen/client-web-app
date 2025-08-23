@@ -6,8 +6,8 @@ export const BookingFormSchema = z
     car_id: z.number().optional(),
     with_driver: z.boolean().optional(),
     number_of_persons: z.number().optional(),
-    start_date: z.string().datetime({ message: "Start Date must be provided" }),
-    end_date: z.string().datetime(),
+    start_date: z.string().min(1, { message: "Start Date must be provided" }),
+    end_date: z.string().min(1, { message: "End Date must be provided" }),
     payment_method: z.enum(["MIDTRANS", "PAYPAL"]),
     pickup_location: z
       .string()
@@ -51,8 +51,8 @@ export const BookingRegisterFormSchema = z
     car_id: z.number().optional(),
     with_driver: z.boolean().optional(),
     number_of_persons: z.number().optional(),
-    start_date: z.string().datetime({ message: "Start Date must be provided" }),
-    end_date: z.string().datetime().optional(),
+    start_date: z.string().min(1, { message: "Start Date must be provided" }),
+    end_date: z.string(),
     payment_method: z.enum(["MIDTRANS", "PAYPAL"]),
     pickup_location: z
       .string()
@@ -124,7 +124,7 @@ export const BookingRegisterFormSchema = z
       return true;
     },
     {
-      message: "Please upload 2 identity files to proceed",
+      message: "Please upload identity and driver license files",
       path: ["identity_file"],
     }
   );

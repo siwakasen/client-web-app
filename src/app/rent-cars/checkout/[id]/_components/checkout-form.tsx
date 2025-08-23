@@ -187,21 +187,27 @@ export function CheckoutForm({
         return;
       }
 
+      const convertedStartDate = convertISOToCurrentTimezone(values.start_date);
+      const convertedEndDate = convertISOToCurrentTimezone(values.end_date);
+
       const formData = {
         ...values,
+        start_date: convertedStartDate,
+        end_date: convertedEndDate,
       };
+      console.log('formData', formData);
 
-      const response = await useCreateBooking(formData);
+      // const response = await useCreateBooking(formData);
 
-      if ('errors' in response) {
-        toast.error(response.errors.message || 'An error occurred', {
-          description: response.status
-            ? `Error code: ${response.status}`
-            : undefined,
-        });
-        return;
-      }
-      window.location.href = response.data.redirect_url;
+      // if ('errors' in response) {
+      //   toast.error(response.errors.message || 'An error occurred', {
+      //     description: response.status
+      //       ? `Error code: ${response.status}`
+      //       : undefined,
+      //   });
+      //   return;
+      // }
+      // window.location.href = response.data.redirect_url;
     } catch (error: any) {
       console.log(error);
       toast.error('An unexpected error occurred. Please try again.');
@@ -597,9 +603,6 @@ export function CheckoutForm({
                       <FormItem>
                         <FormLabel htmlFor="pickup-location">
                           Pickup Location
-                          <span className="text-red-500 text-xl font-bold">
-                            *
-                          </span>
                         </FormLabel>
                         <FormControl>
                           <Textarea
@@ -644,12 +647,33 @@ export function CheckoutForm({
                 <p className="text-sm text-gray-600 mb-4">
                   All transactions are secured and encrypted.
                 </p>
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                  <p className="text-sm text-red-700">
-                    <span className="font-medium">Attention:</span> The final
-                    price will be displayed on the payment page and may vary
-                    based on currency conversion and applicable taxes.
-                  </p>
+                <div className="space-y-4 mb-4">
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg
+                          className="w-5 h-5 text-yellow-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-yellow-600">
+                          The final price will be displayed on the payment page
+                          and may vary based on currency conversion and
+                          applicable taxes.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <FormField
                   control={form.control}
@@ -801,7 +825,11 @@ export function CheckoutForm({
               {/* Pay Now Button */}
               <Button
                 type="submit"
-                disabled={form.formState.isSubmitting || !hasUploadedIdentity}
+                disabled={
+                  form.formState.isSubmitting ||
+                  form.formState.isSubmitSuccessful ||
+                  !hasUploadedIdentity
+                }
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold mt-8 disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
                 size="lg"
               >

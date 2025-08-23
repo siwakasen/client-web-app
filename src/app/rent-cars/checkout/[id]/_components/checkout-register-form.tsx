@@ -173,22 +173,26 @@ export function CheckoutRegisterForm({
 
   async function onSubmit(values: z.infer<typeof BookingRegisterFormSchema>) {
     try {
+      const convertedStartDate = convertISOToCurrentTimezone(values.start_date);
+      const convertedEndDate = convertISOToCurrentTimezone(values.end_date);
       const formData = {
         ...values,
+        start_date: convertedStartDate,
+        end_date: convertedEndDate,
       };
+      console.log('formData', formData);
+      // const response = await useCreateBookingWithRegister(formData);
+      // if ('errors' in response) {
+      //   switch (true) {
+      //     case !!response.errors?.message:
+      //       console.log('Booking error:', response);
+      //       toast.error(response.errors.message);
+      //       break;
+      //   }
+      //   return;
+      // }
 
-      const response = await useCreateBookingWithRegister(formData);
-      if ('errors' in response) {
-        switch (true) {
-          case !!response.errors?.message:
-            console.log('Booking error:', response);
-            toast.error(response.errors.message);
-            break;
-        }
-        return;
-      }
-
-      window.location.href = response.data.redirect_url;
+      // window.location.href = response.data.redirect_url;
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -366,11 +370,11 @@ export function CheckoutRegisterForm({
                 </div>
 
                 <div className="space-y-4">
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
                         <svg
-                          className="w-5 h-5 text-blue-600"
+                          className="w-5 h-5 text-yellow-600"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -384,13 +388,11 @@ export function CheckoutRegisterForm({
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-blue-800">
-                          Identity Required
+                        <p className="text-sm font-medium text-yellow-800">
+                          Identity & Driver License Required
                         </p>
-                        <p className="text-xs text-blue-600 mt-1">
-                          Upload 2 clear photos of your identity (front and
-                          back). Your account will be created and files will be
-                          uploaded during registration.
+                        <p className="text-xs text-yellow-600 mt-1">
+                          Upload your identity file and driver license file.
                         </p>
                       </div>
                     </div>
@@ -411,11 +413,8 @@ export function CheckoutRegisterForm({
                           htmlFor="file-upload-register"
                           className="cursor-pointer"
                         >
-                          <span className="mt-2 block text-sm font-medium text-gray-900">
-                            Upload Identity Files
-                          </span>
                           <span className="mt-1 block text-xs text-gray-500">
-                            PNG, JPG, JPEG up to 30MB each (2 files required)
+                            PNG, JPG, JPEG (2 files required)
                           </span>
                         </label>
                         <input
@@ -719,9 +718,6 @@ export function CheckoutRegisterForm({
                       <FormItem>
                         <FormLabel htmlFor="pickup-location">
                           Pickup Location
-                          <span className="text-red-500 text-xl font-bold">
-                            *
-                          </span>
                         </FormLabel>
                         <FormControl>
                           <Textarea
@@ -766,12 +762,33 @@ export function CheckoutRegisterForm({
                 <p className="text-sm text-gray-600 mb-4">
                   All transactions are secured and encrypted.
                 </p>
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                  <p className="text-sm text-red-700">
-                    <span className="font-medium">Attention:</span> The final
-                    price will be displayed on the payment page and may vary
-                    based on currency conversion and applicable taxes.
-                  </p>
+                <div className="space-y-4 mb-4">
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg
+                          className="w-5 h-5 text-yellow-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-yellow-600">
+                          The final price will be displayed on the payment page
+                          and may vary based on currency conversion and
+                          applicable taxes.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <FormField
                   control={form.control}
@@ -923,7 +940,10 @@ export function CheckoutRegisterForm({
               {/* Pay Now Button */}
               <Button
                 type="submit"
-                disabled={form.formState.isSubmitting}
+                disabled={
+                  form.formState.isSubmitting ||
+                  form.formState.isSubmitSuccessful
+                }
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold mt-8 disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
                 size="lg"
               >
