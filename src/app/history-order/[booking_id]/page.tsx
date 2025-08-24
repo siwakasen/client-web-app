@@ -187,24 +187,22 @@ export default async function HistoryOrderDetailPage({
           <CardContent className="space-y-4">
             <div className="grid gap-3">
               <div>
-                <span className="font-medium text-gray-700">Order Date:</span>
-                <p className="text-gray-900">
-                  {formatDateTime(
-                    convertISOToCurrentTimezone(booking.created_at)
-                  )}
-                </p>
-              </div>
-
-              <div>
-                <span className="font-medium text-gray-700">Duration:</span>
+                <span className=" text-sm text-gray-500">Date:</span>
                 <p className="text-gray-900">
                   {formatDate(booking.start_date)} -{' '}
                   {formatDate(booking.end_date)}
                 </p>
               </div>
+              <div>
+                <span className=" text-sm text-gray-500">Pickup Time:</span>
+                <p className="text-gray-900">{booking.pickup_time}</p>
+                <span className=" text-sm text-gray-500">
+                  Date and pickup time are shown in Bali Timezone (GMT +8).
+                </span>
+              </div>
 
               <div>
-                <span className="font-medium text-gray-700">
+                <span className=" text-sm text-gray-500">
                   Number of Persons:
                 </span>
                 <p className="text-gray-900">
@@ -213,22 +211,22 @@ export default async function HistoryOrderDetailPage({
               </div>
 
               <div>
-                <span className="font-medium text-gray-700">
-                  Pickup Location:
-                </span>
+                <span className=" text-sm text-gray-500">Pickup Location:</span>
                 <p className="text-gray-900">{booking.pickup_location}</p>
               </div>
 
               <div>
-                <span className="font-medium text-gray-700">Pickup Time:</span>
-                <p className="text-gray-900">{booking.pickup_time}</p>
+                <span className=" text-sm text-gray-500">Order Date:</span>
+                <p className="text-gray-900">
+                  {formatDateTime(
+                    convertISOToCurrentTimezone(booking.created_at)
+                  )}
+                </p>
               </div>
 
               {booking.with_driver !== null && (
                 <div>
-                  <span className="font-medium text-gray-700">
-                    With Driver:
-                  </span>
+                  <span className="text-sm text-gray-500">With Driver:</span>
                   <p className="text-gray-900">
                     {booking.with_driver ? 'Yes' : 'No'}
                   </p>
@@ -237,7 +235,7 @@ export default async function HistoryOrderDetailPage({
 
               {booking.additional_notes && (
                 <div>
-                  <span className="font-medium text-gray-700">
+                  <span className=" text-sm text-gray-500">
                     Additional Notes:
                   </span>
                   <p className="text-gray-900">{booking.additional_notes}</p>
@@ -245,7 +243,7 @@ export default async function HistoryOrderDetailPage({
               )}
 
               <div className="pt-3 border-t">
-                <span className="font-medium text-gray-700">Total Price:</span>
+                <span className=" text-sm text-gray-500">Total Price:</span>
                 <p className="text-2xl font-bold text-green-600">
                   {formatCurrency(booking.total_price)}
                 </p>

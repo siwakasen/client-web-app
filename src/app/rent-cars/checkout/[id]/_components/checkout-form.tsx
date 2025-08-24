@@ -406,6 +406,9 @@ export function CheckoutForm({
                   <ChevronDown className="h-4 w-4 text-gray-400" />
                 </div>
                 <div className="space-y-4">
+                  <span className="text-sm text-gray-500">
+                    Date and pickup time are shown in Bali Timezone (GMT +8).
+                  </span>
                   <div className="flex gap-4">
                     {/* Start Date */}
                     <FormField
