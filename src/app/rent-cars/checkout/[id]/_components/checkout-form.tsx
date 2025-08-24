@@ -32,6 +32,13 @@ import { Switch } from '@/components/ui/switch';
 import { useRouter, usePathname } from 'next/navigation';
 import { useUploadIdentityFile } from '@/hooks';
 import { Upload, X, FileImage } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 interface CheckoutFormProps {
   car: Car;
@@ -560,13 +567,63 @@ export function CheckoutForm({
                           Pickup Time
                         </FormLabel>
                         <FormControl>
-                          <Input
-                            type="time"
-                            id="time-picker"
-                            step="1"
-                            className="w-32"
-                            {...field}
-                          />
+                          <div className="flex gap-2">
+                            <Select
+                              value={
+                                field.value ? field.value.split(':')[0] : ''
+                              }
+                              onValueChange={(hour: string) => {
+                                const currentTime = field.value || '00:00';
+                                const [_, minutes] = currentTime.split(':');
+                                const newTime = `${hour}:${minutes}`;
+                                field.onChange(newTime);
+                              }}
+                            >
+                              <SelectTrigger className="w-20">
+                                <SelectValue placeholder="HH" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {Array.from({ length: 24 }, (_, i) => (
+                                  <SelectItem
+                                    key={i}
+                                    value={i.toString().padStart(2, '0')}
+                                  >
+                                    {i.toString().padStart(2, '0')}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <span className="flex items-center text-lg font-semibold">
+                              :
+                            </span>
+                            <Select
+                              value={
+                                field.value ? field.value.split(':')[1] : ''
+                              }
+                              onValueChange={(minute: string) => {
+                                const currentTime = field.value || '00:00';
+                                const [hours] = currentTime.split(':');
+                                const newTime = `${hours}:${minute}`;
+                                field.onChange(newTime);
+                              }}
+                            >
+                              <SelectTrigger className="w-20">
+                                <SelectValue placeholder="MM" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {[
+                                  0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
+                                ].map((min) => (
+                                  <SelectItem
+                                    key={min}
+                                    value={min.toString().padStart(2, '0')}
+                                  >
+                                    {min.toString().padStart(2, '0')}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>

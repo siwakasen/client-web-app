@@ -318,15 +318,12 @@ export default async function HistoryOrderDetailPage({
       {booking.booking_adjustments.length > 0 && (
         <Card className="mt-6">
           <CardHeader>
-            <CardTitle>Booking Adjustment & Refund Information</CardTitle>
+            <CardTitle>Reschedule & Cancellation Request</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
               {/* Booking Adjustments */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">
-                  Adjustment Requests
-                </h3>
                 {booking.booking_adjustments.map((adjustment) => (
                   <div
                     key={adjustment.id}
@@ -334,8 +331,7 @@ export default async function HistoryOrderDetailPage({
                   >
                     <div className="flex justify-between items-center mb-2">
                       <div className="text-sm text-gray-600 space-y-1">
-                        <p>
-                          Request Type:{' '}
+                        <p className="font-medium">
                           {adjustment.request_type === RequestType.CANCELLATION
                             ? 'Cancellation'
                             : 'Reschedule'}
@@ -351,6 +347,9 @@ export default async function HistoryOrderDetailPage({
                     </div>
                     <div className="text-sm text-gray-600 space-y-1">
                       <p>Reason: {adjustment.reason}</p>
+                      <p>
+                        Requested Date: {formatDateTime(adjustment.created_at)}
+                      </p>
                     </div>
                     {adjustment.request_type === RequestType.RESCHEDULE && (
                       <div className="text-sm text-gray-600 space-y-1">
