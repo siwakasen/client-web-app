@@ -205,12 +205,35 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+  const formatOrderDate = (dateString: string): string => {
+    return new Date(dateString).toLocaleString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
     });
+  };
+
+  const formatDate = (dateString: string): string => {
+    if (!dateString) return '';
+    const isoMatch = dateString.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (!isoMatch) return '';
+    const [_, year, month, day] = isoMatch;
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    const monthName = months[parseInt(month, 10) - 1];
+    return `${monthName} ${day.padStart(2, '0')}, ${year}`;
   };
 
   const formatCurrency = (amount: number) => {
@@ -339,7 +362,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
                       </h3>
                       <p className="text-sm md:text-xs text-muted-foreground">
                         Order #{booking.id} •{' '}
-                        {formatDate(
+                        {formatOrderDate(
                           convertISOToCurrentTimezone(booking.created_at)
                         )}
                       </p>

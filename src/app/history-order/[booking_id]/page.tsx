@@ -146,13 +146,68 @@ export default async function HistoryOrderDetailPage({
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+  const formatDateTimeLocale = (dateString: string): string => {
+    if (!dateString) return '';
+    const isoMatch = dateString.match(
+      /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/
+    );
+    if (!isoMatch) return '';
+    const [_, year, month, day, hour, minute] = isoMatch;
+
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+
+    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    // Calculate day of week manually
+    const yearNum = parseInt(year, 10);
+    const monthNum = parseInt(month, 10);
+    const dayNum = parseInt(day, 10);
+
+    // Zeller's congruence algorithm to get day of week
+    let adjustedMonth = monthNum;
+    let adjustedYear = yearNum;
+    if (monthNum < 3) {
+      adjustedMonth += 12;
+      adjustedYear -= 1;
+    }
+    const k = adjustedYear % 100;
+    const j = Math.floor(adjustedYear / 100);
+    const h =
+      (dayNum +
+        Math.floor((13 * (adjustedMonth + 1)) / 5) +
+        k +
+        Math.floor(k / 4) +
+        Math.floor(j / 4) -
+        2 * j) %
+      7;
+    const dayOfWeek = (h + 5) % 7; // Adjust to match Sunday=0
+
+    const monthName = months[monthNum - 1];
+    const weekdayName = weekdays[dayOfWeek];
+
+    // Format time
+    const hourNum = parseInt(hour, 10);
+    const isPM = hourNum >= 12;
+    const displayHour =
+      hourNum === 0 ? 12 : hourNum > 12 ? hourNum - 12 : hourNum;
+    const ampm = isPM ? 'PM' : 'AM';
+
+    return `${weekdayName}, ${monthName} ${dayNum}, ${yearNum}, ${displayHour
+      .toString()
+      .padStart(2, '0')}:${minute} ${ampm}`;
   };
 
   const formatDateTime = (dateString: string) => {
@@ -189,8 +244,8 @@ export default async function HistoryOrderDetailPage({
               <div>
                 <span className=" text-sm text-gray-500">Date:</span>
                 <p className="text-gray-900">
-                  {formatDate(booking.start_date)} -{' '}
-                  {formatDate(booking.end_date)}
+                  {formatDateTimeLocale(booking.start_date)} -{' '}
+                  {formatDateTimeLocale(booking.end_date)}
                 </p>
               </div>
               <div>
@@ -291,9 +346,7 @@ export default async function HistoryOrderDetailPage({
                       <p>
                         Payment Date:{' '}
                         {payment.payment_date
-                          ? formatDateTime(
-                              convertISOToCurrentTimezone(payment.payment_date)
-                            )
+                          ? formatDateTimeLocale(payment.payment_date)
                           : 'N/A'}
                       </p>
                     </div>
@@ -348,18 +401,21 @@ export default async function HistoryOrderDetailPage({
                     <div className="text-sm text-gray-600 space-y-1">
                       <p>Reason: {adjustment.reason}</p>
                       <p>
-                        Requested Date: {formatDateTime(adjustment.created_at)}
+                        Requested Date:{' '}
+                        {formatDateTime(
+                          convertISOToCurrentTimezone(adjustment.created_at)
+                        )}
                       </p>
                     </div>
                     {adjustment.request_type === RequestType.RESCHEDULE && (
                       <div className="text-sm text-gray-600 space-y-1">
-                        <p>
+                        <p className="m-0">
                           New Start Date:{' '}
-                          {formatDateTime(adjustment.new_start_date)}
+                          {formatDateTimeLocale(adjustment.new_start_date)}
                         </p>
                         <p>
                           New End Date:{' '}
-                          {formatDateTime(adjustment.new_end_date)}
+                          {formatDateTimeLocale(adjustment.new_end_date)}
                         </p>
                       </div>
                     )}

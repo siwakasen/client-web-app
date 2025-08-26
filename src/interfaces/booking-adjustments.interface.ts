@@ -9,8 +9,8 @@ export interface BookingAdjustment {
     request_type: string
     status: string
     reason: string
-    new_start_date: any
-    new_end_date: any
+    new_start_date: string
+    new_end_date: string
     additional_price: number
     created_at: string
     updated_at: string

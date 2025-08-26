@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 import { useRouter } from 'next/navigation';
 
-import { cn } from '@/lib/utils';
+import { cn, convertISOToCurrentTimezone } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import {
@@ -25,9 +25,15 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { useRescheduleBooking } from '@/hooks/booking-adjustments.hook';
 import { toast } from 'sonner';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 interface RescheduleDialogProps {
   isOpen: boolean;
@@ -47,7 +53,6 @@ export function RescheduleDialog({
   currentEndDate,
 }: RescheduleDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
 
   // For car rentals - date range picker
   const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
@@ -65,6 +70,18 @@ export function RescheduleDialog({
     currentStartDate ? new Date(currentStartDate) : undefined
   );
 
+  // Pickup time state
+  const [pickupTime, setPickupTime] = useState('');
+
+  // Helper function to combine date and time
+  const combineDateAndTime = (date: Date, time: string): Date => {
+    if (!time) return date;
+    const [hours, minutes] = time.split(':');
+    const newDate = new Date(date);
+    newDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+    return newDate;
+  };
+
   const handleDateRangeSelect = (selectedRange: DateRange | undefined) => {
     setDateRange(selectedRange);
   };
@@ -76,6 +93,10 @@ export function RescheduleDialog({
   const handleSubmit = async () => {
     let newStartDate: string;
     let newEndDate: string;
+    if (!pickupTime) {
+      toast.error('Please select a pickup time');
+      return;
+    }
 
     if (isCarRental) {
       // For car rentals, use date range
@@ -83,8 +104,18 @@ export function RescheduleDialog({
         toast.error('Please select both start and end dates');
         return;
       }
-      newStartDate = dateRange.from.toISOString();
-      newEndDate = dateRange.to.toISOString();
+
+      // Combine dates with pickup time if provided
+      const startDateWithTime = pickupTime
+        ? combineDateAndTime(dateRange.from, pickupTime)
+        : dateRange.from;
+      const endDateWithTime = pickupTime
+        ? combineDateAndTime(dateRange.to, pickupTime)
+        : dateRange.to;
+      newStartDate = convertISOToCurrentTimezone(
+        startDateWithTime.toISOString()
+      );
+      newEndDate = convertISOToCurrentTimezone(endDateWithTime.toISOString());
     } else {
       // For travel packages, use single date and calculate end date
       if (!selectedDate) {
@@ -92,29 +123,31 @@ export function RescheduleDialog({
         return;
       }
 
-      // Calculate end date based on current duration
-      const currentStart = new Date(currentStartDate);
-      const currentEnd = new Date(currentEndDate);
-      const durationMs = currentEnd.getTime() - currentStart.getTime();
-      const durationDays = Math.ceil(durationMs / (1000 * 60 * 60 * 24));
-
       const newEnd = new Date(selectedDate);
-      newEnd.setDate(newEnd.getDate() + durationDays);
 
-      newStartDate = selectedDate.toISOString();
-      newEndDate = newEnd.toISOString();
+      // Combine dates with pickup time if provided
+      const startDateWithTime = pickupTime
+        ? combineDateAndTime(selectedDate, pickupTime)
+        : selectedDate;
+      const endDateWithTime = pickupTime
+        ? combineDateAndTime(newEnd, pickupTime)
+        : newEnd;
+      newStartDate = convertISOToCurrentTimezone(
+        startDateWithTime.toISOString()
+      );
+      newEndDate = convertISOToCurrentTimezone(endDateWithTime.toISOString());
     }
 
     setIsSubmitting(true);
     try {
+      console.log(newStartDate, newEndDate);
       const response = await useRescheduleBooking(
         bookingId,
         newStartDate,
         newEndDate
       );
-
       if ('errors' in response) {
-        toast.error('Failed to reschedule booking');
+        toast.error(response.errors.message || 'An error occurred');
       } else {
         toast.success('Reschedule request submitted successfully');
         onClose();
@@ -133,6 +166,7 @@ export function RescheduleDialog({
     } else {
       setSelectedDate(undefined);
     }
+    setPickupTime('');
   };
 
   const formatDateRange = () => {
@@ -257,6 +291,61 @@ export function RescheduleDialog({
                 )}
               </div>
             )}
+
+            {/* Pickup Time Selection */}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Pickup Time</Label>
+              <div className="flex gap-2">
+                <Select
+                  value={pickupTime ? pickupTime.split(':')[0] : ''}
+                  onValueChange={(hour: string) => {
+                    const currentTime = pickupTime || '00:00';
+                    const [_, minutes] = currentTime.split(':');
+                    const newTime = `${hour}:${minutes}`;
+                    setPickupTime(newTime);
+                  }}
+                >
+                  <SelectTrigger className="w-20">
+                    <SelectValue placeholder="HH" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Array.from({ length: 24 }, (_, i) => (
+                      <SelectItem key={i} value={i.toString().padStart(2, '0')}>
+                        {i.toString().padStart(2, '0')}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <span className="flex items-center text-lg font-semibold">
+                  :
+                </span>
+                <Select
+                  value={pickupTime ? pickupTime.split(':')[1] : ''}
+                  onValueChange={(minute: string) => {
+                    const currentTime = pickupTime || '00:00';
+                    const [hours] = currentTime.split(':');
+                    const newTime = `${hours}:${minute}`;
+                    setPickupTime(newTime);
+                  }}
+                >
+                  <SelectTrigger className="w-20">
+                    <SelectValue placeholder="MM" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map(
+                      (min) => (
+                        <SelectItem
+                          key={min}
+                          value={min.toString().padStart(2, '0')}
+                        >
+                          {min.toString().padStart(2, '0')}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
         </div>
 
