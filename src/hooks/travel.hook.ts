@@ -17,7 +17,6 @@ import { ErrorResponse } from "./common.hook";
 export async function useGetTravelPackages(
   pagination: Pagination
 ): Promise<TravelPackagesResponse> {
-  "use cache";
   try {
     return await fetchTravelPackages(pagination);
   } catch (error: any) {
@@ -39,7 +38,6 @@ export async function useGetTravelPackages(
 export async function useGetTravelPackagesDetail(
   pagination: TravelPackagesDetailRequest
 ): Promise<TravelPackagesDetailResponse> {
-  "use cache";
   try {
     return await fetchTravelPackagesDetail(pagination);
   } catch (error: any) {
@@ -54,7 +52,6 @@ export async function useGetTravelPackagesDetail(
 export async function useGetTravelPackagesDetailHistory(
   id: number
 ): Promise<TravelPackagesDetailResponse> {
-  'use cache';
   try {
     return await fetchTravelPackagesDetailHistory(id);
   } catch (error: any) {

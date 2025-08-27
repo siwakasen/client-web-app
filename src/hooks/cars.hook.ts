@@ -12,7 +12,6 @@ import { ErrorResponse } from "./common.hook";
 export async function useGetCars(
   payload: Pagination
 ): Promise<CarsResponse> {
-  "use cache";
   try {
   return await fetchCars(payload);
 } catch (error: any) {
@@ -52,7 +51,6 @@ export async function useGetAvailableCars(
 export async function useGetCarsDetail(
   id: number
 ): Promise<CarsDetailResponse> {
-  'use cache';
   try {
     return await fetchCarsDetail({ id });
   } catch (error: any) {
@@ -65,7 +63,6 @@ export async function useGetCarsDetail(
 export async function useGetCarsDetailHistory(
   id: number,
 ): Promise<CarsDetailResponse> {
-  'use cache';
   try {
     return await fetchCarsDetailHistory({ id });
   } catch (error: any) {
