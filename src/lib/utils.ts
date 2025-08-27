@@ -7,6 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function convertISOToCurrentTimezone(isoString: string): string {
   if (!isoString) return "";
+  console.log("DB ISO",isoString);
 
   const date = new Date(isoString);
 
@@ -20,7 +21,8 @@ export function convertISOToCurrentTimezone(isoString: string): string {
 
   // Adjust the date by the timezone offset
   const adjustedDate = new Date(date.getTime() - timezoneOffset * 60 * 1000);
-
+  console.log("After convertISOToCurrentTimezone",adjustedDate);
+  console.log("After convertISOToCurrentTimezone ISO",adjustedDate.toISOString());
   return adjustedDate.toISOString();
 }
 export function combineDateAndTime(dateString: string, timeString: string) {

@@ -211,7 +211,8 @@ export default async function HistoryOrderDetailPage({
   };
 
   const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleString('en-US', {
+    console.log('before formatDateTime', dateString);
+    const date = new Date(dateString).toLocaleString('en-US', {
       weekday: 'short',
       year: 'numeric',
       month: 'short',
@@ -219,6 +220,8 @@ export default async function HistoryOrderDetailPage({
       hour: '2-digit',
       minute: '2-digit',
     });
+    console.log('after formatDateTime', date);
+    return date;
   };
 
   return (
@@ -273,7 +276,7 @@ export default async function HistoryOrderDetailPage({
               <div>
                 <span className=" text-sm text-gray-500">Order Date:</span>
                 <p className="text-gray-900">
-                  {formatDateTimeLocale(
+                  {formatDateTime(
                     convertISOToCurrentTimezone(booking.created_at)
                   )}
                 </p>
@@ -485,6 +488,7 @@ export default async function HistoryOrderDetailPage({
                         alt={packageData.package_name}
                         fill
                         className="object-cover"
+                        priority
                       />
                     </div>
                   )}
@@ -556,7 +560,9 @@ export default async function HistoryOrderDetailPage({
                         src={convertCarImageUrl(carData.car_image)}
                         alt={carData.car_name}
                         fill
+                        sizes="100vw"
                         className="object-cover"
+                        priority
                       />
                     </div>
                   )}
