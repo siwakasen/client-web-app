@@ -6,7 +6,6 @@ import { Booking } from '@/interfaces/booking.interface';
 import { formatCurrency } from '@/lib/utils';
 import {
   convertISOToCurrentTimezone,
-  formatDateTime,
   formatDateTimeLocale,
   formatStatusText,
   getStatusBadgeClass,
@@ -57,7 +56,9 @@ export function BookingInformation({ booking }: { booking: Booking }) {
           <div>
             <span className=" text-sm text-gray-500">Order Date:</span>
             <p className="text-gray-900">
-              {formatDateTime(convertISOToCurrentTimezone(booking.created_at))}
+              {formatDateTimeLocale(
+                convertISOToCurrentTimezone(booking.created_at)
+              )}
             </p>
           </div>
 

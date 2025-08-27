@@ -48,19 +48,7 @@ export function formatCurrency(amount: number, currency: string = 'USD'): string
     currency: currency,
   }).format(amount);
 }
-export const formatDateTime = (dateString: string) => {
-  console.log('before formatDateTime', dateString);
-  const date = new Date(dateString).toLocaleString('en-US', {
-    weekday: 'short',
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-  console.log('after formatDateTime', date);
-  return date;
-};
+
 
 export const formatDateTimeLocale = (dateString: string): string => {
   if (!dateString) return '';
