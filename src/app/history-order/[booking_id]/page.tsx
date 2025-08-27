@@ -6,7 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BookingStatus } from '@/constants/booking-status';
 import Image from 'next/image';
-import { formatCurrency, convertISOToCurrentTimezone } from '@/lib/utils';
+import {
+  formatCurrency,
+  convertISOToCurrentTimezone,
+  getStatusBadgeClass,
+  formatStatusText,
+  formatDateTimeLocale,
+} from '@/lib/utils';
 import {
   convertCarImageUrl,
   convertTravelImageUrl,
@@ -18,6 +24,8 @@ import { RequestType } from '@/interfaces';
 import { RefundStepper } from './_components/refund-stepper';
 import { RefundFormDialog } from './_components/refund-form-dialog';
 import { RefundStatus } from '@/interfaces/refunds.interface';
+import { BookingInformation } from './_components/booking-information';
+import { AdjustmentsInformation } from './_components/adjustments-information';
 
 export default async function HistoryOrderDetailPage({
   params,
@@ -84,146 +92,6 @@ export default async function HistoryOrderDetailPage({
     }
   }
 
-  const getStatusAdjustmentBadgeClass = (status: string) => {
-    switch (status) {
-      case AdjustmentStatus.PENDING:
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case AdjustmentStatus.WAITING_PAYMENT:
-        return 'bg-orange-100 text-orange-800 border-orange-200';
-      case AdjustmentStatus.APPROVED:
-        return 'bg-green-100 text-green-800 border-green-200';
-      case AdjustmentStatus.REJECTED:
-        return 'bg-red-100 text-red-800 border-red-200';
-      case AdjustmentStatus.EXPIRED:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
-
-  const formatStatusText = (status: string) => {
-    if (!status) return '';
-    return status
-      .replace(/_/g, ' ')
-      .toLowerCase()
-      .replace(/\b\w/g, (char) => char.toUpperCase());
-  };
-
-  const getStatusBadgeClass = (status: string) => {
-    const upperStatus = status?.toUpperCase();
-
-    // Payment Status Colors
-    if (upperStatus === 'PENDING') {
-      return 'bg-yellow-100 text-yellow-800 border-yellow-300 shadow-sm';
-    }
-    if (upperStatus === 'SUCCESS') {
-      return 'bg-green-100 text-green-800 border-green-300 shadow-sm';
-    }
-    if (upperStatus === 'FAILED') {
-      return 'bg-red-100 text-red-800 border-red-300 shadow-sm';
-    }
-
-    // Booking Status Colors
-    switch (upperStatus) {
-      case BookingStatus.CONFIRMED:
-        return 'bg-blue-100 text-blue-800 border-blue-300 shadow-sm';
-      case BookingStatus.ONGOING:
-        return 'bg-cyan-100 text-cyan-800 border-cyan-300 shadow-sm';
-      case BookingStatus.COMPLETED:
-        return 'bg-green-100 text-green-800 border-green-300 shadow-sm';
-      case BookingStatus.CANCELLED:
-        return 'bg-red-100 text-red-800 border-red-300 shadow-sm';
-      case BookingStatus.WAITING_PAYMENT:
-        return 'bg-orange-100 text-orange-800 border-orange-300 shadow-sm';
-      case BookingStatus.WAITING_CONFIRMATION:
-        return 'bg-yellow-100 text-yellow-800 border-yellow-300 shadow-sm';
-      case BookingStatus.NO_SHOW:
-        return 'bg-gray-100 text-gray-800 border-gray-300 shadow-sm';
-      case BookingStatus.PAYMENT_FAILED:
-        return 'bg-red-100 text-red-800 border-red-300 shadow-sm';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-300 shadow-sm';
-    }
-  };
-
-  const formatDateTimeLocale = (dateString: string): string => {
-    if (!dateString) return '';
-    const isoMatch = dateString.match(
-      /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/
-    );
-    if (!isoMatch) return '';
-    const [_, year, month, day, hour, minute] = isoMatch;
-
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-
-    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-    // Calculate day of week manually
-    const yearNum = parseInt(year, 10);
-    const monthNum = parseInt(month, 10);
-    const dayNum = parseInt(day, 10);
-
-    // Zeller's congruence algorithm to get day of week
-    let adjustedMonth = monthNum;
-    let adjustedYear = yearNum;
-    if (monthNum < 3) {
-      adjustedMonth += 12;
-      adjustedYear -= 1;
-    }
-    const k = adjustedYear % 100;
-    const j = Math.floor(adjustedYear / 100);
-    const h =
-      (dayNum +
-        Math.floor((13 * (adjustedMonth + 1)) / 5) +
-        k +
-        Math.floor(k / 4) +
-        Math.floor(j / 4) -
-        2 * j) %
-      7;
-    const dayOfWeek = (h + 5) % 7; // Adjust to match Sunday=0
-
-    const monthName = months[monthNum - 1];
-    const weekdayName = weekdays[dayOfWeek];
-
-    // Format time
-    const hourNum = parseInt(hour, 10);
-    const isPM = hourNum >= 12;
-    const displayHour =
-      hourNum === 0 ? 12 : hourNum > 12 ? hourNum - 12 : hourNum;
-    const ampm = isPM ? 'PM' : 'AM';
-
-    return `${weekdayName}, ${monthName} ${dayNum}, ${yearNum}, ${displayHour
-      .toString()
-      .padStart(2, '0')}:${minute} ${ampm}`;
-  };
-
-  const formatDateTime = (dateString: string) => {
-    console.log('before formatDateTime', dateString);
-    const date = new Date(dateString).toLocaleString('en-US', {
-      weekday: 'short',
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-    console.log('after formatDateTime', date);
-    return date;
-  };
-
   return (
     <div className="container mx-auto px-4 py-20 max-w-4xl">
       <div className="mb-6">
@@ -233,99 +101,7 @@ export default async function HistoryOrderDetailPage({
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Booking Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              Booking Information
-              <Badge className={getStatusBadgeClass(booking.status)}>
-                {formatStatusText(booking.status)}
-              </Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid gap-3">
-              <div>
-                <span className=" text-sm text-gray-500">Date:</span>
-                <p className="text-gray-900">
-                  {formatDateTimeLocale(booking.start_date)} -{' '}
-                  {formatDateTimeLocale(booking.end_date)}
-                </p>
-              </div>
-              <div>
-                <span className=" text-sm text-gray-500">Pickup Time:</span>
-                <p className="text-gray-900">{booking.pickup_time}</p>
-                <span className=" text-sm text-gray-500">
-                  Date and pickup time are shown in Bali Timezone (GMT +8).
-                </span>
-              </div>
-
-              <div>
-                <span className=" text-sm text-gray-500">
-                  Number of Persons:
-                </span>
-                <p className="text-gray-900">
-                  {booking.number_of_persons} person(s)
-                </p>
-              </div>
-
-              <div>
-                <span className=" text-sm text-gray-500">Pickup Location:</span>
-                <p className="text-gray-900">{booking.pickup_location}</p>
-              </div>
-
-              <div>
-                <span className=" text-sm text-gray-500">Order Date:</span>
-                <p className="text-gray-900">
-                  {formatDateTime(
-                    convertISOToCurrentTimezone(booking.created_at)
-                  )}
-                </p>
-              </div>
-
-              {booking.with_driver !== null && (
-                <div>
-                  <span className="text-sm text-gray-500">With Driver:</span>
-                  <p className="text-gray-900">
-                    {booking.with_driver ? 'Yes' : 'No'}
-                  </p>
-                </div>
-              )}
-
-              {booking.additional_notes && (
-                <div>
-                  <span className=" text-sm text-gray-500">
-                    Additional Notes:
-                  </span>
-                  <p className="text-gray-900">{booking.additional_notes}</p>
-                </div>
-              )}
-
-              <div className="pt-3 border-t">
-                <span className=" text-sm text-gray-500">Total Price:</span>
-                <p className="text-2xl font-bold text-green-600">
-                  {formatCurrency(booking.total_price)}
-                </p>
-              </div>
-
-              {/* Booking Action Buttons */}
-              <BookingActions
-                bookingId={booking.id}
-                status={booking.status}
-                isRequestingCancel={booking.booking_adjustments.some(
-                  (adjustment: BookingAdjustment) =>
-                    adjustment.request_type === RequestType.CANCELLATION
-                )}
-                isRequestingReschedule={booking.booking_adjustments.some(
-                  (adjustment: BookingAdjustment) =>
-                    adjustment.request_type === RequestType.RESCHEDULE
-                )}
-                isCarRental={!booking.package_id}
-                currentStartDate={booking.start_date}
-                currentEndDate={booking.end_date}
-              />
-            </div>
-          </CardContent>
-        </Card>
+        <BookingInformation booking={booking} />
 
         {/* Payment Information */}
         <Card>
@@ -381,47 +157,8 @@ export default async function HistoryOrderDetailPage({
               {/* Booking Adjustments */}
               <div className="space-y-4">
                 {booking.booking_adjustments.map((adjustment) => (
-                  <div
-                    key={adjustment.id}
-                    className="p-3 bg-gray-50 rounded-lg"
-                  >
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="text-sm text-gray-600 space-y-1">
-                        <p className="font-medium">
-                          {adjustment.request_type === RequestType.CANCELLATION
-                            ? 'Cancellation'
-                            : 'Reschedule'}
-                        </p>
-                      </div>
-                      <Badge
-                        className={getStatusAdjustmentBadgeClass(
-                          adjustment.status
-                        )}
-                      >
-                        {formatStatusText(adjustment.status)}
-                      </Badge>
-                    </div>
-                    <div className="text-sm text-gray-600 space-y-1">
-                      <p>Reason: {adjustment.reason}</p>
-                      <p>
-                        Requested Date:{' '}
-                        {formatDateTimeLocale(
-                          convertISOToCurrentTimezone(adjustment.created_at)
-                        )}
-                      </p>
-                    </div>
-                    {adjustment.request_type === RequestType.RESCHEDULE && (
-                      <div className="text-sm text-gray-600 space-y-1">
-                        <p className="m-0">
-                          New Start Date:{' '}
-                          {formatDateTimeLocale(adjustment.new_start_date)}
-                        </p>
-                        <p>
-                          New End Date:{' '}
-                          {formatDateTimeLocale(adjustment.new_end_date)}
-                        </p>
-                      </div>
-                    )}
+                  <div key={adjustment.id}>
+                    <AdjustmentsInformation adjustment={adjustment} />
                   </div>
                 ))}
               </div>
