@@ -273,7 +273,7 @@ export default async function HistoryOrderDetailPage({
               <div>
                 <span className=" text-sm text-gray-500">Order Date:</span>
                 <p className="text-gray-900">
-                  {formatDateTime(
+                  {formatDateTimeLocale(
                     convertISOToCurrentTimezone(booking.created_at)
                   )}
                 </p>
@@ -402,7 +402,7 @@ export default async function HistoryOrderDetailPage({
                       <p>Reason: {adjustment.reason}</p>
                       <p>
                         Requested Date:{' '}
-                        {formatDateTime(
+                        {formatDateTimeLocale(
                           convertISOToCurrentTimezone(adjustment.created_at)
                         )}
                       </p>
