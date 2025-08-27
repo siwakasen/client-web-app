@@ -140,7 +140,6 @@ export function RescheduleDialog({
 
     setIsSubmitting(true);
     try {
-      console.log(newStartDate, newEndDate);
       const response = await useRescheduleBooking(
         bookingId,
         newStartDate,

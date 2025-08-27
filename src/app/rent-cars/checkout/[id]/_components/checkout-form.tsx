@@ -215,7 +215,6 @@ export function CheckoutForm({
       }
       window.location.href = response.data.redirect_url;
     } catch (error: any) {
-      console.log(error);
       toast.error('An unexpected error occurred. Please try again.');
     }
   }

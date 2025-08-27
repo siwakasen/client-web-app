@@ -23,7 +23,6 @@ export default async function PaymentCompletePage({
     Number(order_id.split('-')[0])
   );
   if ('errors' in response && 'status' in response) {
-    console.log(response);
     if (response.status === 404) {
       notFound();
     } else {

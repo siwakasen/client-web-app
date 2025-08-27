@@ -191,7 +191,6 @@ export function CheckoutRegisterForm({
       if ('errors' in response) {
         switch (true) {
           case !!response.errors?.message:
-            console.log('Booking error:', response);
             toast.error(response.errors.message);
             break;
         }

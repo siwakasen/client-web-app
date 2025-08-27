@@ -36,7 +36,6 @@ export function BookingActions({
   };
 
   const canCancel = (status: string) => {
-    console.log(status === 'WAITING_PAYMENT');
     return status === 'WAITING_PAYMENT';
   };
 

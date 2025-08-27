@@ -84,7 +84,6 @@ export default function MainContent({
       setCars(data);
       setMeta(newMeta);
     } catch (error: any) {
-      console.log(error.message);
     } finally {
       setIsLoading(false);
     }

@@ -45,7 +45,6 @@ export async function useCreateBookingWithRegister(
       try {
         await useUploadIdentityFile(formData.identity_file);
       } catch (uploadError) {
-        console.warn("Identity file upload failed:", uploadError);
         // Don't fail the entire booking if upload fails - user can try again later
       }
     }

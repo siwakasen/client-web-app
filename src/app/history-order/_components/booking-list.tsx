@@ -141,12 +141,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
               if ('data' in packageResponse) {
                 packageName = packageResponse.data.package_name;
               }
-            } catch (error) {
-              console.error(
-                `Error fetching package ${booking.package_id}:`,
-                error
-              );
-            }
+            } catch (error) {}
           }
 
           // Fetch car data if car_id exists
@@ -156,9 +151,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
               if ('data' in carResponse) {
                 carName = carResponse.data.car_name;
               }
-            } catch (error) {
-              console.error(`Error fetching car ${booking.car_id}:`, error);
-            }
+            } catch (error) {}
           }
 
           return {
@@ -172,7 +165,6 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
       setBookings(enrichedBookings);
     } catch (err) {
       setError('Failed to fetch bookings');
-      console.error('Error fetching bookings:', err);
     } finally {
       setLoading(false);
     }

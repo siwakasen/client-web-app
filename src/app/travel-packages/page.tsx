@@ -1,11 +1,11 @@
-import MainContent from "./_components/main-content";
-import Image from "next/image";
-import Navbar from "@/components/shared/navbar/Navbar";
-import Footer from "@/components/shared/content/footer";
+import MainContent from './_components/main-content';
+import Image from 'next/image';
+import Navbar from '@/components/shared/navbar/Navbar';
+import Footer from '@/components/shared/content/footer';
 
-import { Meta, TravelPackages } from "@/interfaces";
-import { useGetTravelPackages } from "@/hooks";
-import { useGetCustomer } from "@/hooks/customer.hook";
+import { Meta, TravelPackages } from '@/interfaces';
+import { useGetTravelPackages } from '@/hooks';
+import { useGetCustomer } from '@/hooks/customer.hook';
 
 export default async function TourPackagesPage() {
   const { isAuthenticated, customer } = await useGetCustomer();
@@ -22,13 +22,11 @@ export default async function TourPackagesPage() {
     const { data, meta: metaData } = await useGetTravelPackages({
       limit: 6,
       page: 1,
-      search: "",
+      search: '',
     });
     travelPackages = data;
     metaPackages = metaData;
-  } catch (error) {
-    console.log("Error fetching travel packages:", error);
-  }
+  } catch (error) {}
   return (
     <div className="min-h-screen bg-gray-200">
       <Navbar isAuthenticated={isAuthenticated} customer={customer!} />

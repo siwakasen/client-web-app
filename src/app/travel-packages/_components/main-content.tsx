@@ -1,13 +1,13 @@
-"use client";
-import { Meta, TravelPackages } from "@/interfaces";
-import { useState, useMemo, useEffect } from "react";
-import { FilterSearch } from "./filter-search";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { TourPackageCard } from "./packages-card";
-import { Pagination } from "../../../components/shared/content/pagination";
-import { SkeletonCard } from "@/components/shared/skeleton/skeleton-card";
-import { useGetTravelPackages } from "@/hooks";
+'use client';
+import { Meta, TravelPackages } from '@/interfaces';
+import { useState, useMemo, useEffect } from 'react';
+import { FilterSearch } from './filter-search';
+import { Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { TourPackageCard } from './packages-card';
+import { Pagination } from '../../../components/shared/content/pagination';
+import { SkeletonCard } from '@/components/shared/skeleton/skeleton-card';
+import { useGetTravelPackages } from '@/hooks';
 
 interface TourPackagesProps {
   tourPackages: TravelPackages[];
@@ -17,10 +17,10 @@ export default function MainContent({
   tourPackages: initialTourPackages,
   meta: initialMeta,
 }: TourPackagesProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [maxGroupSize, setMaxGroupSize] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [maxGroupSize, setMaxGroupSize] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [tourPackages, setTourPackages] = useState(initialTourPackages);
   const [meta, setMeta] = useState(initialMeta);
@@ -45,9 +45,7 @@ export default function MainContent({
       });
       setTourPackages(data);
       setMeta(newMeta);
-    } catch (error: any) {
-      console.log(error.message);
-    }
+    } catch (error: any) {}
   };
   useEffect(() => {
     fetchData();
@@ -67,7 +65,7 @@ export default function MainContent({
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     // Reset to top of page when changing pages
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
