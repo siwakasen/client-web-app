@@ -1,14 +1,13 @@
+'use server';
 import { useGetBookingById, useGetTravelPackagesDetailHistory } from '@/hooks';
 import { useGetCarsDetailHistory } from '@/hooks/cars.hook';
 import { useGetRefundsByIdBooking } from '@/hooks/refunds.hook';
 import { redirect } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { BookingStatus } from '@/constants/booking-status';
 import Image from 'next/image';
 import {
   formatCurrency,
-  convertISOToCurrentTimezone,
   getStatusBadgeClass,
   formatStatusText,
   formatDateTimeLocale,
@@ -17,7 +16,6 @@ import {
   convertCarImageUrl,
   convertTravelImageUrl,
 } from '@/helpers/images-url';
-import { BookingActions } from './_components/booking-action';
 import { PaymentAction } from './_components/payment-action';
 import { AdjustmentStatus, BookingAdjustment } from '@/interfaces';
 import { RequestType } from '@/interfaces';

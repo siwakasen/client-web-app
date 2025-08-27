@@ -8,6 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function convertISOToCurrentTimezone(isoString: string): string {
+  'use client'
   if (!isoString) return "";
 
   const date = new Date(isoString);
@@ -48,6 +49,8 @@ export function formatCurrency(amount: number, currency: string = 'USD'): string
 
 
 export const formatDateTimeLocale = (dateString: string): string => {
+  'use client'
+
   if (!dateString) return '';
   const isoMatch = dateString.match(
     /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/
