@@ -34,7 +34,7 @@ export default function ForgetPasswordPage() {
     setIsSubmitting(true);
     try {
       const response = await useForgetPasswordUser(values);
-      console.log(response);
+      console.log('response', response);
       if (response.status && response.status !== 200) {
         form.setFocus('email');
         form.setError('email', { message: response.errors.email });

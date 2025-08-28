@@ -77,6 +77,7 @@ export async function useForgetPasswordUser(
       message: message || "Email to reset password sent!",
     };
   } catch (error: any) {
+    console.log('error', error.response.data);
     return ErrorResponse(error);
   }
 }

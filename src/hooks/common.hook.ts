@@ -1,11 +1,11 @@
 import { AxiosError } from "axios";
 
 export const ErrorResponse = <T>(error: any, returnType?: T) : T => {
-  console.log(error.response.data);
+  console.log('errorResponse', error.response.data);
     if(error instanceof AxiosError) {
-        console.error('Axios response message:', error.response?.data.message);
+        console.error('Axios response :', error.response?.data);
       } else {
-        console.error('Error message:', error.message);
+        console.error('Error response:', error.message);
       }
       return returnType ?? {
         status: error.response?.status,
