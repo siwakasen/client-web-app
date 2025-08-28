@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { useState } from "react";
-import { useLoginUser } from "@/hooks";
-import Link from "next/link";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { LoginFormSchema } from "@/lib/validation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { useLoginUser } from '@/hooks';
+import Link from 'next/link';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { LoginFormSchema } from '@/lib/validation';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormControl,
@@ -19,7 +19,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,8 +27,8 @@ export default function LoginPage() {
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
@@ -38,13 +38,13 @@ export default function LoginPage() {
       if (response.status && response.status !== 200) {
         switch (true) {
           case !!response.errors?.email:
-            form.setFocus("email");
-            form.setError("email", { message: response.errors.email });
+            form.setFocus('email');
+            form.setError('email', { message: response.errors.email });
             break;
 
           case !!response.errors?.password:
-            form.setFocus("password");
-            form.setError("password", { message: response.errors.password });
+            form.setFocus('password');
+            form.setError('password', { message: response.errors.password });
             break;
 
           case !!response.errors?.message:
@@ -55,7 +55,7 @@ export default function LoginPage() {
       }
       if (response.message) {
         toast.success(response.message);
-        router.push("/");
+        router.push('/');
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -106,7 +106,7 @@ export default function LoginPage() {
                     <div className="relative">
                       <Input
                         id="password"
-                        type={showPassword ? "text" : "password"}
+                        type={showPassword ? 'text' : 'password'}
                         placeholder="Enter Password"
                         className="w-full pr-10"
                         {...field}
@@ -137,7 +137,7 @@ export default function LoginPage() {
               {form.formState.isSubmitting ? (
                 <Loader2 className="animate-spin" />
               ) : (
-                "Login"
+                'Login'
               )}
             </Button>
 
@@ -153,7 +153,7 @@ export default function LoginPage() {
             {/* Register Link */}
             <div className="text-center">
               <p className="text-sm text-gray-600">
-                Don't have an account?{" "}
+                Don't have an account?{' '}
                 <Link
                   href="/register"
                   className="text-blue-500 hover:text-blue-600 underline"
