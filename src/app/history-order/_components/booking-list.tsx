@@ -457,9 +457,11 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
                           (adjustment: BookingAdjustment) =>
                             adjustment.request_type === RequestType.RESCHEDULE
                         )}
-                        payment_method={booking.payments[0].payment_method}
+                        payment_method={
+                          booking.payments[0]?.payment_method || ''
+                        }
                         payment_gateway_id={
-                          booking.payments[0].payment_gateway_id
+                          booking.payments[0]?.payment_gateway_id || ''
                         }
                         isCarRental={!booking.package_id}
                         currentStartDate={booking.start_date}
