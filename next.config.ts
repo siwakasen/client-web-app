@@ -1,35 +1,34 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
   images: {
     remotePatterns: [
       {
-        protocol: "http",
-        hostname: "localhost",
+        protocol: 'http',
+        hostname: 'localhost',
       },
       {
-        protocol: "https",
-        hostname: "**.vulpbox.com",
+        protocol: 'https',
+        hostname: '**.vulpbox.com',
       },
     ],
   },
   allowedDevOrigins: [
-    "https://siwakasen.mole-mintaka.ts.net",
-    "https://vulpies.tail66dfd8.ts.net",
-    "localhost:3001",
-    "localhost:3002",
-    "localhost:3003",
-    "localhost:3004",
-    "localhost:3005",
-    "localhost:3006",
+    'https://siwakasen.mole-mintaka.ts.net',
+    'https://vulpies.tail66dfd8.ts.net',
+    'localhost:3001',
+    'localhost:3002',
+    'localhost:3003',
+    'localhost:3004',
+    'localhost:3005',
+    'localhost:3006',
   ],
   experimental: {
     useCache: true,
     serverActions: {
       bodySizeLimit: '50mb',
     },
-
   },
 };
 

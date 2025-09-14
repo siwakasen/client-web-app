@@ -153,7 +153,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
               }
             } catch (error) {}
           }
-
+          console.log(booking.ratings);
           return {
             ...booking,
             packageName,
@@ -161,7 +161,6 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
           };
         })
       );
-
       setBookings(enrichedBookings);
     } catch (err) {
       setError('Failed to fetch bookings');
@@ -309,6 +308,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
     );
   }
 
+  console.log(bookings[0].ratings);
   return (
     <>
       <div className="grid gap-6">
@@ -466,6 +466,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
                         isCarRental={!booking.package_id}
                         currentStartDate={booking.start_date}
                         currentEndDate={booking.end_date}
+                        rating={booking.ratings || undefined}
                       />
                     </div>
                   </div>

@@ -100,6 +100,7 @@ export function BookingInformation({ booking }: { booking: Booking }) {
             isCarRental={!booking.package_id}
             currentStartDate={booking.start_date}
             currentEndDate={booking.end_date}
+            rating={booking.ratings}
           />
         </div>
       </CardContent>

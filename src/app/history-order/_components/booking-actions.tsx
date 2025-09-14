@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useCancelBooking } from '@/hooks';
-import { RotateCcw, X, CreditCard } from 'lucide-react';
+import { RotateCcw, X, CreditCard, Star } from 'lucide-react';
 import { toast } from 'sonner';
 import { CancellationDialog } from './cancellation-dialog';
 import { RescheduleDialog } from './reschedule-dialog';
+import { RatingDialog } from './rating-dialog';
+import { Rating } from '@/interfaces/rating.interface';
 
 interface BookingActionsProps {
   bookingId: number;
@@ -19,6 +21,7 @@ interface BookingActionsProps {
   isCarRental: boolean;
   currentStartDate: string;
   currentEndDate: string;
+  rating?: Rating;
 }
 
 export function BookingActions({
@@ -32,9 +35,11 @@ export function BookingActions({
   isCarRental,
   currentStartDate,
   currentEndDate,
+  rating,
 }: BookingActionsProps) {
   const [showCancellationDialog, setShowCancellationDialog] = useState(false);
   const [showRescheduleDialog, setShowRescheduleDialog] = useState(false);
+  const [showRatingDialog, setShowRatingDialog] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
 
   const canRescheduleOrCancel = (status: string) => {
@@ -57,6 +62,11 @@ export function BookingActions({
   const canPay = (status: string) => {
     const upperStatus = status?.toUpperCase();
     return upperStatus === 'WAITING_PAYMENT';
+  };
+
+  const canRate = (status: string) => {
+    const upperStatus = status?.toUpperCase();
+    return upperStatus === 'COMPLETED';
   };
 
   const handleReschedule = (e: React.MouseEvent) => {
@@ -100,6 +110,12 @@ export function BookingActions({
     } else if (payment_method === 'MIDTRANS') {
       window.location.href = `https://app.sandbox.midtrans.com/snap/v4/redirection/${payment_gateway_id}`;
     }
+  };
+
+  const handleRateClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowRatingDialog(true);
   };
 
   // Show Pay Now button for WAITING_PAYMENT
@@ -211,6 +227,47 @@ export function BookingActions({
           bookingId={bookingId}
           status={status}
           isLoading={isCancelling}
+        />
+      </>
+    );
+  }
+
+  if (canRate(status)) {
+    // If rating exists, show the rating
+    if (rating) {
+      return (
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
+            <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+            <span className="text-sm font-medium">{rating.service_rate}/5</span>
+          </div>
+          {rating.description && (
+            <span className="text-sm text-gray-600 italic">
+              "{rating.description}"
+            </span>
+          )}
+        </div>
+      );
+    }
+
+    // If no rating exists, show the Rate button
+    return (
+      <>
+        <Button
+          variant="default"
+          size="sm"
+          className="cursor-pointer bg-amber-500 hover:bg-amber-600"
+          onClick={handleRateClick}
+        >
+          <Star className="h-4 w-4" />
+          Rate
+        </Button>
+
+        <RatingDialog
+          isOpen={showRatingDialog}
+          onClose={() => setShowRatingDialog(false)}
+          bookingId={bookingId}
+          onSuccess={refetch}
         />
       </>
     );
