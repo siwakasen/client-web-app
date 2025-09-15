@@ -198,6 +198,7 @@ export function BookingActions({
           isCarRental={isCarRental}
           currentStartDate={currentStartDate}
           currentEndDate={currentEndDate}
+          refetch={refetch}
         />
       </>
     );

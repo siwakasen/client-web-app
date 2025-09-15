@@ -308,7 +308,6 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
     );
   }
 
-  console.log(bookings[0].ratings);
   return (
     <>
       <div className="grid gap-6">
@@ -353,10 +352,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
                         {getBookingTitle(booking)}
                       </h3>
                       <p className="text-sm md:text-xs text-muted-foreground">
-                        Order #{booking.id} •{' '}
-                        {formatOrderDate(
-                          convertISOToCurrentTimezone(booking.created_at)
-                        )}
+                        Order #{booking.id}
                       </p>
                     </div>
 

@@ -1,9 +1,13 @@
-"use server";
+'use server';
 
-import { getHeaders, getToken } from "@/lib/users-provider";
-import { cancelPaymentPaypal, capturePaymentPaypal, getPaymentByBookingId } from "@/services";
-import { PaymentResponse } from "@/interfaces";
-import { ErrorResponse } from "./common.hook";
+import { getHeaders, getToken } from '@/lib/users-provider';
+import {
+  cancelPaymentPaypal,
+  capturePaymentPaypal,
+  getPaymentByBookingId,
+} from '@/services';
+import { PaymentResponse } from '@/interfaces';
+import { ErrorResponse } from './common.hook';
 
 export async function useCapturePaymentPaypal(orderId: string): Promise<{
   status: number;
@@ -37,10 +41,13 @@ export async function useCancelPaymentPaypal(orderId: string): Promise<{
   }
 }
 
-export async function   useGetPaymentByBookingId(bookingId: number) : Promise<PaymentResponse | {
-  status: number;
-  errors?: any;
-}> {
+export async function useGetPaymentByBookingId(bookingId: number): Promise<
+  | PaymentResponse
+  | {
+      status: number;
+      errors?: any;
+    }
+> {
   try {
     const headers = await getHeaders();
     const token = await getToken();

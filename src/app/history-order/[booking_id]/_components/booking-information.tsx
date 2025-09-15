@@ -13,7 +13,13 @@ import {
 import { BookingActions } from './booking-action';
 import { BookingAdjustment, RequestType } from '@/interfaces';
 
-export function BookingInformation({ booking }: { booking: Booking }) {
+export function BookingInformation({
+  booking,
+  refetch,
+}: {
+  booking: Booking;
+  refetch: () => void;
+}) {
   return (
     <Card>
       <CardHeader>
@@ -101,6 +107,7 @@ export function BookingInformation({ booking }: { booking: Booking }) {
             currentStartDate={booking.start_date}
             currentEndDate={booking.end_date}
             rating={booking.ratings}
+            refetch={refetch}
           />
         </div>
       </CardContent>

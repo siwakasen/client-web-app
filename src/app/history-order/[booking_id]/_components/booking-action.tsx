@@ -18,8 +18,8 @@ interface BookingActionsProps {
   isCarRental: boolean;
   currentStartDate: string;
   currentEndDate: string;
+  refetch: () => void;
   rating?: Rating;
-  refetch?: () => void;
 }
 
 export function BookingActions({
@@ -134,6 +134,7 @@ export function BookingActions({
           isCarRental={isCarRental}
           currentStartDate={currentStartDate}
           currentEndDate={currentEndDate}
+          refetch={refetch}
         />
       </>
     );

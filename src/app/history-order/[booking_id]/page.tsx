@@ -90,6 +90,13 @@ export default async function HistoryOrderDetailPage({
     }
   }
 
+  const fetchBookings = async () => {
+    const response = await useGetBookingById(booking_id);
+    if ('errors' in response) {
+      redirect('/history-order');
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-20 max-w-4xl">
       <div className="mb-6">
@@ -99,7 +106,7 @@ export default async function HistoryOrderDetailPage({
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Booking Information */}
-        <BookingInformation booking={booking} />
+        <BookingInformation booking={booking} refetch={fetchBookings} />
 
         {/* Payment Information */}
         <Card>

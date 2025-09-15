@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import {
   Dialog,
   DialogContent,
@@ -11,10 +11,14 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { Label } from '@/components/ui/label';
-import { CalendarIcon, RotateCcw } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import { format } from 'date-fns';
+import { toast } from 'sonner';
+import { useRescheduleBooking } from '@/hooks/booking-adjustments.hook';
+import { DateRangePicker } from '@/components/ui/date-range-picker';
+import { Label } from '@/components/ui/label';
+import { Calendar } from '@/components/ui/calendar';
+import { CalendarIcon } from 'lucide-react';
 import {
   Popover,
   PopoverContent,
@@ -29,6 +33,7 @@ interface RescheduleDialogProps {
   isCarRental: boolean;
   currentStartDate: string;
   currentEndDate: string;
+  refetch: () => void;
 }
 
 export function RescheduleDialog({
@@ -38,30 +43,34 @@ export function RescheduleDialog({
   isCarRental,
   currentStartDate,
   currentEndDate,
+  refetch,
 }: RescheduleDialogProps) {
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [startDate, setStartDate] = useState<string | undefined>(undefined);
+  const [endDate, setEndDate] = useState<string | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
-    if (!startDate || !endDate) {
+    if (!startDate) {
       return;
     }
 
+    const computedEndDate = isCarRental ? endDate : startDate;
+    if (!computedEndDate) return;
+
     try {
       setIsSubmitting(true);
-      // TODO: Implement reschedule API call
-      console.log('Rescheduling booking:', {
+      const response = await useRescheduleBooking(
         bookingId,
-        startDate: format(startDate, 'yyyy-MM-dd'),
-        endDate: format(endDate, 'yyyy-MM-dd'),
-      });
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Close dialog after success
+        startDate,
+        computedEndDate
+      );
+      if ('errors' in response) {
+        toast.error(response.errors.message);
+        return;
+      }
+      toast.success('Booking rescheduled successfully');
       onClose();
+      refetch();
     } catch (error) {
       console.error('Failed to reschedule:', error);
     } finally {
@@ -105,63 +114,58 @@ export function RescheduleDialog({
               </div>
             </div>
 
-            <div className="grid gap-2">
-              <Label className="text-sm font-medium">New Start Date *</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      'w-full justify-start text-left font-normal',
-                      !startDate && 'text-muted-foreground'
-                    )}
-                    disabled={isSubmitting}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {startDate ? format(startDate, 'PPP') : 'Pick a start date'}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={startDate}
-                    onSelect={setStartDate}
-                    disabled={(date) => date < new Date()}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            <div className="grid gap-2">
-              <Label className="text-sm font-medium">New End Date *</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      'w-full justify-start text-left font-normal',
-                      !endDate && 'text-muted-foreground'
-                    )}
-                    disabled={isSubmitting || !startDate}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {endDate ? format(endDate, 'PPP') : 'Pick an end date'}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={endDate}
-                    onSelect={setEndDate}
-                    disabled={(date) =>
-                      date <= (startDate || new Date()) || date < new Date()
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
+            {isCarRental ? (
+              <DateRangePicker
+                label="New Date Range *"
+                startDate={startDate}
+                endDate={endDate}
+                onDateRangeChange={(start, end) => {
+                  setStartDate(start);
+                  setEndDate(end);
+                }}
+                onApply={handleSubmit}
+                onClear={() => {
+                  setStartDate(undefined);
+                  setEndDate(undefined);
+                }}
+                className="mt-2"
+              />
+            ) : (
+              <div className="grid gap-2">
+                <Label className="text-sm font-medium">New Date *</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        'w-full justify-start text-left font-normal',
+                        !startDate && 'text-muted-foreground'
+                      )}
+                      disabled={isSubmitting}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {startDate
+                        ? format(new Date(startDate), 'PPP')
+                        : 'Pick a date'}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={startDate ? new Date(startDate) : undefined}
+                      onSelect={(date) => {
+                        if (!date) return;
+                        const formatted = format(date, 'yyyy-MM-dd');
+                        setStartDate(formatted);
+                        setEndDate(undefined);
+                      }}
+                      disabled={(date) => date < new Date()}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            )}
           </div>
 
           <DialogFooter className="flex gap-2">
@@ -176,7 +180,7 @@ export function RescheduleDialog({
             </Button>
             <Button
               onClick={handleSubmit}
-              disabled={!startDate || !endDate || isSubmitting}
+              disabled={!startDate || (isCarRental && !endDate) || isSubmitting}
               type="button"
               className="cursor-pointer"
             >
