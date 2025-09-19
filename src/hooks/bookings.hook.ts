@@ -52,6 +52,7 @@ export async function useCreateBookingWithRegister(
 > {
   try {
     const response = await createBookingWithRegister(formData);
+    console.log(response);
     await createSession(response.data.token);
     revalidateTag('session');
 

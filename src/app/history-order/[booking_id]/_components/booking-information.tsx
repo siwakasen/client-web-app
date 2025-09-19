@@ -12,14 +12,15 @@ import {
 } from '@/lib/utils';
 import { BookingActions } from './booking-action';
 import { BookingAdjustment, RequestType } from '@/interfaces';
+import { useGetBookingById } from '@/hooks';
 
-export function BookingInformation({
-  booking,
-  refetch,
-}: {
-  booking: Booking;
-  refetch: () => void;
-}) {
+export function BookingInformation({ booking }: { booking: Booking }) {
+  const fetchBookings = async () => {
+    const response = await useGetBookingById(booking.id.toString());
+    if ('errors' in response) {
+      return;
+    }
+  };
   return (
     <Card>
       <CardHeader>
@@ -107,7 +108,7 @@ export function BookingInformation({
             currentStartDate={booking.start_date}
             currentEndDate={booking.end_date}
             rating={booking.ratings}
-            refetch={refetch}
+            refetch={fetchBookings}
           />
         </div>
       </CardContent>
