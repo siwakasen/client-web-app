@@ -7,6 +7,7 @@ import * as motion from 'motion/react-client';
 import { Meta, TravelPackages } from '@/interfaces';
 import { useGetTravelPackages } from '@/hooks';
 import { useGetCustomer } from '@/hooks/customer.hook';
+import LiveChat from '@/components/shared/live-chat/live-chat';
 
 export default async function TourPackagesPage() {
   const { isAuthenticated, customer } = await useGetCustomer();
@@ -96,6 +97,8 @@ export default async function TourPackagesPage() {
       </motion.section>
 
       <MainContent tourPackages={travelPackages} meta={metaPackages} />
+      <LiveChat />
+
       <Footer />
     </div>
   );

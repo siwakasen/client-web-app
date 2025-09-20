@@ -5,6 +5,7 @@ import Footer from '@/components/shared/content/footer';
 import * as motion from 'motion/react-client';
 
 import { useGetCustomer } from '@/hooks';
+import LiveChat from '@/components/shared/live-chat/live-chat';
 export default async function RentCarsPage({
   searchParams,
 }: {
@@ -89,6 +90,7 @@ export default async function RentCarsPage({
         initialEndDate={end_date}
         initialSearch={search}
       />
+      <LiveChat />
       <Footer />
     </div>
   );

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Footer from '@/components/shared/content/footer';
 import { BookingList } from './_components/booking-list';
+import LiveChat from '@/components/shared/live-chat/live-chat';
 
 export default async function HistoryPage({
   searchParams,
@@ -49,6 +50,7 @@ export default async function HistoryPage({
           status={currentStatus}
         />
       </div>
+      <LiveChat />
       <Footer />
     </>
   );

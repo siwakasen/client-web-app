@@ -1,16 +1,16 @@
-import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { DollarSign, Calendar, Users, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ImageCarousel } from "./_components/carousel-images";
-import { Separator } from "@/components/ui/separator";
-import { convertTravelImageUrl } from "@/helpers/images-url/travel-images";
-import Link from "next/link";
-import { TravelPackages } from "@/interfaces";
-import { notFound } from "next/navigation";
-import { useGetTravelPackages, useGetTravelPackagesDetail } from "@/hooks";
-import { getHeaders } from "@/lib/users-provider";
+import Image from 'next/image';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { DollarSign, Calendar, Users, Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ImageCarousel } from './_components/carousel-images';
+import { Separator } from '@/components/ui/separator';
+import { convertTravelImageUrl } from '@/helpers/images-url/travel-images';
+import Link from 'next/link';
+import { TravelPackages } from '@/interfaces';
+import { notFound } from 'next/navigation';
+import { useGetTravelPackages, useGetTravelPackagesDetail } from '@/hooks';
+import LiveChat from '@/components/shared/live-chat/live-chat';
 
 export default async function TravelPackageDetailPage({
   params,
@@ -22,18 +22,14 @@ export default async function TravelPackageDetailPage({
   let data: TravelPackages | null = null;
   let filteredRelatedPackages: TravelPackages[] = [];
   try {
-    const { data: travel } = await useGetTravelPackagesDetail(
-      {
-        id: Number(id),
-      },
-    );
-    const relatedPackages = await useGetTravelPackages(
-      {
-        limit: 6,
-        page: 1,
-        search: "",
-      },
-    );
+    const { data: travel } = await useGetTravelPackagesDetail({
+      id: Number(id),
+    });
+    const relatedPackages = await useGetTravelPackages({
+      limit: 6,
+      page: 1,
+      search: '',
+    });
     data = travel;
     filteredRelatedPackages = relatedPackages.data
       .filter((pkg) => pkg.id !== Number(id))
@@ -52,7 +48,7 @@ export default async function TravelPackageDetailPage({
       {/* Hero Section with Title */}
       <div className="relative h-64 md:h-80 lg:h-96 overflow-hidden">
         <Image
-          src={convertTravelImageUrl(data.images?.[0] || "")}
+          src={convertTravelImageUrl(data.images?.[0] || '')}
           alt={data.package_name}
           fill
           sizes="100vw"
@@ -84,9 +80,7 @@ export default async function TravelPackageDetailPage({
 
             {/* Description */}
             <div>
-              <p className=" leading-relaxed">
-                {data.description}
-              </p>
+              <p className=" leading-relaxed">{data.description}</p>
             </div>
 
             {/* Info Grid */}
@@ -197,7 +191,7 @@ export default async function TravelPackageDetailPage({
                 <Card className="flex flex-col h-full rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow cursor-pointer bg-white p-0">
                   <div className="relative h-48 w-full">
                     <Image
-                      src={convertTravelImageUrl(pkg.images?.[0] || "")}
+                      src={convertTravelImageUrl(pkg.images?.[0] || '')}
                       alt={pkg.package_name}
                       fill
                       className="object-cover w-full h-full rounded-t-2xl"
@@ -229,6 +223,8 @@ export default async function TravelPackageDetailPage({
           </div>
         </div>
       </div>
+
+      <LiveChat />
     </div>
   );
 }
