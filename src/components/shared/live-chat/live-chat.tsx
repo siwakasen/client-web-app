@@ -56,17 +56,12 @@ export default function LiveChat() {
     );
 
     socket.on('connect', () => {
-      console.log('Connected to chat server');
       setConnectionError(null);
 
       // Automatically check for existing session when connected
       if (hasChatSession() && !hasJoined) {
         const existingSession = getChatSession();
         if (existingSession) {
-          console.log(
-            'Found existing session, attempting to rejoin:',
-            existingSession
-          );
           setIsConnecting(true);
 
           socket.emit('rejoin_session', {
@@ -77,9 +72,7 @@ export default function LiveChat() {
       }
     });
 
-    socket.on('disconnect', () => {
-      console.log('Disconnected from chat server');
-    });
+    socket.on('disconnect', () => {});
 
     socket.on('connect_error', (error: Error) => {
       setConnectionError('Failed to connect to chat server');
@@ -88,7 +81,6 @@ export default function LiveChat() {
 
     // Handle session started
     socket.on('session_started', (session: ChatSession) => {
-      console.log('Session started:', session);
       saveChatSession(session);
       setSessionId(session.id);
       setGuestName(session.guest_name || '');
@@ -113,8 +105,6 @@ export default function LiveChat() {
         customerId?: number;
         guestName?: string;
       }) => {
-        console.log('Session rejoined:', data);
-
         // Clear the rejoin timeout
         if (sessionRejoinTimeout) {
           clearTimeout(sessionRejoinTimeout);
@@ -139,7 +129,6 @@ export default function LiveChat() {
 
     // Handle chat history
     socket.on('messages', (chatMessages: ChatMessage[]) => {
-      console.log('Received messages:', chatMessages);
       const uiMessages: UIMessage[] = chatMessages.map((msg) => ({
         id: `msg-${msg.id}`,
         author: msg.sender_type === 'CUS' ? 'me' : 'support',
@@ -151,7 +140,6 @@ export default function LiveChat() {
 
     // Handle new message
     socket.on('new_message', (message: ChatMessage) => {
-      console.log('New message:', message);
       const uiMessage: UIMessage = {
         id: `msg-${message.id}`,
         author: message.sender_type === 'CUS' ? 'me' : 'support',
@@ -179,7 +167,6 @@ export default function LiveChat() {
 
     // Handle session ended
     socket.on('session_ended', (data: { message: string }) => {
-      console.log('Session ended:', data);
       clearChatSession();
       setHasJoined(false);
       setSessionId(null);

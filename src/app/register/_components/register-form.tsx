@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { useState } from "react";
-import { useRegisterUser } from "@/hooks";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { useRegisterUser } from '@/hooks';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 import {
   Form,
   FormControl,
@@ -14,16 +14,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterFormSchema } from "@/lib/validation";
-import { z } from "zod";
-import { PhoneInput } from "@/components/shared/phone-input/phone-input";
+} from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { RegisterFormSchema } from '@/lib/validation';
+import { z } from 'zod';
+import { PhoneInput } from '@/components/shared/phone-input/phone-input';
 import {
   CountryDropdown,
   Country,
-} from "@/components/shared/country-input/country-dropdown";
+} from '@/components/shared/country-input/country-dropdown';
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -32,14 +32,14 @@ export default function RegisterForm() {
   const router = useRouter();
   const form = useForm<z.infer<typeof RegisterFormSchema>>({
     resolver: zodResolver(RegisterFormSchema),
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirm_password: "",
-      phone_number: "",
-      country_origin: "",
+      name: '',
+      email: '',
+      password: '',
+      confirm_password: '',
+      phone_number: '',
+      country_origin: '',
     },
   });
 
@@ -52,13 +52,13 @@ export default function RegisterForm() {
       if (response.status && response.status !== 200) {
         switch (true) {
           case !!response.errors?.email:
-            form.setFocus("email");
-            form.setError("email", { message: response.errors.email });
+            form.setFocus('email');
+            form.setError('email', { message: response.errors.email });
             break;
 
           case !!response.errors?.password:
-            form.setFocus("password");
-            form.setError("password", { message: response.errors.password });
+            form.setFocus('password');
+            form.setError('password', { message: response.errors.password });
             break;
 
           case !!response.errors?.message:
@@ -71,11 +71,10 @@ export default function RegisterForm() {
       // Success case
       if (response.message) {
         toast.success(response.message);
-        router.push("/login");
+        router.push('/login');
       }
     } catch (error) {
-      console.error("Registration error:", error);
-      toast.error("An unexpected error occurred. Please try again.");
+      toast.error('An unexpected error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -141,7 +140,7 @@ export default function RegisterForm() {
                   <div className="relative">
                     <Input
                       id="password"
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
                       placeholder="Enter Password"
                       className="w-full pr-10"
                       {...field}
@@ -174,7 +173,7 @@ export default function RegisterForm() {
                   <div className="relative">
                     <Input
                       id="confirm_password"
-                      type={showConfirmPassword ? "text" : "password"}
+                      type={showConfirmPassword ? 'text' : 'password'}
                       placeholder="Confirm Password"
                       className="w-full pr-10"
                       {...field}
@@ -243,13 +242,13 @@ export default function RegisterForm() {
             disabled={isSubmitting}
             className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? <Loader2 /> : "Register"}
+            {isSubmitting ? <Loader2 /> : 'Register'}
           </Button>
 
           {/* Login Link */}
           <div className="text-center">
             <p className="text-sm text-gray-600">
-              Already Have an Account?{" "}
+              Already Have an Account?{' '}
               <a
                 href="/login"
                 className="text-blue-500 hover:text-blue-600 underline"

@@ -153,7 +153,6 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
               }
             } catch (error) {}
           }
-          console.log(booking.ratings);
           return {
             ...booking,
             packageName,
