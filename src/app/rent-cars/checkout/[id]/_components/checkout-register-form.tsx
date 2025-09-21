@@ -1012,35 +1012,6 @@ export function CheckoutRegisterForm({
                   'Create Account & Pay'
                 )}
               </Button>
-              <div className="text-sm text-gray-500 mt-4">
-                <div className="font-bold pb-1">Development payments:</div>
-                <div>
-                  <div className="font-bold">Paypal</div>
-                  <div className="text-xs ps-2">
-                    If you choose Paypal as payment method, copy the account
-                    below first.
-                  </div>
-                  <div className="text-sm ps-2">
-                    Username: sb-cxz6y43810532@personal.example.com
-                  </div>
-                  <div className="text-sm ps-2">Password: yyb]7fJ?</div>
-                </div>
-                <div>
-                  <div className="font-bold">Midtrans</div>
-                  <div className="text-sm ps-2">
-                    If you choose Midtrans as payment method, click the link
-                    here before click Pay Now Button{' '}
-                    <a
-                      href="https://simulator.sandbox.midtrans.com/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 underline"
-                    >
-                      Midtrans Payment Simulator
-                    </a>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
