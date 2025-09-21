@@ -4,7 +4,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/sonner';
 
 export const metadata: Metadata = {
-  title: 'Ride Bali Explore',
+  title: 'Bali Travel Ride',
   description: "Let's explore Bali with us",
 };
 

@@ -50,7 +50,7 @@ export default async function Hero() {
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.8, ease: 'easeOut', delay: 1.2 }}
             >
-              Ride Bali Explore
+              Bali Travel Ride
             </motion.span>
             <motion.span
               className="relative"
@@ -59,7 +59,7 @@ export default async function Hero() {
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.8, ease: 'easeOut', delay: 1.5 }}
             >
-              Ride Bali Explore
+              Bali Travel Ride
             </motion.span>
           </motion.span>
         </motion.h1>

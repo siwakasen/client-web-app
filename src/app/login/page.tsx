@@ -67,11 +67,11 @@ export default function LoginPage() {
         <div className="flex flex-col items-center mb-4">
           <img
             src="/images/logo.png"
-            alt="Ride Bali Explore Logo"
+            alt="Bali Travel Ride Logo"
             className="h-16 mb-2"
           />
           <h1 className="text-2xl font-bold text-gray-900">Welcome!</h1>
-          <p className="text-gray-500 text-sm">Login to Ride Bali Explore</p>
+          <p className="text-gray-500 text-sm">Login to Bali Travel Ride</p>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

@@ -1,45 +1,48 @@
-import { useGetCarsDetail, useGetCustomer } from "@/hooks";
-import { redirect } from "next/navigation";
-import { CheckoutForm } from "./_components/checkout-form";
-import { CheckoutRegisterForm } from "./_components/checkout-register-form";
+import { useGetCarsDetail, useGetCustomer } from '@/hooks';
+import { redirect } from 'next/navigation';
+import { CheckoutForm } from './_components/checkout-form';
+import { CheckoutRegisterForm } from './_components/checkout-register-form';
 
 interface CheckoutPageProps {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ start_date?: string; end_date?: string }>;
 }
 
-export default async function CheckoutPage({ params, searchParams }: CheckoutPageProps) {
+export default async function CheckoutPage({
+  params,
+  searchParams,
+}: CheckoutPageProps) {
   const { id } = await params;
   const { start_date, end_date } = await searchParams;
   if (!start_date || !end_date) {
-    redirect("/rent-cars");
+    redirect('/rent-cars');
   }
   const { data: car } = await useGetCarsDetail(Number(id));
   const { customer } = await useGetCustomer();
-  
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="border-b bg-white px-4 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="text-xl font-bold">Ride Bali Explore</div>
+          <div className="text-xl font-bold">Bali Travel Ride</div>
           <div className="flex items-center gap-2"></div>
         </div>
       </div>
-      
+
       {customer ? (
-        <CheckoutForm 
-          car={car} 
-          customer={customer} 
-          searchParams={{ start_date, end_date }} 
+        <CheckoutForm
+          car={car}
+          customer={customer}
+          searchParams={{ start_date, end_date }}
         />
       ) : (
-        <CheckoutRegisterForm 
-          car={car} 
-          searchParams={{ start_date, end_date }} 
+        <CheckoutRegisterForm
+          car={car}
+          searchParams={{ start_date, end_date }}
         />
       )}
-      
+
       {/* Footer Links */}
       <div className="bg-white border-t px-4 py-6">
         <div className="max-w-7xl mx-auto">

@@ -1,9 +1,9 @@
-"use client";
-import Link from "next/link";
-import { useState, useEffect } from "react";
+'use client';
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
-import { Menu, User, LogOut, ChevronDown, History } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Menu, User, LogOut, ChevronDown, History } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
@@ -11,16 +11,16 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { useLogoutUser } from "@/hooks";
+} from '@/components/ui/sheet';
+import { useLogoutUser } from '@/hooks';
 import {
   DropdownMenu,
   DropdownMenuItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Customer } from "@/interfaces";
-import { toast } from "sonner";
+} from '@/components/ui/dropdown-menu';
+import { Customer } from '@/interfaces';
+import { toast } from 'sonner';
 
 export default function Navbar({
   isAuthenticated,
@@ -46,11 +46,11 @@ export default function Navbar({
     };
 
     // Add event listener when component mounts
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
 
     // Clean up event listener when component unmounts
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []); // Empty dependency array ensures this runs only once on mount
 
@@ -61,9 +61,9 @@ export default function Navbar({
   };
 
   const navigationItems = [
-    { href: "/", label: "Home" },
-    { href: "/travel-packages", label: "Packages Tour" },
-    { href: "/rent-cars", label: "Cars Rental" },
+    { href: '/', label: 'Home' },
+    { href: '/travel-packages', label: 'Packages Tour' },
+    { href: '/rent-cars', label: 'Cars Rental' },
   ];
 
   return (
@@ -71,18 +71,18 @@ export default function Navbar({
     <nav
       className={`w-full fixed top-0 left-0 z-50 px-4 md:px-8 py-4 transition-all duration-300 ${
         isScrolled
-          ? "bg-gray-50 shadow-md"
-          : "bg-gradient-to-b from-black/70 to-transparent"
+          ? 'bg-gray-50 shadow-md'
+          : 'bg-gradient-to-b from-black/70 to-transparent'
       }`}
     >
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <span className="text-xl md:text-2xl font-bold">
-            <span className="text-green-400">Ride Bali</span>{" "}
+            <span className="text-green-400">Bali Travel</span>{' '}
             {/* Conditionally change logo text color */}
-            <span className={isScrolled ? "text-gray-900" : "text-white"}>
-              Explore
+            <span className={isScrolled ? 'text-gray-900' : 'text-white'}>
+              Ride
             </span>
           </span>
         </div>
@@ -97,8 +97,8 @@ export default function Navbar({
                 // Conditionally change link text color and hover color
                 className={`font-bold transition-colors duration-200 lg:mx-6 xl:mx-8 ${
                   isScrolled
-                    ? "text-gray-900 hover:text-green-600"
-                    : "text-white hover:text-green-400"
+                    ? 'text-gray-900 hover:text-green-600'
+                    : 'text-white hover:text-green-400'
                 }`}
               >
                 {item.label}
@@ -117,8 +117,8 @@ export default function Navbar({
                 // Conditionally change menu icon color
                 className={`hover:bg-white/10 ${
                   isScrolled
-                    ? "text-gray-900 hover:text-green-600"
-                    : "text-white hover:text-green-400"
+                    ? 'text-gray-900 hover:text-green-600'
+                    : 'text-white hover:text-green-400'
                 }`}
               >
                 <Menu className="h-6 w-6" />
@@ -131,8 +131,8 @@ export default function Navbar({
             >
               <SheetHeader className="text-left">
                 <SheetTitle className="text-2xl font-bold">
-                  <span className="text-green-600">Ride Bali</span>{" "}
-                  <span className="text-gray-800 ">Explore</span>
+                  <span className="text-green-600">Bali Travel</span>{' '}
+                  <span className="text-gray-800 ">Ride</span>
                 </SheetTitle>
                 <SheetDescription className="text-gray-600 ">
                   Navigate through our services
@@ -163,7 +163,10 @@ export default function Navbar({
                       variant="ghost"
                       className="w-full justify-start text-gray-800 hover:text-green-600 hover:bg-green-50 py-3 px-4"
                     >
-                      <Link href="/history-order" onClick={() => setIsOpen(false)}>
+                      <Link
+                        href="/history-order"
+                        onClick={() => setIsOpen(false)}
+                      >
                         <History className="h-5 w-5 mr-3" />
                         History Order
                       </Link>
@@ -229,13 +232,13 @@ export default function Navbar({
               <DropdownMenuTrigger className="outline-none">
                 <div
                   className={`rounded-md transition-colors duration-200 hover:bg-white/10 cursor-pointer ${
-                    isScrolled ? "hover:bg-gray-200" : ""
+                    isScrolled ? 'hover:bg-gray-200' : ''
                   }`}
                   aria-label="Profile"
                 >
                   <div
                     className={`flex items-center bg-gray-50 rounded-md px-3 py-2 ${
-                      isScrolled ? "text-gray-900" : "text-black"
+                      isScrolled ? 'text-gray-900' : 'text-black'
                     }`}
                   >
                     <User className="h-5 w-5  font-bold" />
@@ -251,7 +254,7 @@ export default function Navbar({
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link 
+                  <Link
                     href="/history-order"
                     className="flex items-center w-full cursor-pointer hover:bg-gray-50"
                   >
@@ -277,8 +280,8 @@ export default function Navbar({
                   size="lg"
                   className={`transition-all duration-300 rounded-full ${
                     isScrolled
-                      ? "bg-green-500 text-white hover:bg-green-600"
-                      : "bg-white/20 text-white backdrop-blur-md border border-white/30 hover:bg-black/30"
+                      ? 'bg-green-500 text-white hover:bg-green-600'
+                      : 'bg-white/20 text-white backdrop-blur-md border border-white/30 hover:bg-black/30'
                   }`}
                 >
                   <Link href="/login">Login</Link>
@@ -288,8 +291,8 @@ export default function Navbar({
                   size="lg"
                   className={`transition-all duration-300 rounded-full ${
                     isScrolled
-                      ? "bg-slate-500 text-white hover:bg-slate-600"
-                      : "bg-white/20 text-white backdrop-blur-md border border-white/30 hover:bg-black/30"
+                      ? 'bg-slate-500 text-white hover:bg-slate-600'
+                      : 'bg-white/20 text-white backdrop-blur-md border border-white/30 hover:bg-black/30'
                   }`}
                 >
                   <Link href="/register">Register</Link>

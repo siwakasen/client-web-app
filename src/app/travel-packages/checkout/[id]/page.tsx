@@ -19,7 +19,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
       {/* Header */}
       <div className="border-b bg-white px-4 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="text-xl font-bold">Ride Bali Explore</div>
+          <div className="text-xl font-bold">Bali Travel Ride</div>
           <div className="flex items-center gap-2"></div>
         </div>
       </div>

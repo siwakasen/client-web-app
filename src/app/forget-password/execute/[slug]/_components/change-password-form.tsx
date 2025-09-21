@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { ChangePasswordFormSchema } from "@/lib/validation/forget-password-schema";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { ChangePasswordFormSchema } from '@/lib/validation/forget-password-schema';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 import {
   Form,
   FormControl,
@@ -16,9 +16,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { useRouter } from "next/navigation";
-import { useChangePasswordUser } from "@/hooks";
+} from '@/components/ui/form';
+import { useRouter } from 'next/navigation';
+import { useChangePasswordUser } from '@/hooks';
 
 const ChangePasswordForm = ({ token }: { token: string }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,10 +27,10 @@ const ChangePasswordForm = ({ token }: { token: string }) => {
 
   const form = useForm<z.infer<typeof ChangePasswordFormSchema>>({
     resolver: zodResolver(ChangePasswordFormSchema),
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues: {
-      password: "",
-      confirmPassword: "",
+      password: '',
+      confirmPassword: '',
     },
   });
 
@@ -44,13 +44,13 @@ const ChangePasswordForm = ({ token }: { token: string }) => {
 
       if (errors) {
         toast.error(`${errors.message}`);
-        router.push("/forget-password");
+        router.push('/forget-password');
         return;
       }
       toast.success(message);
-      router.push("/login");
+      router.push('/login');
     } catch (error: any) {
-      toast.error(error.message || "Failed to change password");
+      toast.error(error.message || 'Failed to change password');
     }
   }
 
@@ -60,7 +60,7 @@ const ChangePasswordForm = ({ token }: { token: string }) => {
         <div className="flex flex-col items-center mb-4">
           <img
             src="/images/logo.png"
-            alt="Ride Bali Explore Logo"
+            alt="Bali Travel Ride Logo"
             className="h-16 mb-2"
           />
           <h1 className="text-2xl font-bold text-gray-900">Change Password</h1>
@@ -79,7 +79,7 @@ const ChangePasswordForm = ({ token }: { token: string }) => {
                   <FormControl>
                     <div className="relative">
                       <Input
-                        type={showPassword ? "text" : "password"}
+                        type={showPassword ? 'text' : 'password'}
                         placeholder="Enter new password"
                         className="w-full pr-10"
                         {...field}
@@ -112,7 +112,7 @@ const ChangePasswordForm = ({ token }: { token: string }) => {
                   <FormControl>
                     <div className="relative">
                       <Input
-                        type={showConfirmPassword ? "text" : "password"}
+                        type={showConfirmPassword ? 'text' : 'password'}
                         placeholder="Confirm new password"
                         className="w-full pr-10"
                         {...field}
@@ -146,7 +146,7 @@ const ChangePasswordForm = ({ token }: { token: string }) => {
               {form.formState.isSubmitting ? (
                 <Loader2 className="animate-spin" />
               ) : (
-                "Change Password"
+                'Change Password'
               )}
             </Button>
           </form>
