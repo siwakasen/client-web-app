@@ -54,7 +54,7 @@ export default function Manager() {
             >
               <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-white shadow-lg">
                 <img
-                  src="images/profile2.jpg"
+                  src="images/profile.jpg"
                   alt="Manager"
                   className="w-full h-full object-cover"
                 />
@@ -79,7 +79,7 @@ export default function Manager() {
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.6, ease: 'easeOut', delay: 0.9 }}
             >
-              Ms. Hanna
+              Mr. Gede
             </motion.h3>
             <motion.p
               className="text-lg text-gray-600 mb-8"
@@ -99,7 +99,7 @@ export default function Manager() {
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.8, ease: 'easeOut', delay: 1.3 }}
             >
-              With over 15 years of industry experience, Hanna leads our company
+              With over 10 years of industry experience, Gede leads our company
               with vision and innovation. His commitment to excellence and
               sustainable practices has transformed how we approach business in
               the modern era.
