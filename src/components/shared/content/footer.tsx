@@ -20,7 +20,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-700 mt-4 pt-4 text-center">
           <p className="text-gray-300">
-            © 2025 Travel Bali. All rights reserved.
+            © 2025 Bali Travel Ride. All rights reserved.
           </p>
         </div>
       </div>
