@@ -65,7 +65,6 @@ export default function LiveChat() {
           setIsConnecting(true);
 
           socket.emit('rejoin_session', {
-            chatSessionId: existingSession.sessionId,
             sessionKey: existingSession.sessionKey,
           });
         }
@@ -184,17 +183,6 @@ export default function LiveChat() {
     socketRef.current = socket;
   }, []);
 
-  // Check for existing session on component mount
-  useEffect(() => {
-    if (hasChatSession()) {
-      const existingSession = getChatSession();
-      if (existingSession) {
-        setGuestName(existingSession.guestName || '');
-        // Will attempt to rejoin when socket connects
-      }
-    }
-  }, []);
-
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     const scrollToBottom = () => {
@@ -295,7 +283,7 @@ export default function LiveChat() {
       <div className="fixed bottom-4 right-4 z-50">
         <Button
           size="lg"
-          className="rounded-full h-12 px-4 shadow-lg shadow-black/20 flex items-center gap-2"
+          className="rounded-full h-12 px-4 shadow-lg shadow-black/20 flex items-center gap-2 cursor-pointer"
           onClick={openChat}
         >
           <svg
