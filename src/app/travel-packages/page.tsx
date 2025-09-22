@@ -97,7 +97,7 @@ export default async function TourPackagesPage() {
       </motion.section>
 
       <MainContent tourPackages={travelPackages} meta={metaPackages} />
-      <LiveChat />
+      <LiveChat customer={customer} />
 
       <Footer />
     </div>

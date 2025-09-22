@@ -9,7 +9,11 @@ import { convertTravelImageUrl } from '@/helpers/images-url/travel-images';
 import Link from 'next/link';
 import { TravelPackages } from '@/interfaces';
 import { notFound } from 'next/navigation';
-import { useGetTravelPackages, useGetTravelPackagesDetail } from '@/hooks';
+import {
+  useGetCustomer,
+  useGetTravelPackages,
+  useGetTravelPackagesDetail,
+} from '@/hooks';
 import LiveChat from '@/components/shared/live-chat/live-chat';
 
 export default async function TravelPackageDetailPage({
@@ -19,6 +23,7 @@ export default async function TravelPackageDetailPage({
 }) {
   // Fetch data on the server
   const { id } = await params;
+  const { customer } = await useGetCustomer();
   let data: TravelPackages | null = null;
   let filteredRelatedPackages: TravelPackages[] = [];
   try {
@@ -224,7 +229,7 @@ export default async function TravelPackageDetailPage({
         </div>
       </div>
 
-      <LiveChat />
+      <LiveChat customer={customer} />
     </div>
   );
 }

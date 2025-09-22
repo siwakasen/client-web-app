@@ -13,6 +13,7 @@ import {
   ChatSession,
   ChatMessage,
 } from '@/lib/users-provider/client';
+import { Customer } from '@/interfaces';
 
 type UIMessage = {
   id: string;
@@ -21,11 +22,11 @@ type UIMessage = {
   timestamp: number;
 };
 
-export default function LiveChat() {
+export default function LiveChat({ customer }: { customer?: Customer }) {
   const [isOpen, setIsOpen] = useState(false);
   const [hasJoined, setHasJoined] = useState(false);
-  const [guestName, setGuestName] = useState('');
-  const [pendingName, setPendingName] = useState('');
+  const [guestName, setGuestName] = useState(customer?.name || '');
+  const [pendingName, setPendingName] = useState(customer?.name || '');
   const [messages, setMessages] = useState<UIMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isConnecting, setIsConnecting] = useState(false);
@@ -37,6 +38,7 @@ export default function LiveChat() {
   const socketRef = useRef<Socket | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
+  const joinButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const title = useMemo(
     () => (hasJoined ? `Customer Service` : 'Need Any Assistance?'),
@@ -208,7 +210,12 @@ export default function LiveChat() {
     // If no existing session, show the join form
     if (!hasChatSession()) {
       setTimeout(() => {
-        inputRef.current?.focus();
+        // If customer has a name, focus the button, otherwise focus the input
+        if (customer?.name) {
+          joinButtonRef.current?.focus();
+        } else {
+          inputRef.current?.focus();
+        }
       }, 50);
     }
   }, [initSocket]);
@@ -226,8 +233,9 @@ export default function LiveChat() {
 
     socketRef.current.emit('start_session', {
       guestName: trimmed,
+      customerId: customer?.id,
     });
-  }, [pendingName]);
+  }, [pendingName, customer?.id]);
 
   const handleSend = useCallback(() => {
     const text = inputValue.trim();
@@ -236,6 +244,7 @@ export default function LiveChat() {
     socketRef.current.emit('send_message', {
       chatSessionId: sessionId,
       message: text,
+      senderId: customer?.id,
     });
 
     setInputValue('');
@@ -370,11 +379,13 @@ export default function LiveChat() {
                       value={pendingName}
                       onChange={(e) => setPendingName(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      disabled={isConnecting}
+                      disabled={isConnecting || pendingName === customer?.name}
                     />
                     <Button
+                      ref={joinButtonRef}
                       onClick={handleJoin}
                       disabled={!pendingName.trim() || isConnecting}
+                      className="cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     >
                       {isConnecting ? 'Connecting...' : 'Join'}
                     </Button>

@@ -1,8 +1,9 @@
+'use cache';
 import React from 'react';
 import { Star } from 'lucide-react';
 import * as motion from 'motion/react-client';
 
-export default function Manager() {
+export default async function Manager() {
   return (
     <motion.div
       className="bg-gray-50 py-16 px-4 sm:px-6 lg:px-8"

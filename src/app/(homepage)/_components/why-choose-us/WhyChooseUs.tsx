@@ -1,3 +1,4 @@
+'use cache';
 import ContentDivider from '../content-divider/ContentDivider';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';

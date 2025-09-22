@@ -90,7 +90,7 @@ export default async function RentCarsPage({
         initialEndDate={end_date}
         initialSearch={search}
       />
-      <LiveChat />
+      <LiveChat customer={customer} />
       <Footer />
     </div>
   );
