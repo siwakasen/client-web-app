@@ -3,11 +3,14 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from '@/components/ui/alert-dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Star } from 'lucide-react';
 import { toast } from 'sonner';
@@ -73,11 +76,11 @@ export function RatingDialog({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Rate Your Experience</DialogTitle>
-        </DialogHeader>
+    <AlertDialog open={isOpen} onOpenChange={handleClose}>
+      <AlertDialogContent className="sm:max-w-md">
+        <AlertDialogHeader>
+          <AlertDialogTitle>Rate Your Experience</AlertDialogTitle>
+        </AlertDialogHeader>
 
         <div className="space-y-6">
           {/* Star Rating */}
@@ -123,26 +126,21 @@ export function RatingDialog({
               className="min-h-[100px]"
             />
           </div>
-
-          {/* Actions */}
-          <div className="flex gap-2 justify-end">
-            <Button
-              variant="outline"
-              onClick={handleClose}
-              disabled={isSubmitting}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSubmit}
-              disabled={isSubmitting || rating === 0}
-              className="bg-amber-500 hover:bg-amber-600"
-            >
-              {isSubmitting ? 'Submitting...' : 'Submit Rating'}
-            </Button>
-          </div>
         </div>
-      </DialogContent>
-    </Dialog>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={handleClose} disabled={isSubmitting}>
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleSubmit}
+            disabled={isSubmitting || rating === 0}
+            className="bg-amber-500 hover:bg-amber-600"
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Rating'}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

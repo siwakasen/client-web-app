@@ -3,12 +3,15 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from '@/components/ui/alert-dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Refund, RefundMethod } from '@/interfaces/refunds.interface';
@@ -71,19 +74,19 @@ export function RefundFormDialog({ bookingId, refund }: RefundFormDialogProps) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
         <Button
           variant="default"
           className="w-full cursor-pointer bg-blue-600 text-white"
         >
           Fill Refund Form
         </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Refund Request Form</DialogTitle>
-        </DialogHeader>
+      </AlertDialogTrigger>
+      <AlertDialogContent className="sm:max-w-[425px]">
+        <AlertDialogHeader>
+          <AlertDialogTitle>Refund Request Form</AlertDialogTitle>
+        </AlertDialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Method Display */}
           <div className="space-y-2">
@@ -163,20 +166,16 @@ export function RefundFormDialog({ bookingId, refund }: RefundFormDialogProps) {
             </div>
           )}
 
-          <div className="flex justify-end space-x-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-            >
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setOpen(false)}>
               Cancel
-            </Button>
-            <Button type="submit" disabled={!isFormValid()}>
+            </AlertDialogCancel>
+            <AlertDialogAction type="submit" disabled={!isFormValid()}>
               Submit Refund Request
-            </Button>
-          </div>
+            </AlertDialogAction>
+          </AlertDialogFooter>
         </form>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

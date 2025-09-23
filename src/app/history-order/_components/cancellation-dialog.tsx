@@ -3,13 +3,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -56,24 +58,24 @@ export function CancellationDialog({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[425px]">
+    <AlertDialog open={isOpen} onOpenChange={handleClose}>
+      <AlertDialogContent className="sm:max-w-[425px]">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.2 }}
         >
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-destructive">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2 text-destructive">
               <AlertTriangle className="h-5 w-5" />
               Cancel Booking
-            </DialogTitle>
-            <DialogDescription>
+            </AlertDialogTitle>
+            <AlertDialogDescription>
               Are you sure you want to cancel booking #{bookingId}? This action
               cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
 
           <div className="grid gap-4 py-4">
             {requiresReason && (
@@ -113,40 +115,36 @@ export function CancellationDialog({
             )}
           </div>
 
-          <DialogFooter className="flex gap-2">
+          <AlertDialogFooter className="flex gap-2">
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <Button
-                variant="outline"
+              <AlertDialogCancel
                 onClick={handleClose}
                 disabled={isLoading}
-                type="button"
                 className="cursor-pointer"
               >
                 Keep Booking
-              </Button>
+              </AlertDialogCancel>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <Button
-                variant="destructive"
+              <AlertDialogAction
                 onClick={handleConfirm}
                 disabled={isLoading}
-                type="button"
-                className="cursor-pointer"
+                className="cursor-pointer bg-destructive text-destructive-foreground hover:bg-destructive/90"
               >
                 {isLoading ? 'Cancelling...' : 'Cancel Booking'}
-              </Button>
+              </AlertDialogAction>
             </motion.div>
-          </DialogFooter>
+          </AlertDialogFooter>
         </motion.div>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

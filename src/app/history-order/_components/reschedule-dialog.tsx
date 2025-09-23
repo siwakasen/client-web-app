@@ -3,13 +3,15 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { RotateCcw } from 'lucide-react';
 import { format } from 'date-fns';
@@ -85,25 +87,25 @@ export function RescheduleDialog({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[500px]">
+    <AlertDialog open={isOpen} onOpenChange={handleClose}>
+      <AlertDialogContent className="sm:max-w-[500px]">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.2 }}
         >
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
               <RotateCcw className="h-5 w-5" />
               Reschedule Booking
-            </DialogTitle>
-            <DialogDescription>
+            </AlertDialogTitle>
+            <AlertDialogDescription>
               Choose new dates for your{' '}
               {isCarRental ? 'car rental' : 'travel package'} booking #
               {bookingId}
-            </DialogDescription>
-          </DialogHeader>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
 
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
@@ -168,27 +170,24 @@ export function RescheduleDialog({
             )}
           </div>
 
-          <DialogFooter className="flex gap-2">
-            <Button
-              variant="outline"
+          <AlertDialogFooter className="flex gap-2">
+            <AlertDialogCancel
               onClick={handleClose}
               disabled={isSubmitting}
-              type="button"
               className="cursor-pointer"
             >
               Cancel
-            </Button>
-            <Button
+            </AlertDialogCancel>
+            <AlertDialogAction
               onClick={handleSubmit}
               disabled={!startDate || (isCarRental && !endDate) || isSubmitting}
-              type="button"
               className="cursor-pointer"
             >
               {isSubmitting ? 'Rescheduling...' : 'Reschedule Booking'}
-            </Button>
-          </DialogFooter>
+            </AlertDialogAction>
+          </AlertDialogFooter>
         </motion.div>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import { useGetBookingHistory } from '@/hooks/bookings.hook';
 import {
@@ -17,6 +16,9 @@ import {
   TreePalm,
   IdCardLanyardIcon,
   NotebookIcon,
+  Clock,
+  CalendarDays,
+  CreditCard,
 } from 'lucide-react';
 import { HistoryPagination } from './history-pagination';
 import { BookingActions } from './booking-actions';
@@ -28,7 +30,7 @@ import {
   Meta,
   RequestType,
 } from '@/interfaces';
-import { convertISOToCurrentTimezone } from '@/lib/utils';
+import Link from 'next/link';
 
 interface BookingListProps {
   currentPage: number;
@@ -312,7 +314,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
       <div className="grid gap-6">
         {bookings.map((booking) => (
           <a key={booking.id} href={`/history-order/${booking.id}`}>
-            <Card className="w-full hover:shadow-lg transition-shadow cursor-pointer py-0">
+            <Card className="w-full hover:shadow-md hover:shadow-green-400/50 transition-shadow cursor-pointer py-0">
               <CardContent className="p-4">
                 <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
                   {/* Middle: Booking Details */}
@@ -356,41 +358,77 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
                     </div>
 
                     {/* Compact Info Grid - Mobile optimized */}
-                    <div className="space-y-3 md:space-y-1 mb-4 md:mb-0">
-                      <div className="flex items-center gap-3 md:gap-2 justify-center md:justify-start">
-                        <Calendar className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
-                        <span className="text-sm md:text-sm">
-                          {formatDate(booking.start_date)} -{' '}
-                          {formatDate(booking.end_date)}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-3 md:gap-2 justify-start md:justify-start">
-                        <MapPin className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
-                        <span className="text-sm md:text-sm">
-                          {booking.pickup_location}
-                        </span>
-                      </div>
-
-                      {booking.number_of_persons && (
-                        <div className="flex items-center gap-3 md:gap-2 justify-start md:justify-start">
-                          <UserRound className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
+                    <div className="space-y-3 md:space-y-1 mb-4 md:mb-0 flex gap-2">
+                      <div className="flex-2">
+                        <div className="flex items-center gap-3 md:gap-2 justify-center md:justify-start">
+                          <Calendar className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
                           <span className="text-sm md:text-sm">
-                            {booking.number_of_persons} persons
+                            {' '}
+                            {booking.package_id
+                              ? 'Date of trip'
+                              : 'Rental date'}{' '}
+                            : {formatDate(booking.start_date)} -{' '}
+                            {formatDate(booking.end_date)}
                           </span>
                         </div>
-                      )}
 
-                      {booking.with_driver !== null && booking.car_id && (
                         <div className="flex items-center gap-3 md:gap-2 justify-start md:justify-start">
-                          <IdCardLanyardIcon className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
+                          <MapPin className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
                           <span className="text-sm md:text-sm">
-                            {booking.with_driver
-                              ? 'With Driver'
-                              : 'Without Driver'}
+                            Pickup Location : {booking.pickup_location}
                           </span>
                         </div>
-                      )}
+
+                        {booking.number_of_persons && (
+                          <div className="flex items-center gap-3 md:gap-2 justify-start md:justify-start">
+                            <UserRound className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
+                            <span className="text-sm md:text-sm">
+                              {booking.number_of_persons} persons
+                            </span>
+                          </div>
+                        )}
+
+                        {booking.with_driver !== null && booking.car_id && (
+                          <div className="flex items-center gap-3 md:gap-2 justify-start md:justify-start">
+                            <IdCardLanyardIcon className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
+                            <span className="text-sm md:text-sm">
+                              {booking.with_driver
+                                ? 'With Driver'
+                                : 'Without Driver'}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="hidden md:block flex-1">
+                        <div className="flex items-center gap-3 md:gap-2 justify-start md:justify-start">
+                          <Clock className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
+                          <span className="text-sm md:text-sm">
+                            Pickup Time: {booking.pickup_time}
+                          </span>
+                        </div>
+
+                        {/* Booking Created Date */}
+                        <div className="flex items-center gap-3 md:gap-2 justify-start md:justify-start">
+                          <CalendarDays className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
+                          <span className="text-sm md:text-sm">
+                            Booked on: {formatOrderDate(booking.created_at)}
+                          </span>
+                        </div>
+
+                        {/* Payment Method */}
+                        {booking.payments &&
+                          booking.payments.length > 0 &&
+                          booking.payments[0].payment_method && (
+                            <div className="flex items-center gap-3 md:gap-2 justify-start md:justify-start">
+                              <CreditCard className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
+                              <span className="text-sm md:text-sm">
+                                Payment Method:{' '}
+                                {booking.payments[0].payment_method}
+                              </span>
+                            </div>
+                          )}
+                      </div>
+                      <div className="hidden md:block flex-1"></div>
                     </div>
 
                     {booking.booking_adjustments.length > 0 && (
@@ -436,6 +474,16 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
                         <p className="text-2xl md:text-xl font-bold text-primary">
                           {formatCurrency(booking.total_price)}
                         </p>
+                        {booking.payments &&
+                          booking.payments.length > 0 &&
+                          booking.payments[0].payment_date && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Paid on{' '}
+                              {formatOrderDate(
+                                booking.payments[0].payment_date
+                              )}
+                            </p>
+                          )}
                       </div>
                     </div>
 

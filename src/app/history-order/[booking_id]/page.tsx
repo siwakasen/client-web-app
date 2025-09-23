@@ -24,6 +24,9 @@ import { RefundFormDialog } from './_components/refund-form-dialog';
 import { RefundStatus } from '@/interfaces/refunds.interface';
 import { BookingInformation } from './_components/booking-information';
 import { AdjustmentsInformation } from './_components/adjustments-information';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export default async function HistoryOrderDetailPage({
   params,
@@ -31,6 +34,10 @@ export default async function HistoryOrderDetailPage({
   params: Promise<{ booking_id: string }>;
 }) {
   const { booking_id } = await params;
+
+  const handleBackOnClick = () => {
+    redirect('/history-order');
+  };
 
   const response = await useGetBookingById(booking_id);
   if ('errors' in response) {
@@ -92,7 +99,13 @@ export default async function HistoryOrderDetailPage({
 
   return (
     <div className="container mx-auto px-4 py-20 max-w-4xl">
-      <div className="mb-6">
+      <div className="mb-6 mt-2">
+        <Button asChild className="mb-4 cursor-pointer">
+          <div>
+            <ArrowLeft className="h-4 w-4" />
+            <Link href="/history-order">Back</Link>
+          </div>
+        </Button>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Order Details</h1>
         <p className="text-gray-600">Booking ID: #{booking.id}</p>
       </div>

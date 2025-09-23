@@ -158,7 +158,7 @@ export function BookingActions({
   if (canRescheduleOrCancel(status)) {
     return (
       <>
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2">
           <Button
             variant="outline"
             size="sm"
@@ -237,13 +237,13 @@ export function BookingActions({
     // If rating exists, show the rating
     if (rating) {
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap max-w-32">
           <div className="flex items-center gap-1">
             <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
             <span className="text-sm font-medium">{rating.service_rate}/5</span>
           </div>
           {rating.description && (
-            <span className="text-sm text-gray-600 italic">
+            <span className="text-sm text-gray-600 italic text-wrap">
               "{rating.description}"
             </span>
           )}
@@ -253,7 +253,7 @@ export function BookingActions({
 
     // If no rating exists, show the Rate button
     return (
-      <>
+      <div className="flex items-center gap-2 flex-wrap w-full max-w-56">
         <Button
           variant="default"
           size="sm"
@@ -270,7 +270,7 @@ export function BookingActions({
           bookingId={bookingId}
           onSuccess={refetch}
         />
-      </>
+      </div>
     );
   }
 
