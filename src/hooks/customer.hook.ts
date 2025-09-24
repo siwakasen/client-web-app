@@ -23,7 +23,6 @@ import { z } from 'zod';
 import { redirect, RedirectType } from 'next/navigation';
 import { ErrorResponse } from './common.hook';
 import { revalidateTag, unstable_cache } from 'next/cache';
-import { headers } from 'next/headers';
 
 export async function useRegisterUser(
   formData: z.infer<typeof RegisterFormSchema>

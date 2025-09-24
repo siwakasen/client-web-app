@@ -1,18 +1,19 @@
-import axios from "axios";
+import axios from 'axios';
 
-const defaultBaseURL = "http://localhost:3003";
+const defaultBaseURL = 'http://localhost:3003';
 
 const createApiInstance = async (
   baseURL?: string,
   headers?: Record<string, string>,
   token?: string
 ) => {
+  console.log('url fetched: ', baseURL);
   const api = axios.create({
     baseURL: baseURL || defaultBaseURL, // Gunakan baseURL custom atau default
     timeout: 10000, // Timeout 10 detik
     headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
       ...headers,
       ...(token && { Authorization: `Bearer ${token}` }),
     },
