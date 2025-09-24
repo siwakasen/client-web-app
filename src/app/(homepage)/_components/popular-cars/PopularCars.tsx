@@ -34,7 +34,7 @@ export default async function PopularCars() {
 
   return (
     <motion.section
-      className="bg-gray-50 pt-16 px-4 md:px-8 min-h-fit"
+      className="bg-gray-50 py-16 px-4 md:px-8 min-h-fit"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: '-100px' }}
