@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const BookingFormSchema = z
   .object({
@@ -6,16 +6,16 @@ export const BookingFormSchema = z
     car_id: z.number().optional(),
     with_driver: z.boolean().optional(),
     number_of_persons: z.number().optional(),
-    start_date: z.string().min(1, { message: "Start Date must be provided" }),
-    end_date: z.string().min(1, { message: "End Date must be provided" }),
-    payment_method: z.enum(["MIDTRANS", "PAYPAL"]),
+    start_date: z.string().min(1, { message: 'Start Date must be provided' }),
+    end_date: z.string().min(1, { message: 'End Date must be provided' }),
+    payment_method: z.enum(['MIDTRANS', 'PAYPAL']),
     pickup_location: z
       .string()
-      .min(1, { message: "Pickup location must be provided" })
+      .min(1, { message: 'Pickup location must be provided' })
       .trim(),
     pickup_time: z
       .string()
-      .min(1, { message: "Pickup time must be provided" })
+      .min(1, { message: 'Pickup time must be provided' })
       .trim(),
     additional_notes: z.string().optional(),
     identity_file: z.array(z.instanceof(File)).optional(),
@@ -28,8 +28,8 @@ export const BookingFormSchema = z
       return true;
     },
     {
-      message: "end_date and with_driver are required when booking a car",
-      path: ["end_date", "with_driver"],
+      message: 'end_date and with_driver are required when booking a car',
+      path: ['end_date', 'with_driver'],
     }
   )
   .refine(
@@ -40,8 +40,8 @@ export const BookingFormSchema = z
       return true;
     },
     {
-      message: "number_of_persons is required when booking a package",
-      path: ["number_of_persons"],
+      message: 'number_of_persons is required when booking a package',
+      path: ['number_of_persons'],
     }
   );
 
@@ -51,36 +51,36 @@ export const BookingRegisterFormSchema = z
     car_id: z.number().optional(),
     with_driver: z.boolean().optional(),
     number_of_persons: z.number().optional(),
-    start_date: z.string().min(1, { message: "Start Date must be provided" }),
+    start_date: z.string().min(1, { message: 'Start Date must be provided' }),
     end_date: z.string(),
-    payment_method: z.enum(["MIDTRANS", "PAYPAL"]),
+    payment_method: z.enum(['MIDTRANS', 'PAYPAL']),
     pickup_location: z
       .string()
-      .min(1, { message: "Pickup location must be provided" })
+      .min(1, { message: 'Pickup location must be provided' })
       .trim(),
     pickup_time: z
       .string()
-      .min(1, { message: "Pickup time must be provided" })
+      .min(1, { message: 'Pickup time must be provided' })
       .trim(),
     additional_notes: z.string().optional(),
     name: z
       .string()
-      .min(3, { message: "Name must be at least 3 characters long." })
+      .min(3, { message: 'Name must be at least 3 characters long.' })
       .trim(),
     email: z
       .string()
-      .min(1, { message: "Email must be provided" })
-      .email({ message: "Please enter a valid email." })
+      .min(1, { message: 'Email must be provided' })
+      .email({ message: 'Please enter a valid email.' })
       .trim(),
     password: z
       .string()
-      .min(8, { message: "Password must be at least 8 characters long" })
+      .min(8, { message: 'Password must be at least 8 characters long' })
       .regex(/[a-zA-Z]/, {
-        message: "Password must contain at least one letter.",
+        message: 'Password must contain at least one letter.',
       })
-      .regex(/[0-9]/, { message: "Password must contain at least one number." })
-      .regex(/[!@#$%^&*]/, {
-        message: "Password must contain at least one special character.",
+      .regex(/[0-9]/, { message: 'Password must contain at least one number.' })
+      .regex(/[!@#$%^&*_-]/, {
+        message: 'Password must contain at least one special character.',
       })
       .trim(),
     confirm_password: z.string().trim(),
@@ -96,8 +96,8 @@ export const BookingRegisterFormSchema = z
       return true;
     },
     {
-      message: "end_date and with_driver are required when booking a car",
-      path: ["end_date", "with_driver"],
+      message: 'end_date and with_driver are required when booking a car',
+      path: ['end_date', 'with_driver'],
     }
   )
   .refine(
@@ -108,13 +108,13 @@ export const BookingRegisterFormSchema = z
       return true;
     },
     {
-      message: "number_of_persons is required when booking a package",
-      path: ["number_of_persons"],
+      message: 'number_of_persons is required when booking a package',
+      path: ['number_of_persons'],
     }
   )
   .refine((data) => data.password === data.confirm_password, {
-    message: "Passwords must be match",
-    path: ["confirm_password"],
+    message: 'Passwords must be match',
+    path: ['confirm_password'],
   })
   .refine(
     (data) => {
@@ -124,7 +124,7 @@ export const BookingRegisterFormSchema = z
       return true;
     },
     {
-      message: "Please upload identity and driver license files",
-      path: ["identity_file"],
+      message: 'Please upload identity and driver license files',
+      path: ['identity_file'],
     }
   );
