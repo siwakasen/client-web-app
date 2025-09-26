@@ -217,7 +217,7 @@ export default async function HistoryOrderDetailPage({
                     <div className="space-y-2">
                       <p>
                         <span className="font-medium">Duration:</span>{' '}
-                        {packageData.duration} days
+                        {packageData.duration} hours
                       </p>
                       <p>
                         <span className="font-medium">Max Persons:</span>{' '}

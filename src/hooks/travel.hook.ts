@@ -52,6 +52,7 @@ export async function useGetTravelPackagesDetail(
 export async function useGetTravelPackagesDetailHistory(
   id: number
 ): Promise<TravelPackagesDetailResponse> {
+  'use cache';
   try {
     return await fetchTravelPackagesDetailHistory(id);
   } catch (error: any) {

@@ -101,6 +101,7 @@ function BookingSkeleton() {
 
 export function BookingList({ currentPage, limit, status }: BookingListProps) {
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [enrichedBookings, setEnrichedBookings] = useState<Booking[]>([]);
   const [meta, setMeta] = useState<Meta>({
     totalPages: 0,
     totalItems: 0,
@@ -111,13 +112,14 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [enrichingData, setEnrichingData] = useState(false);
 
   const fetchBookings = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      // Fetch booking history with status filter
+      // Step 1: Fetch booking history with status filter
       const response = await useGetBookingHistory(currentPage, limit, status);
 
       if ('errors' in response) {
@@ -128,46 +130,71 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
       const { data: bookingsData, meta: metaData } = response;
       setMeta(metaData);
 
-      // Fetch package and car data for bookings
-      const enrichedBookings = await Promise.all(
-        bookingsData.map(async (booking: Booking) => {
-          let packageName = null;
-          let carName = null;
+      // Step 2: Set initial bookings data and render immediately
+      setBookings(bookingsData);
+      setEnrichedBookings(bookingsData);
+      setLoading(false);
 
-          // Fetch package data if package_id exists
-          if (booking.package_id) {
-            try {
-              const packageResponse = await useGetTravelPackagesDetailHistory(
-                booking.package_id
-              );
-              if ('data' in packageResponse) {
-                packageName = packageResponse.data.package_name;
-              }
-            } catch (error) {}
-          }
-
-          // Fetch car data if car_id exists
-          if (booking.car_id) {
-            try {
-              const carResponse = await useGetCarsDetailHistory(booking.car_id);
-              if ('data' in carResponse) {
-                carName = carResponse.data.car_name;
-              }
-            } catch (error) {}
-          }
-          return {
-            ...booking,
-            packageName,
-            carName,
-          };
-        })
-      );
-      setBookings(enrichedBookings);
+      // Step 3: Asynchronously enrich data one by one
+      enrichBookingData(bookingsData);
     } catch (err) {
       setError('Failed to fetch bookings');
-    } finally {
       setLoading(false);
     }
+  };
+
+  const enrichBookingData = async (bookingsData: Booking[]) => {
+    setEnrichingData(true);
+
+    // Process each booking individually for partial rendering
+    for (let i = 0; i < bookingsData.length; i++) {
+      const booking = bookingsData[i];
+      let packageName = null;
+      let carName = null;
+
+      // Fetch package data if package_id exists
+      if (booking.package_id) {
+        try {
+          const packageResponse = await useGetTravelPackagesDetailHistory(
+            booking.package_id
+          );
+          if ('data' in packageResponse) {
+            packageName = packageResponse.data.package_name;
+          }
+        } catch (error) {
+          console.error('Error fetching package data:', error);
+        }
+      }
+
+      // Fetch car data if car_id exists
+      if (booking.car_id) {
+        try {
+          const carResponse = await useGetCarsDetailHistory(booking.car_id);
+          if ('data' in carResponse) {
+            carName = carResponse.data.car_name;
+          }
+        } catch (error) {
+          console.error('Error fetching car data:', error);
+        }
+      }
+
+      // Update the specific booking with enriched data
+      const enrichedBooking = {
+        ...booking,
+        packageName,
+        carName,
+      };
+
+      // Update the enriched bookings state with the new data
+      setEnrichedBookings((prev) =>
+        prev.map((b, index) => (index === i ? enrichedBooking : b))
+      );
+
+      // Small delay to show progressive loading effect
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+
+    setEnrichingData(false);
   };
 
   useEffect(() => {
@@ -267,7 +294,8 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
     if (booking.carName) {
       return booking.carName;
     }
-    return `Order #${booking.id}`;
+
+    return `...`;
   };
 
   if (loading) {
@@ -297,7 +325,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
     );
   }
 
-  if (bookings.length === 0) {
+  if (enrichedBookings.length === 0) {
     return (
       <div className="text-center py-12">
         <TreePalm className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
@@ -312,7 +340,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
   return (
     <>
       <div className="grid gap-6">
-        {bookings.map((booking) => (
+        {enrichedBookings.map((booking) => (
           <a key={booking.id} href={`/history-order/${booking.id}`}>
             <Card className="w-full hover:shadow-md hover:shadow-green-400/50 transition-shadow cursor-pointer py-0">
               <CardContent className="p-4">
@@ -349,9 +377,9 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
                           {formatStatusText(booking.status)}
                         </Badge>
                       </div>
-                      <h3 className="font-semibold text-xl md:text-lg truncate mb-2 md:mb-1">
+                      <p className="font-semibold text-xl md:text-lg truncate mb-2 md:mb-1">
                         {getBookingTitle(booking)}
-                      </h3>
+                      </p>
                       <p className="text-sm md:text-xs text-muted-foreground">
                         Order #{booking.id}
                       </p>

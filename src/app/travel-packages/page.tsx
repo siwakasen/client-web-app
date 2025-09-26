@@ -44,6 +44,7 @@ export default async function TourPackagesPage() {
         <Image
           src="/images/bali_1.jpg"
           priority
+          quality={70}
           alt="Bali landscape"
           fill
           sizes="(max-width: 768px) 100vw, 50vw"

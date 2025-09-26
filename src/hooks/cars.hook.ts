@@ -66,6 +66,7 @@ export async function useGetCarsDetail(
 export async function useGetCarsDetailHistory(
   id: number
 ): Promise<CarsDetailResponse> {
+  'use cache';
   try {
     return await fetchCarsDetailHistory({ id });
   } catch (error: any) {

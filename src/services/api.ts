@@ -7,7 +7,6 @@ const createApiInstance = async (
   headers?: Record<string, string>,
   token?: string
 ) => {
-  console.log('url fetched: ', baseURL);
   const api = axios.create({
     baseURL: baseURL || defaultBaseURL, // Gunakan baseURL custom atau default
     timeout: 10000, // Timeout 10 detik
