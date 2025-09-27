@@ -30,7 +30,7 @@ import {
   Meta,
   RequestType,
 } from '@/interfaces';
-import Link from 'next/link';
+import { formatDateTimeLocale } from '@/lib/utils';
 
 interface BookingListProps {
   currentPage: number;
@@ -101,7 +101,6 @@ function BookingSkeleton() {
 
 export function BookingList({ currentPage, limit, status }: BookingListProps) {
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [enrichedBookings, setEnrichedBookings] = useState<Booking[]>([]);
   const [meta, setMeta] = useState<Meta>({
     totalPages: 0,
     totalItems: 0,
@@ -112,7 +111,6 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [enrichingData, setEnrichingData] = useState(false);
 
   const fetchBookings = async () => {
     try {
@@ -132,7 +130,6 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
 
       // Step 2: Set initial bookings data and render immediately
       setBookings(bookingsData);
-      setEnrichedBookings(bookingsData);
       setLoading(false);
 
       // Step 3: Asynchronously enrich data one by one
@@ -144,8 +141,6 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
   };
 
   const enrichBookingData = async (bookingsData: Booking[]) => {
-    setEnrichingData(true);
-
     // Process each booking individually for partial rendering
     for (let i = 0; i < bookingsData.length; i++) {
       const booking = bookingsData[i];
@@ -186,15 +181,10 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
       };
 
       // Update the enriched bookings state with the new data
-      setEnrichedBookings((prev) =>
+      setBookings((prev) =>
         prev.map((b, index) => (index === i ? enrichedBooking : b))
       );
-
-      // Small delay to show progressive loading effect
-      await new Promise((resolve) => setTimeout(resolve, 100));
     }
-
-    setEnrichingData(false);
   };
 
   useEffect(() => {
@@ -325,7 +315,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
     );
   }
 
-  if (enrichedBookings.length === 0) {
+  if (bookings.length === 0) {
     return (
       <div className="text-center py-12">
         <TreePalm className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
@@ -340,7 +330,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
   return (
     <>
       <div className="grid gap-6">
-        {enrichedBookings.map((booking) => (
+        {bookings.map((booking) => (
           <a key={booking.id} href={`/history-order/${booking.id}`}>
             <Card className="w-full hover:shadow-md hover:shadow-green-400/50 transition-shadow cursor-pointer py-0">
               <CardContent className="p-4">
