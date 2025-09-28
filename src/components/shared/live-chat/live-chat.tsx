@@ -303,7 +303,7 @@ export default function LiveChat({ customer }: { customer?: Customer }) {
           >
             <path d="M2.25 12c0-4.97 4.643-9 10.375-9s10.375 4.03 10.375 9-4.643 9-10.375 9c-.88 0-1.732-.093-2.543-.27-.29-.063-.593.01-.82.197L5.2 22.8c-.74.617-1.879.048-1.753-.885l.318-2.353c.04-.3-.078-.6-.309-.813C2.954 17.482 2.25 14.844 2.25 12z" />
           </svg>
-          <span className="text-sm font-medium">Need Support?</span>
+          <span className="text-sm font-medium">Quick Assist</span>
         </Button>
       </div>
 
