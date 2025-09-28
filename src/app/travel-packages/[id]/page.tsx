@@ -184,7 +184,7 @@ export default async function TravelPackageDetailPage({
         {/* Related Packages */}
         <div className="mt-16">
           <h2 className="text-2xl font-bold mb-8">
-            Explore More Package Tours
+            Explore More Packages Travel
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredRelatedPackages.map((pkg) => (

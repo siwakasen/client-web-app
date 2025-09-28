@@ -62,7 +62,7 @@ export default function Navbar({
 
   const navigationItems = [
     { href: '/', label: 'Home' },
-    { href: '/travel-packages', label: 'Packages Tour' },
+    { href: '/travel-packages', label: 'Packages Travel' },
     { href: '/rent-cars', label: 'Cars Rental' },
   ];
 
