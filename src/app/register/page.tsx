@@ -1,5 +1,5 @@
-import RegisterForm from "./_components/register-form";
-import WelcomeSection from "./_components/welcome-section";
+import RegisterForm from './_components/register-form';
+import WelcomeSection from './_components/welcome-section';
 
 export default function RegisterPage() {
   return (
@@ -11,7 +11,7 @@ export default function RegisterPage() {
         </div>
 
         {/* Right Side - Registration Form */}
-        <div className="flex justify-center w-full h-full items-center">
+        <div className="flex justify-center w-full px-10 h-full items-center">
           <RegisterForm />
         </div>
 

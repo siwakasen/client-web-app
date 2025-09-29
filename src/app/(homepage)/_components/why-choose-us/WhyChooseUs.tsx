@@ -30,22 +30,22 @@ export default async function WhyChooseUs() {
 
   return (
     <motion.section
-      className="bg-gray-50 md:pt-16 pt-8 px-4 md:px-8 min-h-screen"
+      className="bg-gray-50 md:pt-16 pt-8 px-4 md:px-8 min-h-screen overflow-hidden"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 1, ease: 'easeOut' }}
     >
       <motion.div
-        className="max-w-7xl mx-auto  px-4 sm:px-6 lg:px-8"
-        initial={{ opacity: 0, y: 30 }}
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-50px' }}
         transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
       >
         <motion.div
           className="flex justify-between items-start mb-8"
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
@@ -61,14 +61,14 @@ export default async function WhyChooseUs() {
 
         <motion.div
           className="flex flex-col md:flex-row w-full justify-between md:gap-12 gap-8 items-center"
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.4 }}
         >
           {/* Image Card */}
           <motion.div
-            initial={{ opacity: 0, x: -60 }}
+            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-50px' }}
             transition={{ duration: 0.7, ease: 'easeOut', delay: 0.6 }}
@@ -82,7 +82,6 @@ export default async function WhyChooseUs() {
                     alt="Why Choose Us"
                     fill
                     priority={true}
-                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 90vw, (max-width: 1024px) 50vw, 40vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
@@ -93,7 +92,7 @@ export default async function WhyChooseUs() {
           {/* Features List */}
           <motion.div
             className="lg:w-1/2 space-y-8 px-12 md:px-0"
-            initial={{ opacity: 0, x: 60 }}
+            initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-50px' }}
             transition={{ duration: 0.7, ease: 'easeOut', delay: 0.8 }}
@@ -102,7 +101,7 @@ export default async function WhyChooseUs() {
               <motion.div
                 key={index}
                 className="flex gap-6 items-start"
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{

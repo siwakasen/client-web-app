@@ -15,6 +15,18 @@ import {
 } from '@/lib/users-provider/client';
 import { Customer } from '@/interfaces';
 
+const formatTimestamp = (timestamp: number): string => {
+  const date = new Date(timestamp > 1e10 ? timestamp : timestamp * 1000);
+
+  const utcDate = new Date(date.getTime() - 8 * 60 * 60 * 1000);
+
+  return utcDate.toLocaleTimeString('id-ID', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+};
+
 type UIMessage = {
   id: string;
   author: 'me' | 'support' | 'system';
@@ -412,10 +424,7 @@ export default function LiveChat({ customer }: { customer?: Customer }) {
                           </p>
                           {m.author !== 'system' && (
                             <p className="text-xs opacity-70 mt-1">
-                              {new Date(m.timestamp).toLocaleTimeString([], {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                              })}
+                              {formatTimestamp(m.timestamp)}
                             </p>
                           )}
                         </div>
