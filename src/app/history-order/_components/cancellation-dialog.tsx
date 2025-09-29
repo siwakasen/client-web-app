@@ -72,8 +72,9 @@ export function CancellationDialog({
               Cancel Booking
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to cancel booking #{bookingId}? This action
-              cannot be undone.
+              Are you sure you want to cancel booking #{bookingId}? You will be
+              refunded <span className="font-bold">70%</span> of the booking
+              amount.
             </AlertDialogDescription>
           </AlertDialogHeader>
 
