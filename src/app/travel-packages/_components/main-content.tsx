@@ -8,6 +8,7 @@ import { TourPackageCard } from './packages-card';
 import { Pagination } from '../../../components/shared/content/pagination';
 import { SkeletonCard } from '@/components/shared/skeleton/skeleton-card';
 import { useGetTravelPackages } from '@/hooks';
+import { useGetRatingsByTravelPackageId } from '@/hooks/rating.hook';
 
 interface TourPackagesProps {
   tourPackages: TravelPackages[];
@@ -24,6 +25,9 @@ export default function MainContent({
   const [currentPage, setCurrentPage] = useState(1);
   const [tourPackages, setTourPackages] = useState(initialTourPackages);
   const [meta, setMeta] = useState(initialMeta);
+  const [packageRatings, setPackageRatings] = useState<
+    Record<number, { averageRating: number; ratingCount: number }>
+  >({});
 
   // Debounce search term
   useEffect(() => {
@@ -45,7 +49,32 @@ export default function MainContent({
       });
       setTourPackages(data);
       setMeta(newMeta);
+
+      // Clear previous ratings and fetch new ones
+      setPackageRatings({});
+      fetchPackageRatings(data);
     } catch (error: any) {}
+  };
+
+  // Fetch ratings for each package asynchronously
+  const fetchPackageRatings = async (packages: TravelPackages[]) => {
+    for (const pkg of packages) {
+      try {
+        const response = await useGetRatingsByTravelPackageId(pkg.id);
+        if ('data' in response && response.data.averageRating !== undefined) {
+          console.log('response', response.data);
+          setPackageRatings((prev) => ({
+            ...prev,
+            [pkg.id]: {
+              averageRating: response.data.averageRating,
+              ratingCount: response.data.ratingsCount,
+            },
+          }));
+        }
+      } catch (error) {
+        console.error(`Error fetching rating for package ${pkg.id}:`, error);
+      }
+    }
   };
   useEffect(() => {
     fetchData();
@@ -103,7 +132,12 @@ export default function MainContent({
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
                 {filteredPackages.map((pkg) => (
-                  <TourPackageCard key={pkg.id} travelPackage={pkg} />
+                  <TourPackageCard
+                    key={pkg.id}
+                    travelPackage={pkg}
+                    averageRating={packageRatings[pkg.id]?.averageRating}
+                    ratingCount={packageRatings[pkg.id]?.ratingCount}
+                  />
                 ))}
               </div>
               {filteredPackages.length === 0 && (

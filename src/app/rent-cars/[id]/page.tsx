@@ -1,15 +1,16 @@
-import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { DollarSign, Users, Check, Key, Palette } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { convertCarImageUrl } from "@/helpers/images-url/car-images";
-import Link from "next/link";
-import React from "react";
-import { Car } from "@/interfaces";
-import { notFound, redirect } from "next/navigation";
-import { useGetCarsDetail } from "@/hooks";
+import Image from 'next/image';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { DollarSign, Users, Check, Key, Palette, Star } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { convertCarImageUrl } from '@/helpers/images-url/car-images';
+import Link from 'next/link';
+import React from 'react';
+import { Car } from '@/interfaces';
+import { notFound, redirect } from 'next/navigation';
+import { useGetCarsDetail } from '@/hooks';
+import { useGetRatingsByCarId } from '@/hooks/rating.hook';
 
 export default async function CarDetailPage({
   params,
@@ -18,16 +19,20 @@ export default async function CarDetailPage({
   params: Promise<{ id: string }>;
   searchParams: Promise<{ start_date?: string; end_date?: string }>;
 }) {
-
   const { start_date, end_date } = await searchParams;
   if (!start_date || !end_date) {
-    redirect("/rent-cars");
+    redirect('/rent-cars');
   }
   const { id } = await params;
   let data: Car | null = null;
+  let ratings: any[] = [];
   try {
     const { data: car } = await useGetCarsDetail(Number(id));
+    const ratingsResponse = await useGetRatingsByCarId(Number(id));
     data = car;
+    if ('data' in ratingsResponse && ratingsResponse.data?.ratings) {
+      ratings = ratingsResponse.data.ratings;
+    }
   } catch (error) {
     // TOAST ERROR
   }
@@ -38,12 +43,23 @@ export default async function CarDetailPage({
 
   const formatPrice = (price: number) => `$${price.toLocaleString()}`;
 
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, index) => (
+      <Star
+        key={index}
+        className={`w-4 h-4 ${
+          index < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+        }`}
+      />
+    ));
+  };
+
   return (
     <div className="min-h-screen ">
       {/* Hero Section with Title */}
       <div className="relative h-64 md:h-80 lg:h-96 overflow-hidden">
         <Image
-          src={convertCarImageUrl(data.car_image || "")}
+          src={convertCarImageUrl(data.car_image || '')}
           alt={data.car_name}
           fill
           sizes="100vw"
@@ -150,7 +166,9 @@ export default async function CarDetailPage({
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Link href={`/rent-cars/checkout/${data.id}?start_date=${start_date}&end_date=${end_date} `}>
+                <Link
+                  href={`/rent-cars/checkout/${data.id}?start_date=${start_date}&end_date=${end_date} `}
+                >
                   <Button className="w-full cursor-pointer" size="lg">
                     Rent Now
                   </Button>
@@ -176,6 +194,44 @@ export default async function CarDetailPage({
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        {/* Customer Reviews */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold mb-8">Customer Reviews</h2>
+
+          {ratings.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {ratings.map((rating) => (
+                <Card
+                  key={rating.id}
+                  className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
+                >
+                  <CardContent className="p-6">
+                    {/* Star Rating */}
+                    <div className="flex items-center mb-4">
+                      {renderStars(rating.service_rate)}
+                    </div>
+
+                    {/* Blockquote */}
+                    <blockquote className="mt-6 border-l-4 border-gray-300 pl-6 italic text-gray-700 leading-relaxed">
+                      &quot;{rating.description || 'No description provided.'}
+                      &quot;
+                    </blockquote>
+
+                    {/* Date */}
+                    <div className="mt-4 text-sm text-gray-500">
+                      {new Date(rating.created_at).toLocaleDateString()}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No reviews available yet.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,15 +1,20 @@
-import type React from "react";
-import type { TravelPackages } from "@/interfaces";
-import { convertTravelImageUrl } from "@/helpers/images-url/travel-images";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import type React from 'react';
+import type { TravelPackages } from '@/interfaces';
+import { convertTravelImageUrl } from '@/helpers/images-url/travel-images';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Star } from 'lucide-react';
 
 interface TourPackageCardProps {
   travelPackage: TravelPackages;
+  averageRating?: number;
+  ratingCount?: number;
 }
 
 export const TourPackageCard: React.FC<TourPackageCardProps> = ({
   travelPackage,
+  averageRating,
+  ratingCount,
 }) => {
   return (
     <Link
@@ -19,7 +24,7 @@ export const TourPackageCard: React.FC<TourPackageCardProps> = ({
       {/* 1. Add `h-full`, `flex`, and `flex-col` */}
       <div className="bg-white rounded-lg shadow-lg overflow-hidden  h-full flex flex-col">
         <img
-          src={convertTravelImageUrl(travelPackage.images?.[0] || "")}
+          src={convertTravelImageUrl(travelPackage.images?.[0] || '')}
           alt={travelPackage.package_name}
           className="w-full h-48 object-cover"
         />
@@ -30,12 +35,24 @@ export const TourPackageCard: React.FC<TourPackageCardProps> = ({
               {travelPackage.package_name}
             </h3>
             <p className="mt-2 text-sm text-gray-600">
-              {travelPackage.description
-                .split(" ")
-                .slice(0, 40)
-                .join(" ")}
-              {travelPackage.description.split(" ").length > 40 && "..."}
+              {travelPackage.description.split(' ').slice(0, 40).join(' ')}
+              {travelPackage.description.split(' ').length > 40 && '...'}
             </p>
+            {/* Average Rating Display */}
+            <div className="mt-2 flex items-center gap-1">
+              {averageRating !== undefined ? (
+                <>
+                  <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  <span className="text-sm font-medium text-gray-700">
+                    {ratingCount && ratingCount > 0
+                      ? `${averageRating.toFixed(1)} | (${ratingCount} reviews)`
+                      : 'No reviews'}
+                  </span>
+                </>
+              ) : (
+                <span className="text-sm text-gray-400">...</span>
+              )}
+            </div>
           </div>
           {/* 3. Add `mt-auto` to push the price to the bottom */}
           <div className="mt-auto p-4 flex items-center justify-between bg-gray-100 border-gray-200 border-1  rounded-lg">

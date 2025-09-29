@@ -6,3 +6,16 @@ export interface Rating {
   created_at: string;
   updated_at: string;
 }
+
+export interface GetRatingsResponse {
+  data: {
+    averageRating: number;
+    ratingsCount: number;
+    ratings: Rating[];
+  };
+  message: string;
+}
+export interface GetRatingsReviewsResponse {
+  data: Rating[] | [];
+  message: string;
+}

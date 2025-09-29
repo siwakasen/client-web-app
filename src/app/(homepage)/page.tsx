@@ -3,6 +3,7 @@ import PopularPackage from './_components/popular-packages/PopularPackage';
 import WhyChooseUs from './_components/why-choose-us/WhyChooseUs';
 import PopularCars from './_components/popular-cars/PopularCars';
 import Manager from './_components/manager-section/Manager';
+import Reviews from './_components/reviews/reviews';
 import LiveChat from '@/components/shared/live-chat/live-chat';
 import { useGetCustomer } from '@/hooks/customer.hook';
 export default async function Home() {
@@ -13,6 +14,7 @@ export default async function Home() {
       <PopularPackage />
       <WhyChooseUs />
       <PopularCars />
+      <Reviews />
       <Manager />
       <LiveChat customer={customer} />
     </div>

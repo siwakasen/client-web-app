@@ -8,6 +8,7 @@ import { CarsCard } from './cars-card';
 import { Pagination } from '../../../components/shared/content/pagination';
 import { SkeletonCard } from '@/components/shared/skeleton/skeleton-card';
 import { useGetAvailableCars } from '@/hooks';
+import { useGetRatingsByCarId } from '@/hooks/rating.hook';
 import { DateRangePicker } from '@/components/ui/date-range-picker';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -41,6 +42,9 @@ export default function MainContent({
     hasPrevPage: false,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [carRatings, setCarRatings] = useState<
+    Record<number, { averageRating: number; ratingCount: number }>
+  >({});
 
   // Function to update URL parameters
   const updateUrlParams = (params: {
@@ -83,9 +87,33 @@ export default function MainContent({
       });
       setCars(data);
       setMeta(newMeta);
+
+      // Clear previous ratings and fetch new ones
+      setCarRatings({});
+      fetchCarRatings(data);
     } catch (error: any) {
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Fetch ratings for each car asynchronously
+  const fetchCarRatings = async (carsData: Car[]) => {
+    for (const car of carsData) {
+      try {
+        const response = await useGetRatingsByCarId(car.id);
+        if ('data' in response && response.data.averageRating !== undefined) {
+          setCarRatings((prev) => ({
+            ...prev,
+            [car.id]: {
+              averageRating: response.data.averageRating,
+              ratingCount: response.data.ratingsCount,
+            },
+          }));
+        }
+      } catch (error) {
+        console.error(`Error fetching rating for car ${car.id}:`, error);
+      }
     }
   };
 
@@ -221,6 +249,8 @@ export default function MainContent({
                           car={car}
                           start_date={startDate}
                           end_date={endDate}
+                          averageRating={carRatings[car.id]?.averageRating}
+                          ratingCount={carRatings[car.id]?.ratingCount}
                         />
                       ))}
                     </div>

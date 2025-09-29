@@ -3,3 +3,4 @@ export * from './travel.hook';
 export * from './bookings.hook';
 export * from './cars.hook';
 export * from './booking-adjustments.hook';
+export * from './rating.hook';

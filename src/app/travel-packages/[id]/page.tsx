@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { DollarSign, Calendar, Users, Check } from 'lucide-react';
+import { DollarSign, Calendar, Users, Check, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ImageCarousel } from './_components/carousel-images';
 import { Separator } from '@/components/ui/separator';
@@ -9,11 +9,8 @@ import { convertTravelImageUrl } from '@/helpers/images-url/travel-images';
 import Link from 'next/link';
 import { TravelPackages } from '@/interfaces';
 import { notFound } from 'next/navigation';
-import {
-  useGetCustomer,
-  useGetTravelPackages,
-  useGetTravelPackagesDetail,
-} from '@/hooks';
+import { useGetCustomer, useGetTravelPackagesDetail } from '@/hooks';
+import { useGetRatingsByTravelPackageId } from '@/hooks/rating.hook';
 import LiveChat from '@/components/shared/live-chat/live-chat';
 
 export default async function TravelPackageDetailPage({
@@ -25,20 +22,17 @@ export default async function TravelPackageDetailPage({
   const { id } = await params;
   const { customer } = await useGetCustomer();
   let data: TravelPackages | null = null;
-  let filteredRelatedPackages: TravelPackages[] = [];
+  let ratings: any[] = [];
   try {
     const { data: travel } = await useGetTravelPackagesDetail({
       id: Number(id),
     });
-    const relatedPackages = await useGetTravelPackages({
-      limit: 6,
-      page: 1,
-      search: '',
-    });
+    const ratingsResponse = await useGetRatingsByTravelPackageId(Number(id));
+    console.log('ratingsResponse', ratingsResponse);
     data = travel;
-    filteredRelatedPackages = relatedPackages.data
-      .filter((pkg) => pkg.id !== Number(id))
-      .slice(0, 4);
+    if ('data' in ratingsResponse && ratingsResponse.data?.ratings) {
+      ratings = ratingsResponse.data.ratings;
+    }
   } catch (error) {
     // TOAST ERROR
   }
@@ -48,6 +42,17 @@ export default async function TravelPackageDetailPage({
   }
 
   const formatPrice = (price: number) => `$${price.toLocaleString()}`;
+
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, index) => (
+      <Star
+        key={index}
+        className={`w-4 h-4 ${
+          index < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+        }`}
+      />
+    ));
+  };
   return (
     <div className="min-h-screen ">
       {/* Hero Section with Title */}
@@ -181,51 +186,42 @@ export default async function TravelPackageDetailPage({
           </div>
         </div>
 
-        {/* Related Packages */}
+        {/* Customer Reviews */}
         <div className="mt-16">
-          <h2 className="text-2xl font-bold mb-8">
-            Explore More Packages Travel
-          </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredRelatedPackages.map((pkg) => (
-              <Link
-                key={pkg.id}
-                href={`/travel-packages/${pkg.id}`}
-                className="block h-full"
-              >
-                <Card className="flex flex-col h-full rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow cursor-pointer bg-white p-0">
-                  <div className="relative h-48 w-full">
-                    <Image
-                      src={convertTravelImageUrl(pkg.images?.[0] || '')}
-                      alt={pkg.package_name}
-                      fill
-                      className="object-cover w-full h-full rounded-t-2xl"
-                      sizes="(max-width: 768px) 100vw, 25vw"
-                    />
-                  </div>
-                  <CardContent className="flex-1 p-4 flex flex-col">
-                    <h3 className="text-lg font-semibold mb-2">
-                      {pkg.package_name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
-                      {pkg.description}
-                    </p>
-                    <div className="mt-auto flex items-center justify-between">
-                      <span className="text-primary font-bold">
-                        ${pkg.package_price.toLocaleString()}
-                      </span>
-                      <Button
-                        size="sm"
-                        className="bg-slate-700 hover:bg-slate-900 text-white cursor-pointer"
-                      >
-                        View
-                      </Button>
+          <h2 className="text-2xl font-bold mb-8">Customer Reviews</h2>
+
+          {ratings.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {ratings.map((rating) => (
+                <Card
+                  key={rating.id}
+                  className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
+                >
+                  <CardContent className="p-6">
+                    {/* Star Rating */}
+                    <div className="flex items-center mb-4">
+                      {renderStars(rating.service_rate)}
+                    </div>
+
+                    {/* Blockquote */}
+                    <blockquote className="mt-6 border-l-4 border-gray-300 pl-6 italic text-gray-700 leading-relaxed">
+                      &quot;{rating.description || 'No description provided.'}
+                      &quot;
+                    </blockquote>
+
+                    {/* Date */}
+                    <div className="mt-4 text-sm text-gray-500">
+                      {new Date(rating.created_at).toLocaleDateString()}
                     </div>
                   </CardContent>
                 </Card>
-              </Link>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No reviews available yet.</p>
+            </div>
+          )}
         </div>
       </div>
 
