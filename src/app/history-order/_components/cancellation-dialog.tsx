@@ -73,8 +73,8 @@ export function CancellationDialog({
             </AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to cancel booking #{bookingId}? You will be
-              refunded <span className="font-bold">70%</span> of the booking
-              amount.
+              refunded <span className="font-bold text-black">70%</span> of the
+              booking amount.
             </AlertDialogDescription>
           </AlertDialogHeader>
 
