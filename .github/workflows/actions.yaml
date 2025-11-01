@@ -42,7 +42,7 @@ jobs:
 
       - name: Build and push image
         if: |
-          env.skip == 'false' &&
+          env.skip == 'false'
         run: |
           IMAGE=${{ secrets.REGISTRY_URL }}/client-web-app
           docker build --progress=plain -f Dockerfile -t $IMAGE:latest -t $IMAGE:sha-${SHORT_SHA} .
