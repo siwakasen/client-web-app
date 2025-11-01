@@ -15,11 +15,9 @@ export default function Reviews() {
         // Using carId 1 as default - you can modify this or make it dynamic
         const response = await useGetRatingsReviews();
         if ('data' in response && Array.isArray(response.data)) {
-          console.log('response', response);
           setReviews(response.data);
         }
       } catch (error) {
-        console.error('Error fetching reviews:', error);
       } finally {
         setLoading(false);
       }

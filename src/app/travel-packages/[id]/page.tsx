@@ -28,7 +28,6 @@ export default async function TravelPackageDetailPage({
       id: Number(id),
     });
     const ratingsResponse = await useGetRatingsByTravelPackageId(Number(id));
-    console.log('ratingsResponse', ratingsResponse);
     data = travel;
     if ('data' in ratingsResponse && ratingsResponse.data?.ratings) {
       ratings = ratingsResponse.data.ratings;

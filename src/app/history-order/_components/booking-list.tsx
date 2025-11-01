@@ -156,9 +156,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
           if ('data' in packageResponse) {
             packageName = packageResponse.data.package_name;
           }
-        } catch (error) {
-          console.error('Error fetching package data:', error);
-        }
+        } catch (error) {}
       }
 
       // Fetch car data if car_id exists
@@ -168,9 +166,7 @@ export function BookingList({ currentPage, limit, status }: BookingListProps) {
           if ('data' in carResponse) {
             carName = carResponse.data.car_name;
           }
-        } catch (error) {
-          console.error('Error fetching car data:', error);
-        }
+        } catch (error) {}
       }
 
       // Update the specific booking with enriched data

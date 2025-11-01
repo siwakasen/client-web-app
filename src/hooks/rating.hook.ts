@@ -39,9 +39,7 @@ export async function useGetRatingsByCarId(carId: number): Promise<
 > {
   try {
     ('use cache');
-    console.log('useGetRatingsByCarId: ', carId);
     const response = await getRatingsByCarId(carId);
-    console.log('useGetRatingsByCarId response: ', response);
     return response;
   } catch (error: any) {
     return ErrorResponse(error);
@@ -59,9 +57,7 @@ export async function useGetRatingsByTravelPackageId(
 > {
   try {
     ('use cache');
-    console.log('useGetRatingsByTravelPackageId: ', travelPackageId);
     const response = await getRatingsByTravelPackageId(travelPackageId);
-    console.log('useGetRatingsByTravelPackageId response: ', response);
     return response;
   } catch (error: any) {
     return ErrorResponse(error);

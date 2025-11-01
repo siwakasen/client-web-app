@@ -62,7 +62,6 @@ export default function MainContent({
       try {
         const response = await useGetRatingsByTravelPackageId(pkg.id);
         if ('data' in response && response.data.averageRating !== undefined) {
-          console.log('response', response.data);
           setPackageRatings((prev) => ({
             ...prev,
             [pkg.id]: {

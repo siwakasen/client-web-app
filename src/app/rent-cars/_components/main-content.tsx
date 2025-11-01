@@ -111,9 +111,7 @@ export default function MainContent({
             },
           }));
         }
-      } catch (error) {
-        console.error(`Error fetching rating for car ${car.id}:`, error);
-      }
+      } catch (error) {}
     }
   };
 

@@ -64,9 +64,7 @@ export default async function HistoryOrderDetailPage({
       if ('data' in refundResponse && refundResponse.data) {
         refundData = refundResponse.data;
       }
-    } catch (error) {
-      console.error('Error fetching refund details:', error);
-    }
+    } catch (error) {}
   }
 
   // Fetch package or car details based on the booking
@@ -81,9 +79,7 @@ export default async function HistoryOrderDetailPage({
       if ('data' in packageResponse) {
         packageData = packageResponse.data;
       }
-    } catch (error) {
-      console.error('Error fetching package details:', error);
-    }
+    } catch (error) {}
   }
 
   if (booking.car_id) {
@@ -92,9 +88,7 @@ export default async function HistoryOrderDetailPage({
       if ('data' in carResponse) {
         carData = carResponse.data;
       }
-    } catch (error) {
-      console.error('Error fetching car details:', error);
-    }
+    } catch (error) {}
   }
 
   return (

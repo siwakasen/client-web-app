@@ -74,7 +74,6 @@ export function RescheduleDialog({
       onClose();
       refetch();
     } catch (error) {
-      console.error('Failed to reschedule:', error);
     } finally {
       setIsSubmitting(false);
     }
