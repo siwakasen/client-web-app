@@ -46,13 +46,10 @@ jobs:
         run: |
           IMAGE=${{ secrets.REGISTRY_URL }}/client-web-app
           docker build --progress=plain \
-            --build-arg NEXT_PUBLIC_EMPLOYEES_API_URL=${{ secrets.NEXT_PUBLIC_EMPLOYEES_API_URL }} \
             --build-arg NEXT_PUBLIC_TRAVEL_PACKAGES_API_URL=${{ secrets.NEXT_PUBLIC_TRAVEL_PACKAGES_API_URL }} \
             --build-arg NEXT_PUBLIC_CARS_API_URL=${{ secrets.NEXT_PUBLIC_CARS_API_URL }} \
-            --build-arg NEXT_PUBLIC_EXPENSES_API_URL=${{ secrets.NEXT_PUBLIC_EXPENSES_API_URL }} \
             --build-arg NEXT_PUBLIC_BOOKINGS_API_URL=${{ secrets.NEXT_PUBLIC_BOOKINGS_API_URL }} \
             --build-arg NEXT_PUBLIC_CUSTOMERS_API_URL=${{ secrets.NEXT_PUBLIC_CUSTOMERS_API_URL }} \
-            --build-arg NEXT_PUBLIC_REPORT_API_URL=${{ secrets.NEXT_PUBLIC_REPORT_API_URL }} \
             --build-arg NEXT_PUBLIC_WEBSOCKET_URL=${{ secrets.NEXT_PUBLIC_WEBSOCKET_URL }} \
             -f Dockerfile -t $IMAGE:latest -t $IMAGE:sha-${SHORT_SHA} .
           docker push $IMAGE:latest
