@@ -10,12 +10,8 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**.vulpbox.com',
+        hostname: '**',
       },
-      {
-        protocol: 'https',
-        hostname: '**.siwakasen.dev'
-      }
     ],
   },
   allowedDevOrigins: [
